@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from aracgen.emit_class_quest import ClassQuestEmitter
+from aracgen.emit_client import ClientPatchEmitter
 from aracgen.emit_hunter_pet import HunterPetEmitter
 from aracgen.emit_player import PlayerCreateEmitter, build_resolver
 from aracgen.emit_skill import SkillOverlayEmitter
@@ -138,3 +139,10 @@ def write_hunter_pet_sql(
         print(f"Wrote {path}")
 
     print(f"Generated hunter pet data: {len(result.spell_rows)} spell grants (all hunters)")
+
+
+def write_client_patch(output_path: Path) -> None:
+    emitter = ClientPatchEmitter()
+    payload = emitter.compute()
+    emitter.write(output_path)
+    print(f"Wrote {output_path} ({len(payload)} bytes)")

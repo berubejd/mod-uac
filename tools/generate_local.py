@@ -8,6 +8,7 @@ from pathlib import Path
 
 from aracgen.cli import (
     write_class_quest_sql,
+    write_client_patch,
     write_hunter_pet_sql,
     write_player_create_sql,
     write_skill_overlay_sql,
@@ -66,6 +67,7 @@ def main() -> None:
         args.output_dir,
         dbc_source=args.dbc_dir / "Spell.dbc",
     )
+    write_client_patch(args.output_dir / "Patch-A.MPQ")
 
 
 if __name__ == "__main__":
