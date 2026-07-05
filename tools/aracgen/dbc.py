@@ -216,7 +216,7 @@ class DbcTable:
     def get_uint32(self, record_index: int, field_index: int) -> int:
         self._validate_record_index(record_index)
         spec = self._field_spec(field_index)
-        if spec.kind not in {FieldKind.UINT32, FieldKind.STRING}:
+        if spec.kind not in {FieldKind.UINT32, FieldKind.STRING, FieldKind.PAD_UINT32}:
             msg = f"Field {field_index} is not uint32"
             raise TypeError(msg)
         return struct.unpack_from("<I", self.records[record_index], spec.offset)[0]

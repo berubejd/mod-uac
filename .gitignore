@@ -1,5 +1,9 @@
-# Canonical client data — operators extract locally; not distributed.
-data/
+# Local/downloaded client data — not distributed.
+data/cache/*
+!data/cache/.gitkeep
+data/dbc/
+data/Data.zip
+data/**/*.zip
 
 # Python
 __pycache__/
@@ -10,5 +14,5 @@ __pycache__/
 .venv/
 venv/
 
-# Generator outputs (checked-in artifacts live under data/sql/ and client-patch/)
+# Operator-specific generator output (checked-in SQL lives under data/sql/)
 tools/output/
