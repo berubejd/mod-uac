@@ -1,0 +1,14 @@
+# Canonical client data — operators extract locally; not distributed.
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.venv/
+venv/
+
+# Generator outputs (checked-in artifacts live under data/sql/ and client-patch/)
+tools/output/
