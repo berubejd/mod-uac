@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from aracgen.cli import write_player_create_sql, write_skill_overlay_sql
+from aracgen.cli import write_player_create_sql, write_skill_overlay_sql, write_totem_sql
 from aracgen.sources import DEFAULT_CANONICAL_PIN, CanonicalDbcSource, LocalDbcSource
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -69,6 +69,10 @@ def main() -> None:
         db_max_id=args.db_max_id,
     )
     write_player_create_sql(source, INSTALL_DIR, UNINSTALL_DIR)
+    write_totem_sql(
+        INSTALL_DIR / "mod_uac_player_totem_model.sql",
+        UNINSTALL_DIR / "mod_uac_player_totem_model_uninstall.sql",
+    )
 
 
 if __name__ == "__main__":

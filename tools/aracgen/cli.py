@@ -6,6 +6,8 @@ from pathlib import Path
 
 from aracgen.emit_player import PlayerCreateEmitter, build_resolver
 from aracgen.emit_skill import SkillOverlayEmitter
+from aracgen.emit_totem import TotemEmitter
+from aracgen.matrix import ComboMatrix
 from aracgen.sources import DbcSource
 
 
@@ -57,3 +59,21 @@ def write_player_create_sql(
         print(f"Wrote {path}")
 
     print(f"Generated playercreateinfo data for {len(result.kits)} combos")
+
+
+def write_totem_sql(
+    install_path: Path,
+    uninstall_path: Path,
+) -> None:
+    matrix = ComboMatrix.stock()
+    emitter = TotemEmitter(matrix)
+    result = emitter.compute()
+
+    install_path.parent.mkdir(parents=True, exist_ok=True)
+    uninstall_path.parent.mkdir(parents=True, exist_ok=True)
+    install_path.write_text(emitter.render_install(result), encoding="utf-8")
+    uninstall_path.write_text(emitter.render_uninstall(result), encoding="utf-8")
+
+    race_ids = sorted({row.race_id for row in result.rows})
+    print(f"Wrote {install_path} ({len(result.rows)} totem rows, races {race_ids})")
+    print(f"Wrote {uninstall_path}")
