@@ -6,7 +6,13 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from aracgen.cli import write_player_create_sql, write_skill_overlay_sql, write_totem_sql
+from aracgen.cli import (
+    write_class_quest_sql,
+    write_hunter_pet_sql,
+    write_player_create_sql,
+    write_skill_overlay_sql,
+    write_totem_sql,
+)
 from aracgen.sources import LocalDbcSource
 
 OUTPUT_DIR = Path(__file__).resolve().parent / "output"
@@ -53,6 +59,12 @@ def main() -> None:
     write_totem_sql(
         args.output_dir / "mod_uac_player_totem_model.sql",
         args.output_dir / "mod_uac_player_totem_model_uninstall.sql",
+    )
+    write_class_quest_sql(args.output_dir, args.output_dir)
+    write_hunter_pet_sql(
+        args.output_dir,
+        args.output_dir,
+        dbc_source=args.dbc_dir / "Spell.dbc",
     )
 
 

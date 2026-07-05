@@ -1,0 +1,1 @@
+-- mod-uac: no quest_template_addon patches to revert.

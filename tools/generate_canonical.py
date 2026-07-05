@@ -6,7 +6,13 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from aracgen.cli import write_player_create_sql, write_skill_overlay_sql, write_totem_sql
+from aracgen.cli import (
+    write_class_quest_sql,
+    write_hunter_pet_sql,
+    write_player_create_sql,
+    write_skill_overlay_sql,
+    write_totem_sql,
+)
 from aracgen.sources import DEFAULT_CANONICAL_PIN, CanonicalDbcSource, LocalDbcSource
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -53,6 +59,7 @@ def main() -> None:
 
     if args.dbc_dir is not None:
         source = LocalDbcSource(args.dbc_dir)
+        hunter_dbc_source = args.dbc_dir / "Spell.dbc"
         print(f"Using local DBC override: {args.dbc_dir}")
     else:
         source = CanonicalDbcSource(
@@ -60,6 +67,7 @@ def main() -> None:
             cache_dir=args.cache_dir,
             refresh=args.refresh,
         )
+        hunter_dbc_source = source.zip_path
         print(f"Using canonical client-data {args.pin}: {source.zip_path}")
 
     write_skill_overlay_sql(
@@ -73,6 +81,8 @@ def main() -> None:
         INSTALL_DIR / "mod_uac_player_totem_model.sql",
         UNINSTALL_DIR / "mod_uac_player_totem_model_uninstall.sql",
     )
+    write_class_quest_sql(INSTALL_DIR, UNINSTALL_DIR)
+    write_hunter_pet_sql(INSTALL_DIR, UNINSTALL_DIR, dbc_source=hunter_dbc_source)
 
 
 if __name__ == "__main__":
