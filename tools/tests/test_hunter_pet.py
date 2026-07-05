@@ -40,5 +40,9 @@ def test_hunter_pet_spell_dbc_sets_level_one() -> None:
     sql = emitter.render_install_files()["hunter_pet_spell_dbc"]
     assert "REPLACE INTO `spell_dbc`" in sql
     assert "DELETE FROM `spell_dbc`" in emitter.render_uninstall_files()["hunter_pet_spell_dbc"]
-    # Patched rows should differ from stock level 10 for Tame Beast.
-    assert ", 1, 1," in sql or ", 1, 1, " in sql
+    assert "4294967295" not in sql
+    for spell_id in HUNTER_PET_SPELL_IDS:
+        assert f"-- spell {spell_id}" in sql
+    # Tame Beast (1515): patched row should expose level 1 in aligned BaseLevel/SpellLevel slots.
+    tame_beast = sql.split("-- spell 1515", maxsplit=1)[1].split("-- spell ", maxsplit=1)[0]
+    assert ", 1, 1," in tame_beast or ", 1, 1, " in tame_beast

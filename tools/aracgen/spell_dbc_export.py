@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import re
 import zipfile
+from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 
 from aracgen.dbc import DbcTable, FieldKind
-from aracgen.formats import SPELL
+from aracgen.formats import SPELL, SPELL_BASE_LEVEL_FIELD, SPELL_SPELL_LEVEL_FIELD
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 AC_SPELL_DBC_SCHEMA = (
@@ -21,31 +23,64 @@ AC_SPELL_DBC_SCHEMA = (
 )
 
 
-def _load_spell_columns() -> list[str]:
+@dataclass(frozen=True)
+class _SchemaColumn:
+    name: str
+    signed: bool
+
+
+@lru_cache(maxsize=1)
+def _load_spell_schema() -> tuple[_SchemaColumn, ...]:
     text = AC_SPELL_DBC_SCHEMA.read_text(encoding="utf-8", errors="replace")
     match = re.search(r"CREATE TABLE.*?\((.*?)\) ENGINE", text, re.S)
     if match is None:
         msg = f"Could not parse spell_dbc schema from {AC_SPELL_DBC_SCHEMA}"
         raise ValueError(msg)
-    cols: list[str] = []
+    cols: list[_SchemaColumn] = []
     for line in match.group(1).splitlines():
         stripped = line.strip()
         if not stripped or stripped.startswith("PRIMARY"):
             continue
-        cols.append(stripped.split()[0].strip("`"))
-    return cols
+        name = stripped.split()[0].strip("`")
+        signed = "` int NOT NULL" in stripped and "unsigned" not in stripped
+        cols.append(_SchemaColumn(name=name, signed=signed))
+    return tuple(cols)
 
 
-def _sql_literal(value: int | float | str | None) -> str:
+def _load_spell_columns() -> list[str]:
+    return [column.name for column in _load_spell_schema()]
+
+
+def _to_signed_int32(value: int) -> int:
+    value &= 0xFFFFFFFF
+    if value >= 0x80000000:
+        return value - 0x100000000
+    return value
+
+
+def _sql_literal(value: int | float | str | None, *, signed: bool = False) -> str:
     if value is None:
         return "NULL"
     if isinstance(value, float):
         text = f"{value:g}"
         return text if text != "-0" else "0"
     if isinstance(value, int):
+        if signed:
+            return str(_to_signed_int32(value))
         return str(value)
     escaped = value.replace("\\", "\\\\").replace("'", "''")
     return f"'{escaped}'"
+
+
+def _render_row_literals(values: list[int | float | str | None]) -> str:
+    schema = _load_spell_schema()
+    if len(values) != len(schema):
+        msg = f"spell_dbc row width {len(values)} != schema columns {len(schema)}"
+        raise ValueError(msg)
+    return ", ".join(
+        _sql_literal(value, signed=column.signed)
+        for column, value in zip(schema, values, strict=True)
+    )
 
 
 def _string_group_values(table: DbcTable, record_index: int, start_field: int) -> list[str | None]:
@@ -72,49 +107,70 @@ def _empty_string_group() -> list[str | None | int]:
     return [None] * 16 + [0]
 
 
+# Spell.dbc padding slots that map to real spell_dbc SQL integer columns.
+_SPELL_SQL_PAD_FIELDS = frozenset(
+    {
+        13,
+        15,  # unk_320_2, unk_320_3
+        48,  # ModalNextSpell
+        215,  # StanceBarOrder
+        219,
+        220,
+        221,  # MinFactionID, MinReputation, RequiredAuraVision
+        227,
+        228,  # SpellMissileID, PowerDisplayID
+        232,
+        233,  # SpellDescriptionVariableID, SpellDifficultyID
+    }
+)
+
+_NAME_STRING_FIELD = 136
+_SUBTEXT_STRING_FIELD = 153
+_TAIL_NUMERIC_FIELD = 204
+
+
+def _append_dbc_field(
+    table: DbcTable,
+    record_index: int,
+    field_idx: int,
+    values: list[int | float | str | None],
+) -> None:
+    spec = table._fields[field_idx]  # noqa: SLF001
+    if spec.kind == FieldKind.PAD_BYTE:
+        return
+    if spec.kind == FieldKind.PAD_UINT32:
+        if field_idx in _SPELL_SQL_PAD_FIELDS:
+            values.append(0)
+        return
+    if spec.kind == FieldKind.UINT8:
+        values.append(table.get_uint8(record_index, field_idx))
+        return
+    if spec.kind == FieldKind.UINT32:
+        values.append(table.get_uint32(record_index, field_idx))
+        return
+    if spec.kind == FieldKind.FLOAT:
+        values.append(table.get_float(record_index, field_idx))
+        return
+    msg = f"Unhandled field kind {spec.kind} at index {field_idx}"
+    raise ValueError(msg)
+
+
 def _record_values(table: DbcTable, record_index: int) -> list[int | float | str | None]:
     """Build the 234-column spell_dbc row AC expects (client DBC + locale expansion)."""
     values: list[int | float | str | None] = []
-    specs = table._fields  # noqa: SLF001
-    field_idx = 0
-    string_groups = 0
-    while field_idx < len(specs):
-        spec = specs[field_idx]
-        if spec.kind == FieldKind.PAD_BYTE:
-            field_idx += 1
-            continue
-        if spec.kind == FieldKind.PAD_UINT32:
-            field_idx += 1
-            continue
-        if spec.kind == FieldKind.UINT8:
-            values.append(table.get_uint8(record_index, field_idx))
-            field_idx += 1
-            continue
-        if spec.kind == FieldKind.UINT32:
-            values.append(table.get_uint32(record_index, field_idx))
-            field_idx += 1
-            continue
-        if spec.kind == FieldKind.FLOAT:
-            values.append(table.get_float(record_index, field_idx))
-            field_idx += 1
-            continue
-        if spec.kind == FieldKind.STRING:
-            values.extend(_string_group_values(table, record_index, field_idx))
-            field_idx += 16
-            string_groups += 1
-            continue
-        msg = f"Unhandled field kind {spec.kind}"
-        raise ValueError(msg)
 
-    # Client Spell.dbc carries Name + NameSubtext strings; SQL also has Description/AuraDescription.
-    while string_groups < 4:
-        values.extend(_empty_string_group())
-        string_groups += 1
+    for field_idx in range(_NAME_STRING_FIELD):
+        _append_dbc_field(table, record_index, field_idx, values)
+
+    values.extend(_string_group_values(table, record_index, _NAME_STRING_FIELD))
+    values.extend(_string_group_values(table, record_index, _SUBTEXT_STRING_FIELD))
+    values.extend(_empty_string_group())  # Description (client Spell.dbc has no text)
+    values.extend(_empty_string_group())  # AuraDescription
+
+    for field_idx in range(_TAIL_NUMERIC_FIELD, len(table._fields)):  # noqa: SLF001
+        _append_dbc_field(table, record_index, field_idx, values)
 
     columns = _load_spell_columns()
-    while len(values) < len(columns):
-        values.append(0)
-
     if len(values) != len(columns):
         msg = f"spell_dbc row width {len(values)} != schema columns {len(columns)}"
         raise ValueError(msg)
@@ -141,11 +197,11 @@ def find_spell_record(table: DbcTable, spell_id: int) -> int:
 
 def export_spell_row(table: DbcTable, spell_id: int, *, base_level: int = 1) -> str:
     record_index = find_spell_record(table, spell_id)
-    table.set_uint32(record_index, 38, base_level)
-    table.set_uint32(record_index, 39, base_level)
+    table.set_uint32(record_index, SPELL_BASE_LEVEL_FIELD, base_level)
+    table.set_uint32(record_index, SPELL_SPELL_LEVEL_FIELD, base_level)
     values = _record_values(table, record_index)
     columns = _load_spell_columns()
-    rendered = ", ".join(_sql_literal(value) for value in values)
+    rendered = _render_row_literals(values)
     col_list = ", ".join(f"`{name}`" for name in columns)
     return f"REPLACE INTO `spell_dbc` ({col_list}) VALUES ({rendered});"
 
