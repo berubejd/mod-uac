@@ -6,15 +6,13 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from aracgen.cli import write_skill_overlay_sql
+from aracgen.cli import write_player_create_sql, write_skill_overlay_sql
 from aracgen.sources import DEFAULT_CANONICAL_PIN, CanonicalDbcSource, LocalDbcSource
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CACHE_DIR = REPO_ROOT / "data" / "cache"
 INSTALL_DIR = REPO_ROOT / "data" / "sql" / "db-world"
 UNINSTALL_DIR = REPO_ROOT / "data" / "sql" / "db-uninstall"
-INSTALL_FILE = INSTALL_DIR / "mod_uac_skillraceclassinfo_dbc.sql"
-UNINSTALL_FILE = UNINSTALL_DIR / "mod_uac_skillraceclassinfo_dbc_uninstall.sql"
 
 
 def main() -> None:
@@ -66,10 +64,11 @@ def main() -> None:
 
     write_skill_overlay_sql(
         source,
-        INSTALL_FILE,
-        UNINSTALL_FILE,
+        INSTALL_DIR / "mod_uac_skillraceclassinfo_dbc.sql",
+        UNINSTALL_DIR / "mod_uac_skillraceclassinfo_dbc_uninstall.sql",
         db_max_id=args.db_max_id,
     )
+    write_player_create_sql(source, INSTALL_DIR, UNINSTALL_DIR)
 
 
 if __name__ == "__main__":

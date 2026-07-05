@@ -1,0 +1,41 @@
+-- mod-uac: playercreateinfo rows for Unlock All Classes
+-- combos: (1, 3), (1, 7), (1, 11), (2, 2), (2, 5), (2, 8), (2, 11), (3, 7), (3, 8), (3, 9), (3, 11), (4, 2), (4, 7), (4, 8), (4, 9), (5, 2), (5, 3), (5, 7), (5, 11), (6, 2), (6, 4), (6, 5), (6, 8), (6, 9), (7, 2), (7, 3), (7, 5), (7, 7), (7, 11), (8, 2), (8, 9), (8, 11), (10, 1), (10, 7), (10, 11), (11, 4), (11, 9), (11, 11)
+
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (1, 3, 0, 12, -8949.95, -132.493, 83.5312, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (1, 7, 0, 12, -8949.95, -132.493, 83.5312, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (1, 11, 0, 12, -8949.95, -132.493, 83.5312, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2, 2, 1, 14, -618.518, -4251.67, 38.718, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2, 5, 1, 14, -618.518, -4251.67, 38.718, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2, 8, 1, 14, -618.518, -4251.67, 38.718, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2, 11, 1, 14, -618.518, -4251.67, 38.718, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (3, 7, 0, 1, -6240.32, 331.033, 382.758, 6.17716);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (3, 8, 0, 1, -6240.32, 331.033, 382.758, 6.17716);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (3, 9, 0, 1, -6240.32, 331.033, 382.758, 6.17716);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (3, 11, 0, 1, -6240.32, 331.033, 382.758, 6.17716);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (4, 2, 1, 141, 10311.3, 832.463, 1326.41, 5.69632);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (4, 7, 1, 141, 10311.3, 832.463, 1326.41, 5.69632);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (4, 8, 1, 141, 10311.3, 832.463, 1326.41, 5.69632);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (4, 9, 1, 141, 10311.3, 832.463, 1326.41, 5.69632);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (5, 2, 0, 85, 1676.71, 1678.31, 121.67, 2.70526);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (5, 3, 0, 85, 1676.71, 1678.31, 121.67, 2.70526);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (5, 7, 0, 85, 1676.71, 1678.31, 121.67, 2.70526);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (5, 11, 0, 85, 1676.71, 1678.31, 121.67, 2.70526);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (6, 2, 1, 215, -2917.58, -257.98, 52.9968, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (6, 4, 1, 215, -2917.58, -257.98, 52.9968, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (6, 5, 1, 215, -2917.58, -257.98, 52.9968, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (6, 8, 1, 215, -2917.58, -257.98, 52.9968, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (6, 9, 1, 215, -2917.58, -257.98, 52.9968, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (7, 2, 0, 1, -6240.32, 331.033, 382.758, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (7, 3, 0, 1, -6240.32, 331.033, 382.758, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (7, 5, 0, 1, -6240.32, 331.033, 382.758, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (7, 7, 0, 1, -6240.32, 331.033, 382.758, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (7, 11, 0, 1, -6240.32, 331.033, 382.758, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (8, 2, 1, 14, -618.518, -4251.67, 38.718, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (8, 9, 1, 14, -618.518, -4251.67, 38.718, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (8, 11, 1, 14, -618.518, -4251.67, 38.718, 0.0);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (10, 1, 530, 3431, 10349.6, -6357.29, 33.4026, 5.31605);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (10, 7, 530, 3431, 10349.6, -6357.29, 33.4026, 5.31605);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (10, 11, 530, 3431, 10349.6, -6357.29, 33.4026, 5.31605);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (11, 4, 530, 3526, -3961.64, -13931.2, 100.615, 2.08364);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (11, 9, 530, 3526, -3961.64, -13931.2, 100.615, 2.08364);
+INSERT INTO `playercreateinfo` (`race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (11, 11, 530, 3526, -3961.64, -13931.2, 100.615, 2.08364);
