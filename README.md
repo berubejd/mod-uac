@@ -1,0 +1,182 @@
+# mod-uac
+
+Unlock All Classes — AzerothCore WotLK 3.3.5a module.
+
+## Purpose
+
+Allow any playable WotLK race to create and play any playable class — the combinations Blizzard
+did not ship in 3.3.5a (e.g. Tauren Mage, Human Shaman, Blood Elf Warrior). The module is built for
+**operators running stock or lightly customized AzerothCore**: every change is **revertable**, artifacts
+are **generated from known sources** (no mystery binaries on the server), and install is handled by
+the normal DB updater plus one small client patch.
+
+Deep architecture, combo matrix, and phasing: [docs/mod-uac-engineering-implementation.md](docs/mod-uac-engineering-implementation.md).
+
+## Goals
+
+- **Human-readable server data.** Proficiencies, spawns, kits, totems, and quest gates ship as SQL
+  under `data/sql/db-world/`, each file with a matching revert in `data/sql/db-uninstall/`.
+- **No server-side binary DBC edits.** Skill overlays use AzerothCore's `skillraceclassinfo_dbc`
+  world-table merge (same mechanism as other `*_dbc` overlays) — not patched `.dbc` files on disk.
+- **One universal client artifact.** A generated `patch-A.mpq` (~4 KB) containing
+  `CharBaseInfo.dbc` so all race/class tiles appear on the creation screen. The server never reads
+  this file; `playercreateinfo` rows are the server-side gate.
+- **Reproducible generation.** Checked-in SQL and MPQ come from `tools/generate_canonical.py`
+  (pinned [wowgaming/client-data](https://github.com/wowgaming/client-data) tag **v19**). Operators
+  with custom DBC baselines can regenerate via `tools/generate_local.py`.
+
+## What the mod adds
+
+Stock AzerothCore ships **62** valid race/class pairs. mod-uac adds **38** more (100 playable tiles
+on the client, including Death Knight — already all-race in stock `playercreateinfo` and unchanged by
+the SQL emitters). Examples: Human Hunter, Orc Paladin, Tauren Mage, Night Elf Warlock, Blood Elf
+Warrior, Gnome Shaman.
+
+For each new combo the module provides:
+
+| Concern | Mechanism |
+|---------|-----------|
+| Creation allowed (server) | `playercreateinfo` + action/item/spell rows |
+| Armor & weapon skills | `skillraceclassinfo_dbc` overlay |
+| Creation screen tiles (client) | `CharBaseInfo.dbc` in `patch-A.mpq` |
+| Off-race shaman totems | `player_totem_model` |
+| Class-critical abilities | Tiered quest patches + narrow spell grants (see below) |
+
+**Not in scope (Phase 1):** spawning playerbots as new combos (Phase 2), placing foreign class
+trainers in starter zones, or custom NPC/dialogue. Off-race characters are fully valid but may need to
+**travel** for class quests and trainers — same as many private-server ARAC setups.
+
+## Operator install
+
+### 1. Add the module
+
+Clone or symlink into your AzerothCore tree:
+
+```text
+azerothcore-wotlk/modules/mod-uac/
+```
+
+Rebuild/restart as usual. Ensure `mod-uac` is included in your modules build (default `MODULES=static` picks up all `modules/mod-*` directories).
+
+On first **worldserver** start, AzerothCore's DB updater applies every `.sql` file under:
+
+```text
+modules/mod-uac/data/sql/db-world/
+```
+
+The updater scans `modules/<name>/data/sql/` and includes only subdirectories whose name contains **`world`** (see `UpdateFetcher.cpp`). Install SQL lives in `db-world/`; revert SQL lives in `db-uninstall/` (dirname intentionally **without** `world`, so it is never auto-applied).
+
+Include the module in updates if you use an allow-list:
+
+```ini
+# worldserver.conf
+Updates.AllowedModules = "all"
+# or: Updates.AllowedModules = "mod-uac,..."
+```
+
+### 2. Client patch
+
+Copy the checked-in MPQ into the WoW 3.3.5a client `Data/` folder:
+
+```text
+client-patch/patch-A.mpq  →  <WoW>/Data/patch-A.mpq
+```
+
+The client loads `CharBaseInfo.dbc` from this archive so all race/class tiles appear on the creation screen. The server does not read this file — `playercreateinfo` rows gate creation server-side.
+
+Remove `patch-A.mpq` from `Data/` to revert the client to stock combo visibility.
+
+### 3. worldserver.conf
+
+Required for warlock tier-C imp grants and the optional hunter level-1 pet slice:
+
+```ini
+PlayerStart.CustomSpells = 1
+```
+
+Stock AzerothCore defaults this to `0`.
+
+## Install SQL reference
+
+| File | Purpose |
+|------|---------|
+| `mod_uac_skillraceclassinfo_dbc.sql` | Skill/proficiency overlay for new combos |
+| `mod_uac_playercreateinfo.sql` | Spawn locations (38 new rows) |
+| `mod_uac_playercreateinfo_action.sql` | Starting action bar |
+| `mod_uac_playercreateinfo_item.sql` | Starting equipment |
+| `mod_uac_player_totem_model.sql` | Totem models for off-race shamans |
+| `mod_uac_quest_template.sql` | Warlock tier A + §8.3 faction-wide class-quest unlocks |
+| `mod_uac_quest_template_addon.sql` | Anti-gray companion (no-op on stock AC; kept for parity) |
+| `mod_uac_playercreateinfo_spell_custom.sql` | Warlock Summon Imp (NE/Draenei tier C) |
+
+### Optional — hunter pets at level 1
+
+Apply **both** files if you want all hunters to tame at creation (later-expansion QoL):
+
+| Install | Uninstall |
+|---------|-----------|
+| `mod_uac_hunter_pet_spell_custom.sql` | `mod_uac_hunter_pet_spell_custom_uninstall.sql` |
+| `mod_uac_hunter_pet_spell_dbc.sql` | `mod_uac_hunter_pet_spell_dbc_uninstall.sql` |
+
+Spells: Tame Beast (1515), Call Pet (883), Dismiss Pet (2641), Feed Pet (6991), Revive Pet (982).
+
+Requires `PlayerStart.CustomSpells = 1`. The spell grant alone is insufficient — `spell_dbc` overlays set `BaseLevel`/`SpellLevel` to 1.
+
+## Uninstall
+
+AzerothCore has no down-migrations. Revert manually by running the paired files in
+`data/sql/db-uninstall/` against the **world** database (same order as install, or any order — files are independent).
+
+To revert **only** level-1 hunter pets while keeping other mod-uac data, run the two `mod_uac_hunter_pet_*_uninstall.sql` files.
+
+Remove `patch-A.mpq` from the client `Data/` folder.
+
+## Class quests (summary)
+
+Critical abilities use targeted patches, not mod-arac's global quest mask:
+
+| Tier | Rule | Action |
+|------|------|--------|
+| **A** | Reference quest in the **same starter zone** | Patch `AllowableRaces` on specific quest IDs |
+| **B** | Same **continent**, different zone | Same targeted quest patch |
+| **C** | **Cross-continent** hard gate | Spell grant at creation (warlock imp only) |
+
+§8.3 opens warrior, shaman, druid, and paladin reference chains to the full faction (`1101` Alliance / `690` Horde). Off-race players travel to the chain when ready.
+
+See the engineering doc §8 for quest IDs and policy detail.
+
+## Regenerating artifacts (developers)
+
+```bash
+cd tools
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+pytest
+```
+
+Canonical checked-in SQL + MPQ (pinned [wowgaming/client-data](https://github.com/wowgaming/client-data) tag **v19**, cached under `data/cache/`):
+
+```bash
+pip install -r tools/requirements.txt
+python tools/generate_canonical.py
+```
+
+Operator-specific SQL when your DBC baseline or `skillraceclassinfo_dbc` max ID differs:
+
+```bash
+python tools/generate_local.py /path/to/dbc --db-max-id 970
+```
+
+## Manual QA checklist
+
+- [ ] Apply install SQL on a stock AC world DB; worldserver starts cleanly
+- [ ] Remove client patch; off-race combos absent on creation screen
+- [ ] Install `client-patch/patch-A.mpq`; all race/class tiles selectable
+- [ ] Create off-race shaman; totems display with faction-appropriate models (not invisible)
+- [ ] Create Dwarf Warlock; complete imp quest chain in Dun Morogh (tier A)
+- [ ] Create Night Elf Warlock; has Summon Imp at creation (tier C spell grant)
+- [ ] Create off-race warrior/shaman/druid/paladin; reference class quest chain is available after travel (§8.3)
+- [ ] Set `PlayerStart.CustomSpells = 1`; create any hunter at level 1; Tame Beast works on a nearby beast
+- [ ] Run hunter pet uninstall SQL only; new hunters lose pet spells until level 10
+- [ ] Run uninstall SQL; new combos no longer creatable; overlay IDs gone
+- [ ] Remove MPQ; client reverts to stock creation screen

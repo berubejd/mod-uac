@@ -1,0 +1,197 @@
+# AGENTS.md
+
+Guidance for AI coding assistants (Cursor, Claude Code, Aider, etc.) working
+on the Unlock All Classes mod. If you're a human, read the [README](README.md)
+first -- this file assumes you've already seen the basics.
+
+> For Claude Code specifically, [CLAUDE.md](CLAUDE.md) points at this file.
+> Everything here applies to every agent.
+
+---
+
+## Purpose
+
+Allow any playable race to create and play any playable class, with a design that is
+**maintainable, revertable, and free of mystery binaries**, and that is **reusable by other
+server operators** running stock or lightly-customized AzerothCore installations.
+
+### Goals
+- No unexplained binary DBC files. Every artifact is either generated from a known source or is
+  human-readable SQL.
+- No hand-applied, irreversible SQL. Everything is applied by AzerothCore's DB updater and has a
+  companion revert.
+- **Zero server-side binary DBC edits.** (See [engineering doc §3](docs/mod-uac-engineering-implementation.md#3-source-grounded-findings).)
+- Exactly one small, universal client artifact (a generated MPQ), producible in pure Python.
+- Deterministic and reproducible: generation happens against a pinned canonical source, or against
+  the operator's own installed DBCs.
+
+### Non-goals (Phase 2+)
+- Playerbot spawning as new combos (Phase **2a** — see [engineering doc §8 Phase 2](docs/mod-uac-engineering-implementation.md#phase-2--playerbots--polish)).
+- Placing "foreign" class trainers into races' starting zones (gameplay QA / out of scope).
+- NPC dialogue or any LLM involvement (unrelated to this module).
+
+---
+
+## Where things live
+
+```
+mod-uac/
+  data/sql/db-world/            # install SQL (auto-applied by AC updater)
+  data/sql/db-uninstall/        # companion revert SQL (manual; dirname must not contain "world")
+  tools/aracgen/                # generator package
+      dbc.py  sources.py  matrix.py  kits.py
+      emit_skill.py  emit_player.py  emit_totem.py  emit_class_quest.py
+      emit_hunter_pet.py  emit_client.py  mpq.py
+  tools/generate_local.py       # LocalDbcSource     -> operator SQL only
+  tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + shared MPQ
+  tools/requirements.txt
+  client-patch/patch-A.mpq      # universal client artifact
+  CMakeLists.txt                # data-only module stub
+  README.md
+```
+
+---
+
+## Coding conventions
+
+- **Python 3.11**. Use modern syntax: `X | Y` unions, `list[int]`, `datetime.UTC`
+  instead of `datetime.timezone.utc`. Ruff will tell you.
+- **Comments explain why, not what.** A comment like `# increment counter` on
+  `counter += 1` is noise. A comment explaining a non-obvious trade-off is
+  gold.
+- **Write the test before you believe the fix.** Passing tests will catch
+  more regressions than any amount of local eyeballing. Run from `tools/`:
+  `python -m pytest` and `python -m ruff check .`.
+- **Emitters produce install + uninstall pairs.** SQL under
+  `data/sql/db-world/` and `data/sql/db-uninstall/`; never hand-edit
+  checked-in SQL — regenerate via `generate_canonical.py` (or
+  `generate_local.py` for operator baselines).
+
+---
+
+## Commits
+
+Commits are made **manually by the maintainer** — do not run `git commit`
+yourself unless explicitly asked. At every commit boundary (a finished change,
+a phase boundary, or a session wrap), **provide a single-line commit message in
+[Conventional Commit](https://www.conventionalcommits.org) style** for the
+maintainer to copy.
+
+Examples from this repo:
+
+> `feat(1g): class quest ungates for warlock, hunter pets, and travel-gated classes`
+>
+> `feat(1e): add client MPQ patch with full CharBaseInfo matrix`
+>
+> `feat(aracgen): add totem model emitter for off-race shamans`
+
+Conventions:
+
+- Use the standard types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`,
+  `build`, `ci`. Most deliverables here are `feat`.
+- **Scope:** use the **phase id** (`1a` … `1g`, `1f`, `1e`) when the commit
+  lands a planned phase slice; use **`aracgen`** for cross-cutting generator
+  infrastructure that is not tied to one phase (early codec/emitter work used
+  this). Optional narrower scopes (`mpq`, `class-quest`) are fine if clearer.
+- Keep it to **one line**, imperative mood, no trailing period. Do not add a
+  body unless the maintainer asks for one.
+- Regenerated SQL under `data/sql/` and `client-patch/patch-A.mpq` belong in
+  the same commit as the emitter change that produced them (same phase).
+
+---
+
+## Phase map (Phase 1)
+
+Work is tracked in [README.md](README.md) and
+[docs/mod-uac-engineering-implementation.md](docs/mod-uac-engineering-implementation.md) §8.
+Phase 1 is **complete**; Phase 2 (playerbots + gameplay QA) is next.
+
+| Phase | Deliverable (representative paths) |
+|-------|-----------------------------------|
+| **1a** | `tools/aracgen/dbc.py`, `tools/tests/test_dbc_roundtrip.py` |
+| **1b** | `tools/aracgen/emit_skill.py`, `data/sql/db-world/mod_uac_skillraceclassinfo_dbc.sql` |
+| **1c** | `tools/aracgen/emit_player.py`, `mod_uac_playercreateinfo*.sql` |
+| **1d** | `tools/aracgen/emit_totem.py`, `mod_uac_player_totem_model.sql` |
+| **1e** | `tools/aracgen/mpq.py`, `emit_client.py`, `client-patch/patch-A.mpq` |
+| **1f** | `CMakeLists.txt`, `README.md`, docs |
+| **1g** | `emit_class_quest.py`, `class_quest_catalog.py`, `mod_uac_quest_template.sql`, optional `mod_uac_hunter_pet_*.sql` |
+
+Generator entry points: `tools/generate_canonical.py` (checked-in artifacts),
+`tools/generate_local.py` (operator-specific SQL). Shared wiring lives in
+`tools/aracgen/cli.py`.
+
+---
+
+## Multi-phase work: pause at phase boundaries
+
+When a plan is explicitly structured into phases (**1a**, **1b**, … or Phase 2
+slices), **stop after each phase completes** before beginning the next one.
+
+At the boundary:
+
+1. Report what the phase delivered and what comes next.
+2. Ask: *"Ready to commit this phase before I continue?"*
+
+Then wait for the answer.
+
+Why this rule exists: phases here have different risk profiles (e.g. 1g touches
+shared `quest_template` rows; 1e adds the only binary client artifact). The
+maintainer may want a rollback point, Bugbot review, or in-game QA before the
+next layer lands. Executing all phases in one uninterrupted pass removes that
+option.
+
+Example boundary report for **this** codebase:
+
+> **Phase 1g complete.** 75 tests pass, ruff clean. Delivered:
+> `class_quest_catalog.py` (`FACTION_UNLOCK_CHAINS` for §8.3),
+> `emit_class_quest.py` (warlock tiers + faction-wide quest unlock),
+> regenerated `data/sql/db-world/mod_uac_quest_template.sql` and uninstall pair,
+> optional hunter pet SQL slice.
+> Next up: **1e** (client MPQ) unless you want to commit 1g first.
+
+Then wait. If the user says "continue", proceed. If they say "commit first",
+provide the one-line conventional message; do **not** commit unless asked.
+
+This rule applies equally when work *grows* a phase boundary mid-session (e.g.
+§8.3 faction unlocks split out of 1g into their own commit). Name the split,
+ask whether to land the first piece before starting the second.
+
+---
+
+## Design pivots at implementation time
+
+When implementation reveals a simpler shape than the plan called for,
+do not silently follow the plan as written. The engineering doc is a
+proposal based on incomplete information; reading stock AC data often
+surfaces patterns that meet the same exit criteria with less change.
+**Plans are proposals, not contracts.**
+
+The right shape:
+
+1. **Pause and explain the pivot.** Name the original plan, the
+   simpler alternative, the trade-off, and ask before implementing.
+2. **If the user approves, implement the new shape.** Update
+   `docs/mod-uac-engineering-implementation.md` / README checkboxes to
+   match what shipped.
+3. **Record the pivot somewhere durable** (engineering doc §8–9, or a
+   short comment in the emitter catalog).
+
+Example pivot from this project:
+
+> **Plan:** tier-C `playercreateinfo_spell_custom` grants for every
+> cross-continent class gate (like warlock imp).
+> **Pivot:** §8.3 faction-wide `quest_template.AllowableRaces` patches
+> for warrior/shaman/druid/paladin — players travel to the stock chain;
+> spell grants reserved for true hard gates only.
+> **Trade-off:** off-race paladins must reach Eversong; no custom trainers
+> until Phase 2.
+
+Anti-patterns:
+
+* **Silently substituting designs** (e.g. emitting mod-arac's blanket
+  `AllowableRaces = 1791` instead of per-quest revert SQL).
+* **Slavishly following the doc** when stock `quest_template_addon.MaxLevel`
+  is already `0` and anti-gray SQL would be empty noise — skip emission but
+  document why.
+* **Pivoting without naming the trade-off** (e.g. level-1 hunter pets apply to
+  *all* hunters, not just new combos — intentional QoL, isolated uninstall).

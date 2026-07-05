@@ -67,7 +67,7 @@ def main() -> None:
         args.output_dir,
         dbc_source=args.dbc_dir / "Spell.dbc",
     )
-    write_client_patch(args.output_dir / "Patch-A.MPQ")
+    write_client_patch(args.output_dir / "patch-A.mpq")
 
 
 if __name__ == "__main__":

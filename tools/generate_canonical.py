@@ -84,7 +84,7 @@ def main() -> None:
     )
     write_class_quest_sql(INSTALL_DIR, UNINSTALL_DIR)
     write_hunter_pet_sql(INSTALL_DIR, UNINSTALL_DIR, dbc_source=hunter_dbc_source)
-    write_client_patch(REPO_ROOT / "client-patch" / "Patch-A.MPQ")
+    write_client_patch(REPO_ROOT / "client-patch" / "patch-A.mpq")
 
 
 if __name__ == "__main__":
