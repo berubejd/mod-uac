@@ -94,10 +94,15 @@ def render_playercreateinfo_action_uninstall(result: PlayerCreateResult) -> str:
     )
 
 
+def _kits_with_items(result: PlayerCreateResult) -> tuple[ComboKit, ...]:
+    return tuple(kit for kit in result.kits if kit.items)
+
+
 def render_playercreateinfo_item_uninstall(result: PlayerCreateResult) -> str:
-    if not result.kits:
+    kits = _kits_with_items(result)
+    if not kits:
         return "-- mod-uac: no playercreateinfo_item rows to remove.\n"
-    pairs = "), (".join(f"{kit.race_id}, {kit.class_id}" for kit in result.kits)
+    pairs = "), (".join(f"{kit.race_id}, {kit.class_id}" for kit in kits)
     return "\n".join(
         [
             "-- mod-uac: revert playercreateinfo_item rows",
@@ -109,14 +114,16 @@ def render_playercreateinfo_item_uninstall(result: PlayerCreateResult) -> str:
 
 
 def render_playercreateinfo_item_install(result: PlayerCreateResult) -> str:
-    if not result.kits:
+    kits = _kits_with_items(result)
+    if not kits:
         return "-- mod-uac: no playercreateinfo_item rows required.\n"
 
     lines = [
         "-- mod-uac: playercreateinfo_item rows (from CharStartOutfit reference kits)",
+        "-- Skips combos that already have native CharStartOutfit.dbc rows.",
         "",
     ]
-    for kit in result.kits:
+    for kit in kits:
         for item_id, amount in kit.items:
             lines.append(
                 "INSERT INTO `playercreateinfo_item` "

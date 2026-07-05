@@ -1,4 +1,5 @@
 -- mod-uac: playercreateinfo_item rows (from CharStartOutfit reference kits)
+-- Skips combos that already have native CharStartOutfit.dbc rows.
 
 INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (1, 3, 129, 1);
 INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (1, 3, 147, 1);
@@ -45,12 +46,6 @@ INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES
 INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 7, 23344, 1);
 INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 7, 23345, 1);
 INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 7, 23348, 1);
-INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 8, 35, 1);
-INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 8, 55, 1);
-INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 8, 56, 1);
-INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 8, 1395, 1);
-INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 8, 6096, 1);
-INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 8, 6948, 1);
 INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 9, 35, 1);
 INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 9, 57, 1);
 INSERT INTO `playercreateinfo_item` (`race`, `class`, `itemid`, `amount`) VALUES (3, 9, 59, 1);

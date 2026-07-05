@@ -60,7 +60,11 @@ class CanonicalKitResolver:
         ref_race = self.reference_race_for_class(class_id, race_id)
         spawn = spawn_for_race(self.store, race_id)
         actions = self._compose_actions(race_id, class_id, ref_race)
-        items = self._compose_items(class_id, ref_race)
+        items = (
+            ()
+            if _stock_outfit_covers(self.outfit, race_id, class_id)
+            else self._compose_items(class_id, ref_race)
+        )
         return ComboKit(
             race_id=race_id,
             class_id=class_id,
@@ -222,6 +226,15 @@ def _resolve_racial_spell(race_id: int, class_id: int, index: RacialIndex) -> in
         return next(iter(frequencies))
     # Per-class variants (Draenei Gift of the Naaru, Orc Blood Fury ranks): use base rank.
     return min(frequencies)
+
+
+def _stock_outfit_covers(outfit: DbcTable, race_id: int, class_id: int) -> bool:
+    """True when CharStartOutfit.dbc already equips this combo at creation."""
+    return any(
+        outfit.get_uint8(record_index, 1) == race_id
+        and outfit.get_uint8(record_index, 2) == class_id
+        for record_index in range(outfit.record_count)
+    )
 
 
 def _outfit_items(table: DbcTable, race_id: int, class_id: int, gender: int) -> list[int]:

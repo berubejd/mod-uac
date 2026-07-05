@@ -48,6 +48,23 @@ def test_tauren_mage_items_from_horde_mage_reference(resolver: CanonicalKitResol
     assert 6948 in item_ids  # hearthstone
 
 
+def test_dwarf_mage_skips_items_when_char_start_outfit_exists(
+    resolver: CanonicalKitResolver,
+) -> None:
+    kit = resolver.resolve(3, 8)
+    assert kit.items == ()
+
+
+def test_dwarf_mage_item_sql_omits_guarded_combo(resolver: CanonicalKitResolver) -> None:
+    emitter = PlayerCreateEmitter(resolver)
+    install = emitter.render_install_files()["playercreateinfo_item"]
+    uninstall = emitter.render_uninstall_files()["playercreateinfo_item"]
+    assert "VALUES (3, 8," not in install
+    assert "(3, 8)" not in uninstall
+    assert "VALUES (6, 8," in install
+    assert "(6, 8)" in uninstall
+
+
 def test_player_create_emitter_produces_38_combos(resolver: CanonicalKitResolver) -> None:
     result = PlayerCreateEmitter(resolver).compute()
     assert len(result.kits) == 38
