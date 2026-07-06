@@ -28,10 +28,19 @@ class ActionEntry:
     action_type: int
 
 
+@dataclass(frozen=True, slots=True)
+class CreateInfoSkill:
+    race_mask: int
+    class_mask: int
+    skill_id: int
+    rank: int
+
+
 @dataclass(slots=True)
 class StockKitStore:
     spawns: dict[tuple[int, int], SpawnInfo] = field(default_factory=dict)
     actions: dict[tuple[int, int], list[ActionEntry]] = field(default_factory=dict)
+    create_skills: tuple[CreateInfoSkill, ...] = field(default_factory=tuple)
 
     @classmethod
     def load(cls, sql_dir: Path | None = None) -> StockKitStore:
@@ -39,6 +48,7 @@ class StockKitStore:
         store = cls()
         store._load_spawns(root / "playercreateinfo.sql")
         store._load_actions(root / "playercreateinfo_action.sql")
+        store._load_create_skills(root / "playercreateinfo_skills.sql")
         return store
 
     def _load_spawns(self, path: Path) -> None:
@@ -62,6 +72,22 @@ class StockKitStore:
             self.actions.setdefault(key, []).append(
                 ActionEntry(button=button, action=action, action_type=action_type)
             )
+
+    def _load_create_skills(self, path: Path) -> None:
+        text = path.read_text(encoding="utf-8")
+        pattern = re.compile(r"\((\d+),(\d+),(\d+),(\d+)")
+        rows: list[CreateInfoSkill] = []
+        for match in pattern.finditer(text):
+            race_mask, class_mask, skill_id, rank = (int(value) for value in match.groups())
+            rows.append(
+                CreateInfoSkill(
+                    race_mask=race_mask,
+                    class_mask=class_mask,
+                    skill_id=skill_id,
+                    rank=rank,
+                )
+            )
+        self.create_skills = tuple(rows)
 
 
 def spawn_for_race(store: StockKitStore, race_id: int) -> SpawnInfo:

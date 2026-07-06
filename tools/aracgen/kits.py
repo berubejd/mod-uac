@@ -7,6 +7,8 @@ from dataclasses import dataclass, field
 
 from aracgen.dbc import DbcTable
 from aracgen.matrix import ComboMatrix
+from aracgen.item_prototypes import ItemPrototypeStore
+from aracgen.starter_skills import StarterSkillRow, compute_starter_skills
 from aracgen.stock_loader import ActionEntry, SpawnInfo, StockKitStore, spawn_for_race
 
 ALLIANCE_RACES: frozenset[int] = frozenset({1, 3, 4, 7, 11})
@@ -29,6 +31,7 @@ class ComboKit:
     spawn: SpawnInfo
     actions: tuple[ActionEntry, ...]
     items: tuple[tuple[int, int], ...]  # (item_id, amount)
+    skills: tuple[StarterSkillRow, ...]
 
 
 @dataclass(frozen=True, slots=True)
@@ -46,6 +49,7 @@ class CanonicalKitResolver:
     matrix: ComboMatrix
     store: StockKitStore
     outfit: DbcTable
+    item_prototypes: ItemPrototypeStore
     _racial_index: RacialIndex = field(init=False)
     _reference_race_cache: dict[tuple[int, str], int] = field(default_factory=dict, init=False)
 
@@ -65,12 +69,21 @@ class CanonicalKitResolver:
             if _stock_outfit_covers(self.outfit, race_id, class_id)
             else self._compose_items(class_id, ref_race)
         )
+        skills = compute_starter_skills(
+            race_id,
+            class_id,
+            items,
+            self.store,
+            self.item_prototypes,
+            ref_race=ref_race,
+        )
         return ComboKit(
             race_id=race_id,
             class_id=class_id,
             spawn=spawn,
             actions=actions,
             items=items,
+            skills=skills,
         )
 
     def resolve_all(self) -> list[ComboKit]:

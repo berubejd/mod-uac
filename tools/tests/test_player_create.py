@@ -11,14 +11,29 @@ from aracgen.stock_loader import StockKitStore, spawn_for_race
 
 DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "cache" / "client-data-v19.zip"
 STOCK_DIR = Path(__file__).resolve().parents[2] / "data" / "stock" / "db_world"
+AC_ITEM_TEMPLATE = (
+    Path(__file__).resolve().parents[3]
+    / "azerothcore-wotlk"
+    / "data"
+    / "sql"
+    / "base"
+    / "db_world"
+    / "item_template.sql"
+)
 
 
 @pytest.fixture(scope="session")
 def resolver() -> CanonicalKitResolver:
     if not DATA_ZIP.is_file():
         pytest.skip(f"Canonical data not found: {DATA_ZIP}")
+    if not AC_ITEM_TEMPLATE.is_file():
+        pytest.skip(f"item_template.sql not found: {AC_ITEM_TEMPLATE}")
     source = ZipDbcSource(DATA_ZIP)
-    return build_resolver(source.load_char_start_outfit(), stock_dir=STOCK_DIR)
+    return build_resolver(
+        source.load_char_start_outfit(),
+        stock_dir=STOCK_DIR,
+        item_template_path=AC_ITEM_TEMPLATE,
+    )
 
 
 def test_spawn_for_race_uses_tauren_starting_zone() -> None:
@@ -77,6 +92,7 @@ def test_install_sql_includes_expected_tables(resolver: CanonicalKitResolver) ->
     assert "INSERT INTO `playercreateinfo`" in install["playercreateinfo"]
     assert "INSERT INTO `playercreateinfo_action`" in install["playercreateinfo_action"]
     assert "INSERT INTO `playercreateinfo_item`" in install["playercreateinfo_item"]
+    assert "INSERT INTO `playercreateinfo_skills`" in install["playercreateinfo_skills"]
     assert "(6, 8," in install["playercreateinfo"]
 
 
