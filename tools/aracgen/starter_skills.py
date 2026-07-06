@@ -58,15 +58,14 @@ def _reference_weapon_fallback(
 def compute_starter_skills(
     race_id: int,
     class_id: int,
-    items: tuple[tuple[int, int], ...],
+    item_ids: frozenset[int],
     store: StockKitStore,
     item_prototypes: ItemPrototypeStore,
     *,
     ref_race: int,
 ) -> tuple[StarterSkillRow, ...]:
     """Gear-derived skills plus reference weapon-skill sanity check."""
-    item_ids = {item_id for item_id, _amount in items}
-    weapon_subclasses = item_prototypes.weapon_subclasses_for_items(item_ids)
+    weapon_subclasses = item_prototypes.weapon_subclasses_for_items(set(item_ids))
 
     gear_skills = item_prototypes.skills_for_items(item_ids)
     ref_fallback = _reference_weapon_fallback(

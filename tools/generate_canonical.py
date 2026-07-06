@@ -56,6 +56,12 @@ def main() -> None:
         default=0,
         help="MAX(ID) already in skillraceclassinfo_dbc (default: 0 for stock DB)",
     )
+    parser.add_argument(
+        "--outfit-db-max-id",
+        type=int,
+        default=0,
+        help="MAX(ID) already in charstartoutfit_dbc (default: 0 for stock DB)",
+    )
     args = parser.parse_args()
 
     if args.dbc_dir is not None:
@@ -77,7 +83,12 @@ def main() -> None:
         UNINSTALL_DIR / "mod_uac_skillraceclassinfo_dbc_uninstall.sql",
         db_max_id=args.db_max_id,
     )
-    write_player_create_sql(source, INSTALL_DIR, UNINSTALL_DIR)
+    write_player_create_sql(
+        source,
+        INSTALL_DIR,
+        UNINSTALL_DIR,
+        db_max_outfit_id=args.outfit_db_max_id,
+    )
     write_totem_sql(
         INSTALL_DIR / "mod_uac_player_totem_model.sql",
         UNINSTALL_DIR / "mod_uac_player_totem_model_uninstall.sql",

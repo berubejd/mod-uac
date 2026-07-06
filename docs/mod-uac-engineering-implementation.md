@@ -128,13 +128,19 @@ A mask of `0` short-circuits the guard, i.e. the row applies to **all** races/cl
 delta** — emit rows only for (skill, class) whose existing rows do not already cover the new race —
 rather than cloning wholesale.
 
-### 3.6 Starting gear can come from the DB, not `CharStartOutfit.dbc`
-`Player::Create` applies **both** the outfit DBC (`Player.cpp:630`, `GetCharStartOutfitEntry`) **and**
-`playercreateinfo_item` DB rows (`Player.cpp:666–667`, `StoreNewItemInBestSlots`).
+### 3.6 Starting gear must use `CharStartOutfit.dbc`, not `playercreateinfo_item`
+`Player::Create` equips starter gear from `GetCharStartOutfitEntry()` (`Player.cpp:630`) — a lookup
+into `CharStartOutfit.dbc` / `charstartoutfit_dbc` keyed by `(race, class, sex)`. The separate
+`playercreateinfo_item` path (`Player.cpp:666–667`, `StoreNewItemInBestSlots`) is a secondary
+mechanism; **rndbots and other headless creation paths rely on the outfit DBC**, not item rows.
 
-**Consequence:** starting gear for new combos can be delivered entirely via `playercreateinfo_item`
-(revertable SQL). `CharStartOutfit.dbc` becomes client-cosmetic only (the creation-screen paperdoll
-preview) and is optional even there.
+**Consequence:** new combos need **cloned `CharStartOutfit` records** in `charstartoutfit_dbc`, not
+`playercreateinfo_item` inserts. A record is a fixed 77-field shape: header (`ID`, `Race`, `Class`,
+`Sex`, `OutfitID`) plus three parallel 24-wide arrays (`ItemId`, `DisplayItemId`, `InventoryType`).
+We do not compose item lists — we copy the reference combo's male and female records whole, re-key
+only the header (`Race`, `Class`, new `ID` above the stock max), and leave the arrays unchanged
+because they are item-derived and stay valid for the same items. Combos that already have a native
+stock outfit row (e.g. Dwarf Mage `(3,8)`) are skipped to avoid `sCharStartOutfitMap` collisions.
 
 ### 3.7 Summary table
 
@@ -142,8 +148,8 @@ preview) and is optional even there.
 |---|---|---|---|
 | `CharBaseInfo.dbc` | No (not loaded) | **Yes** (creation screen) | Generated client MPQ only |
 | `SkillRaceClassInfo` | **Yes** (proficiency gate) | Preview only | `skillraceclassinfo_dbc` overlay **SQL** |
-| `CharStartOutfit.dbc` | No | Preview only | Replaced by `playercreateinfo_item` SQL |
-| `playercreateinfo(+_action/_spell_custom/_skills/_item)` | **Yes** | No | Module install SQL (+ uninstall) |
+| `CharStartOutfit.dbc` | **Yes** (equip at creation) | Preview | `charstartoutfit_dbc` overlay SQL |
+| `playercreateinfo(+_action/_spell_custom/_skills)` | **Yes** | No | Module install SQL (+ uninstall) |
 | `player_totem_model` | Yes (off-race shamans) | No | Module install SQL (+ uninstall) |
 
 ---
@@ -153,7 +159,7 @@ preview) and is optional even there.
 ### 4.1 Split of responsibilities
 - **Server side: zero binary DBC edits.** Everything is SQL applied by the DB updater:
   `playercreateinfo`, `playercreateinfo_action`, `playercreateinfo_spell_custom`,
-  `playercreateinfo_skills`, `playercreateinfo_item`, `skillraceclassinfo_dbc`, `player_totem_model`.
+  `playercreateinfo_skills`, `charstartoutfit_dbc`, `skillraceclassinfo_dbc`, `player_totem_model`.
 - **Client side: one universal generated MPQ** containing `CharBaseInfo.dbc` (the full matrix).
   Optionally also regenerated `SkillRaceClassInfo.dbc` / `CharStartOutfit.dbc` for preview correctness
   (cosmetic, decided during 1e). The MPQ is **identical for every operator** because the combo matrix
@@ -177,8 +183,8 @@ The only thing the two entry points differ by is the DBC source:
   `CanonicalDbcSource(pin="v19")`. The *only* axis the front-ends differ on.
 - **`ComboMatrix`** — the target `(raceId, classId)` set, plus per-class metadata.
 - **`CanonicalKitResolver`** — composes each new combo from two orthogonal sources:
-  - **kit from the class** — starting `_action`, `_spell_custom`, `_skills`, `_item`, cloned from a
-    chosen reference combo of that class;
+  - **kit from the class** — starting `_action`, `_spell_custom`, `_skills`, and `charstartoutfit_dbc`
+    outfit clones, derived from a chosen reference combo of that class;
   - **location from the race** — spawn map/zone/x/y/z/o taken from any existing combo of that race.
 
   *Example:* to make a **Tauren Mage**, clone **Human Mage**'s kit (class 8) and place it at the
@@ -186,7 +192,8 @@ The only thing the two entry points differ by is the DBC source:
   than authored.
 - **Emitters** (each produces install + uninstall SQL, except the client emitter):
   - `SkillOverlayEmitter` → minimal `skillraceclassinfo_dbc` delta (§3.5), new IDs above source max.
-  - `PlayerCreateEmitter` → the four `playercreateinfo*` tables.
+  - `PlayerCreateEmitter` → `playercreateinfo`, `playercreateinfo_action`,
+    `playercreateinfo_skills`, and `charstartoutfit_dbc` overlays.
   - `TotemEmitter` → `player_totem_model` for off-race shamans.
   - `ClientPatchEmitter` → builds `CharBaseInfo.dbc` and packs the MPQ (pure-Python writer).
 
@@ -213,8 +220,9 @@ DbcSource ──► DbcTable(s) ──► ComboMatrix ──► CanonicalKitReso
 - **`playercreateinfo_action`** — starting action-bar buttons. Cloned from the class reference combo.
 - **`playercreateinfo_spell_custom`** — starting spells. Cloned from the class reference combo.
 - **`playercreateinfo_skills`** — starting skills. Cloned from the class reference combo.
-- **`playercreateinfo_item`** — starting items (replaces `CharStartOutfit.dbc`, §3.6). Cloned from the
-  class reference combo.
+- **`charstartoutfit_dbc`** — starting equipment (§3.6). Full 77-field records cloned from the class
+  reference combo's male/female outfits; overlay IDs above stock max; skipped when stock already
+  covers the combo.
 - **`player_totem_model`** — totem display for shamans of races without native totems (Alliance →
   Dwarf totems, Horde → Orc totems, mirroring the approach `mod-arac` used).
 - **`skillraceclassinfo_dbc`** — DBC overlay (§3.4). Columns mirror the `SkillRaceClassInfo` DBC
@@ -477,7 +485,8 @@ mod-uac/
 
 - `Player.cpp:496–501` — `GetPlayerInfo` null check = server-side combo gate.
 - `Player.cpp:622, 11926–11942` — `LearnDefaultSkills` gated on `GetSkillRaceClassInfo`.
-- `Player.cpp:630, 666–667` — `CharStartOutfit` DBC *and* `playercreateinfo_item` both applied.
+- `Player.cpp:630` — `GetCharStartOutfitEntry` / `CharStartOutfit` DBC is the primary equip path
+  (rndbots and headless creation depend on this). `playercreateinfo_item` (`666–667`) is secondary.
 - `Player.cpp:12457, 3106, 13826` — spell/skill learning gated on `GetSkillRaceClassInfo`.
 - `CharacterHandler.cpp:274+` — `HandleCharCreateOpcode`; no `CharBaseInfo` check.
 - `DBCStores.cpp:238` — file load then `LoadFromDB`.

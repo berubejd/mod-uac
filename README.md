@@ -103,7 +103,7 @@ Stock AzerothCore defaults this to `0`.
 | `mod_uac_skillraceclassinfo_dbc.sql` | Skill/proficiency overlay for new combos |
 | `mod_uac_playercreateinfo.sql` | Spawn locations (38 new rows) |
 | `mod_uac_playercreateinfo_action.sql` | Starting action bar |
-| `mod_uac_playercreateinfo_item.sql` | Starting equipment |
+| `mod_uac_charstartoutfit_dbc.sql` | Starting equipment (CharStartOutfit overlay) |
 | `mod_uac_player_totem_model.sql` | Totem models for off-race shamans |
 | `mod_uac_quest_template.sql` | Warlock tier A + §8.3 faction-wide class-quest unlocks |
 | `mod_uac_quest_template_addon.sql` | Anti-gray companion (no-op on stock AC; kept for parity) |

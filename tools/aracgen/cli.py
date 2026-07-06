@@ -42,8 +42,13 @@ def write_player_create_sql(
     source: DbcSource,
     install_dir: Path,
     uninstall_dir: Path,
+    *,
+    db_max_outfit_id: int = 0,
 ) -> None:
-    resolver = build_resolver(source.load_char_start_outfit())
+    resolver = build_resolver(
+        source.load_char_start_outfit(),
+        db_max_outfit_id=db_max_outfit_id,
+    )
     emitter = PlayerCreateEmitter(resolver)
     result = emitter.compute()
     install_files = emitter.render_install_files(result)
@@ -62,7 +67,10 @@ def write_player_create_sql(
         path.write_text(sql, encoding="utf-8")
         print(f"Wrote {path}")
 
-    print(f"Generated playercreateinfo data for {len(result.kits)} combos")
+    print(
+        f"Generated playercreateinfo data for {len(result.kits)} combos "
+        f"(outfit dbc max {resolver.dbc_max_outfit_id}, db max {db_max_outfit_id})"
+    )
 
 
 def write_totem_sql(

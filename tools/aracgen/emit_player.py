@@ -4,17 +4,23 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from aracgen.charstartoutfit_export import OutfitRecord, render_install_sql, render_uninstall_sql
 from aracgen.kits import CanonicalKitResolver, ComboKit
 from aracgen.item_prototypes import ItemPrototypeStore
-from aracgen.matrix import class_bit, race_bit
+from aracgen.matrix import ComboMatrix, class_bit, race_bit
 from aracgen.starter_skills import StarterSkillRow
-from aracgen.matrix import ComboMatrix
 from aracgen.stock_loader import StockKitStore
 
 
 @dataclass(frozen=True, slots=True)
 class PlayerCreateResult:
     kits: tuple[ComboKit, ...]
+
+    @property
+    def outfit_records(self) -> tuple[OutfitRecord, ...]:
+        return tuple(
+            record for kit in self.kits for record in kit.outfit_records
+        )
 
 
 def compute_player_create(resolver: CanonicalKitResolver) -> PlayerCreateResult:
@@ -97,48 +103,29 @@ def render_playercreateinfo_action_uninstall(result: PlayerCreateResult) -> str:
     )
 
 
-def _kits_with_items(result: PlayerCreateResult) -> tuple[ComboKit, ...]:
-    return tuple(kit for kit in result.kits if kit.items)
-
-
 def _kits_with_skills(result: PlayerCreateResult) -> tuple[ComboKit, ...]:
     return tuple(kit for kit in result.kits if kit.skills)
 
 
-def render_playercreateinfo_item_uninstall(result: PlayerCreateResult) -> str:
-    kits = _kits_with_items(result)
-    if not kits:
-        return "-- mod-uac: no playercreateinfo_item rows to remove.\n"
-    pairs = "), (".join(f"{kit.race_id}, {kit.class_id}" for kit in kits)
-    return "\n".join(
-        [
-            "-- mod-uac: revert playercreateinfo_item rows",
-            "",
-            f"DELETE FROM `playercreateinfo_item` WHERE (`race`, `class`) IN (({pairs}));",
-            "",
-        ]
-    )
-
-
-def render_playercreateinfo_item_install(result: PlayerCreateResult) -> str:
-    kits = _kits_with_items(result)
-    if not kits:
-        return "-- mod-uac: no playercreateinfo_item rows required.\n"
-
-    lines = [
-        "-- mod-uac: playercreateinfo_item rows (from CharStartOutfit reference kits)",
-        "-- Skips combos that already have native CharStartOutfit.dbc rows.",
-        "",
-    ]
-    for kit in kits:
-        for item_id, amount in kit.items:
-            lines.append(
-                "INSERT INTO `playercreateinfo_item` "
-                "(`race`, `class`, `itemid`, `amount`) "
-                f"VALUES ({kit.race_id}, {kit.class_id}, {item_id}, {amount});"
-            )
+def render_charstartoutfit_install(result: PlayerCreateResult) -> str:
+    lines: list[str] = []
+    if result.kits:
+        pairs = "), (".join(f"{kit.race_id}, {kit.class_id}" for kit in result.kits)
+        lines.extend(
+            [
+                "-- mod-uac: remove legacy playercreateinfo_item rows superseded by charstartoutfit_dbc",
+                "",
+                f"DELETE FROM `playercreateinfo_item` WHERE (`race`, `class`) IN (({pairs}));",
+                "",
+            ]
+        )
+    lines.append(render_install_sql(result.outfit_records).rstrip())
     lines.append("")
     return "\n".join(lines)
+
+
+def render_charstartoutfit_uninstall(result: PlayerCreateResult) -> str:
+    return render_uninstall_sql(result.outfit_records)
 
 
 def render_playercreateinfo_skills_install(result: PlayerCreateResult) -> str:
@@ -200,7 +187,7 @@ class PlayerCreateEmitter:
         return {
             "playercreateinfo": render_playercreateinfo_install(data),
             "playercreateinfo_action": render_playercreateinfo_action_install(data),
-            "playercreateinfo_item": render_playercreateinfo_item_install(data),
+            "charstartoutfit_dbc": render_charstartoutfit_install(data),
             "playercreateinfo_skills": render_playercreateinfo_skills_install(data),
         }
 
@@ -209,7 +196,7 @@ class PlayerCreateEmitter:
         return {
             "playercreateinfo": render_playercreateinfo_uninstall(data),
             "playercreateinfo_action": render_playercreateinfo_action_uninstall(data),
-            "playercreateinfo_item": render_playercreateinfo_item_uninstall(data),
+            "charstartoutfit_dbc": render_charstartoutfit_uninstall(data),
             "playercreateinfo_skills": render_playercreateinfo_skills_uninstall(data),
         }
 
@@ -219,6 +206,7 @@ def build_resolver(
     matrix: ComboMatrix | None = None,
     stock_dir=None,
     item_template_path=None,
+    db_max_outfit_id: int = 0,
 ) -> CanonicalKitResolver:
     from pathlib import Path
 
@@ -229,4 +217,5 @@ def build_resolver(
         item_prototypes=ItemPrototypeStore(
             Path(item_template_path) if item_template_path else None
         ),
+        db_max_outfit_id=db_max_outfit_id,
     )

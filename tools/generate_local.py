@@ -44,6 +44,12 @@ def main() -> None:
         default=0,
         help="MAX(ID) from SELECT MAX(ID) FROM skillraceclassinfo_dbc on your world DB",
     )
+    parser.add_argument(
+        "--outfit-db-max-id",
+        type=int,
+        default=0,
+        help="MAX(ID) from SELECT MAX(ID) FROM charstartoutfit_dbc on your world DB",
+    )
     args = parser.parse_args()
 
     source = LocalDbcSource(args.dbc_dir)
@@ -56,7 +62,7 @@ def main() -> None:
         uninstall_path,
         db_max_id=args.db_max_id,
     )
-    write_player_create_sql(source, args.output_dir, args.output_dir)
+    write_player_create_sql(source, args.output_dir, args.output_dir, db_max_outfit_id=args.outfit_db_max_id)
     write_totem_sql(
         args.output_dir / "mod_uac_player_totem_model.sql",
         args.output_dir / "mod_uac_player_totem_model_uninstall.sql",

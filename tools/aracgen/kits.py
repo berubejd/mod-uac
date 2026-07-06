@@ -2,12 +2,17 @@
 
 from __future__ import annotations
 
-import struct
 from dataclasses import dataclass, field
 
+from aracgen.charstartoutfit_export import (
+    OutfitRecord,
+    clone_reference_outfits,
+    outfit_id_floor,
+    stock_outfit_covers,
+)
 from aracgen.dbc import DbcTable
-from aracgen.matrix import ComboMatrix
 from aracgen.item_prototypes import ItemPrototypeStore
+from aracgen.matrix import ComboMatrix
 from aracgen.starter_skills import StarterSkillRow, compute_starter_skills
 from aracgen.stock_loader import ActionEntry, SpawnInfo, StockKitStore, spawn_for_race
 
@@ -21,8 +26,6 @@ DK_ABILITY_SPELLS: frozenset[int] = frozenset({49576, 45477, 45462, 45902, 47541
 # Action bar slots commonly used for racials in stock playercreateinfo_action.
 RACIAL_BUTTON_SLOTS: frozenset[int] = frozenset({2, 3, 9, 10, 11, 74, 75, 82})
 
-CHAR_START_OUTFIT_ITEM_FIELDS = tuple(range(5, 29))
-
 
 @dataclass(frozen=True, slots=True)
 class ComboKit:
@@ -30,7 +33,7 @@ class ComboKit:
     class_id: int
     spawn: SpawnInfo
     actions: tuple[ActionEntry, ...]
-    items: tuple[tuple[int, int], ...]  # (item_id, amount)
+    outfit_records: tuple[OutfitRecord, ...]
     skills: tuple[StarterSkillRow, ...]
 
 
@@ -50,11 +53,21 @@ class CanonicalKitResolver:
     store: StockKitStore
     outfit: DbcTable
     item_prototypes: ItemPrototypeStore
+    db_max_outfit_id: int = 0
     _racial_index: RacialIndex = field(init=False)
     _reference_race_cache: dict[tuple[int, str], int] = field(default_factory=dict, init=False)
+    _next_outfit_id: int = field(init=False)
+    _dbc_max_outfit_id: int = field(init=False)
 
     def __post_init__(self) -> None:
         self._racial_index = _build_racial_index(self.store)
+        dbc_max, _db_max, next_id = outfit_id_floor(self.outfit, self.db_max_outfit_id)
+        self._dbc_max_outfit_id = dbc_max
+        self._next_outfit_id = next_id
+
+    @property
+    def dbc_max_outfit_id(self) -> int:
+        return self._dbc_max_outfit_id
 
     def resolve(self, race_id: int, class_id: int) -> ComboKit:
         if not self.matrix.is_new(race_id, class_id):
@@ -64,15 +77,24 @@ class CanonicalKitResolver:
         ref_race = self.reference_race_for_class(class_id, race_id)
         spawn = spawn_for_race(self.store, race_id)
         actions = self._compose_actions(race_id, class_id, ref_race)
-        items = (
-            ()
-            if _stock_outfit_covers(self.outfit, race_id, class_id)
-            else self._compose_items(class_id, ref_race)
+        outfit_records: tuple[OutfitRecord, ...] = ()
+        if not stock_outfit_covers(self.outfit, race_id, class_id):
+            outfit_records, self._next_outfit_id = clone_reference_outfits(
+                self.outfit,
+                race_id=race_id,
+                class_id=class_id,
+                ref_race=ref_race,
+                next_record_id=self._next_outfit_id,
+            )
+        item_ids = frozenset(
+            item_id
+            for record in outfit_records
+            for item_id in record.positive_item_ids()
         )
         skills = compute_starter_skills(
             race_id,
             class_id,
-            items,
+            item_ids,
             self.store,
             self.item_prototypes,
             ref_race=ref_race,
@@ -82,7 +104,7 @@ class CanonicalKitResolver:
             class_id=class_id,
             spawn=spawn,
             actions=actions,
-            items=items,
+            outfit_records=outfit_records,
             skills=skills,
         )
 
@@ -135,17 +157,6 @@ class CanonicalKitResolver:
             break
 
         return tuple(merged[button] for button in sorted(merged))
-
-    def _compose_items(self, class_id: int, ref_race: int) -> tuple[tuple[int, int], ...]:
-        male_items = _outfit_items(self.outfit, ref_race, class_id, 0)
-        female_items = _outfit_items(self.outfit, ref_race, class_id, 1)
-        male_set, female_set = set(male_items), set(female_items)
-        if male_set == female_set:
-            item_ids = male_set
-        else:
-            # playercreateinfo_item has no gender column; include both when the DBC outfits differ.
-            item_ids = male_set | female_set
-        return tuple((item_id, 1) for item_id in sorted(item_ids))
 
 
 def _faction_of(race_id: int) -> frozenset[int]:
@@ -239,30 +250,3 @@ def _resolve_racial_spell(race_id: int, class_id: int, index: RacialIndex) -> in
         return next(iter(frequencies))
     # Per-class variants (Draenei Gift of the Naaru, Orc Blood Fury ranks): use base rank.
     return min(frequencies)
-
-
-def _stock_outfit_covers(outfit: DbcTable, race_id: int, class_id: int) -> bool:
-    """True when CharStartOutfit.dbc already equips this combo at creation."""
-    return any(
-        outfit.get_uint8(record_index, 1) == race_id
-        and outfit.get_uint8(record_index, 2) == class_id
-        for record_index in range(outfit.record_count)
-    )
-
-
-def _outfit_items(table: DbcTable, race_id: int, class_id: int, gender: int) -> list[int]:
-    fields = table._fields  # noqa: SLF001 — outfit layout is tied to DbcTable format metadata
-    for record_index in range(table.record_count):
-        if (
-            table.get_uint8(record_index, 1) == race_id
-            and table.get_uint8(record_index, 2) == class_id
-            and table.get_uint8(record_index, 3) == gender
-        ):
-            items: list[int] = []
-            for field_index in CHAR_START_OUTFIT_ITEM_FIELDS:
-                offset = fields[field_index].offset
-                item_id = struct.unpack_from("<i", table.records[record_index], offset)[0]
-                if item_id > 0:
-                    items.append(item_id)
-            return items
-    return []

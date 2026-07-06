@@ -56,28 +56,34 @@ def test_tauren_mage_has_racial_war_stomp(resolver: CanonicalKitResolver) -> Non
     assert 20549 in action_spells  # War Stomp
 
 
-def test_tauren_mage_items_from_horde_mage_reference(resolver: CanonicalKitResolver) -> None:
+def test_tauren_mage_outfit_from_horde_mage_reference(resolver: CanonicalKitResolver) -> None:
     kit = resolver.resolve(6, 8)
-    item_ids = {item_id for item_id, _amount in kit.items}
+    item_ids = {
+        item_id
+        for record in kit.outfit_records
+        for item_id in record.positive_item_ids()
+    }
     assert 1395 in item_ids  # mage staff from horde reference outfit
     assert 6948 in item_ids  # hearthstone
 
 
-def test_dwarf_mage_skips_items_when_char_start_outfit_exists(
+def test_dwarf_mage_skips_outfit_when_char_start_outfit_exists(
     resolver: CanonicalKitResolver,
 ) -> None:
     kit = resolver.resolve(3, 8)
-    assert kit.items == ()
+    assert kit.outfit_records == ()
 
 
-def test_dwarf_mage_item_sql_omits_guarded_combo(resolver: CanonicalKitResolver) -> None:
+def test_dwarf_mage_charstartoutfit_sql_omits_guarded_combo(
+    resolver: CanonicalKitResolver,
+) -> None:
     emitter = PlayerCreateEmitter(resolver)
-    install = emitter.render_install_files()["playercreateinfo_item"]
-    uninstall = emitter.render_uninstall_files()["playercreateinfo_item"]
-    assert "VALUES (3, 8," not in install
-    assert "(3, 8)" not in uninstall
-    assert "VALUES (6, 8," in install
-    assert "(6, 8)" in uninstall
+    install = emitter.render_install_files()["charstartoutfit_dbc"]
+    uninstall = emitter.render_uninstall_files()["charstartoutfit_dbc"]
+    assert "-- (3, 8," not in install
+    assert ", 3, 8," not in install.split("REPLACE INTO", 1)[-1]
+    assert "(3, 8" not in uninstall
+    assert "-- (6, 8," in install
 
 
 def test_player_create_emitter_produces_38_combos(resolver: CanonicalKitResolver) -> None:
@@ -91,7 +97,7 @@ def test_install_sql_includes_expected_tables(resolver: CanonicalKitResolver) ->
     install = emitter.render_install_files(result)
     assert "INSERT INTO `playercreateinfo`" in install["playercreateinfo"]
     assert "INSERT INTO `playercreateinfo_action`" in install["playercreateinfo_action"]
-    assert "INSERT INTO `playercreateinfo_item`" in install["playercreateinfo_item"]
+    assert "REPLACE INTO `charstartoutfit_dbc`" in install["charstartoutfit_dbc"]
     assert "INSERT INTO `playercreateinfo_skills`" in install["playercreateinfo_skills"]
     assert "(6, 8," in install["playercreateinfo"]
 
