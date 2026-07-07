@@ -1,0 +1,29 @@
+# mod-uac trainer placement overrides
+#
+# Match rows by zone label + class (see docs/trainer_worksheet.md).
+# In-game names: Red Cloud Mesa = CampNarache, Dun Morogh = Coldridge, etc.
+#
+# Set only the fields you want to change; everything else stays computed.
+#   zone, class — required (identify the trainer row)
+#   entry, anchor — optional (creature entry / anchor class)
+#   x, y, z, o — optional spawn position and facing (use all four to move)
+
+overrides:
+  - zone: CampNarache
+    class: Warlock
+    x: -2950.7625
+    y: -143.74812
+    z: 67.069466
+    o: 4.708466
+  - zone: Deathknell
+    class: Paladin
+    x: 1849.2815
+    y: 1644.8954
+    z: 97.62823
+    o: 4.066793
+  - zone: Deathknell
+    class: Hunter
+    x: 1875.4225
+    y: 1567.0908
+    z: 94.31241
+    o: 2.5329106

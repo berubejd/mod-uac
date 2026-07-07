@@ -421,7 +421,7 @@ def test_snapshot_roundtrip(minimal_snapshot: Snapshot, tmp_path: Path) -> None:
     minimal_snapshot.write(path)
     loaded = Snapshot.load(path)
     assert loaded.version == minimal_snapshot.version
-    assert loaded.data["trainers"]["creature_spawns"][0]["entry"] == 895
+    assert any(spawn["entry"] == 895 for spawn in loaded.data["trainers"]["creature_spawns"])
     assert loaded.schema("creature").column_names()[1] == "id"
 
 

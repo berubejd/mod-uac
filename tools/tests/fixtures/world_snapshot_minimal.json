@@ -5,9 +5,24 @@
   "data": {
     "trainers": {
       "creature_default_trainer": {
-        "895": 7
+        "375": 12,
+        "895": 7,
+        "17089": 15
       },
       "creature_spawns": [
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 375,
+          "equipment_id": 1,
+          "guid": 122,
+          "map": 0,
+          "npcflag": 0,
+          "o": 2.5482,
+          "x": -8853.59,
+          "y": -193.336,
+          "z": 82.1157
+        },
         {
           "curhealth": 102,
           "curmana": 0,
@@ -20,13 +35,36 @@
           "x": -8850.0,
           "y": -190.0,
           "z": 89.0
+        },
+        {
+          "curhealth": 115,
+          "curmana": 126,
+          "entry": 17089,
+          "equipment_id": 1,
+          "guid": 124,
+          "map": 0,
+          "npcflag": 0,
+          "o": 2.0,
+          "x": -8600.0,
+          "y": -50.0,
+          "z": 85.0
         }
       ],
       "creature_template": {
+        "375": {
+          "faction": 55,
+          "name": "Priestess Anetta",
+          "subname": "Priest Trainer"
+        },
         "895": {
           "faction": 55,
           "name": "Thorgas Grimson",
           "subname": "Hunter Trainer"
+        },
+        "17089": {
+          "faction": 55,
+          "name": "Firmanvaar",
+          "subname": "Shaman Trainer"
         }
       },
       "playercreateinfo": [
@@ -56,14 +94,30 @@
           "curmana": 0,
           "equipment_id": 1,
           "npcflag": 0
+        },
+        "17089": {
+          "curhealth": 115,
+          "curmana": 126,
+          "equipment_id": 1,
+          "npcflag": 0
         }
       },
       "trainer_spell_counts": {
-        "7": 5
+        "7": 5,
+        "12": 5,
+        "15": 4
       },
       "trainers": {
         "7": {
           "requirement": 3,
+          "type": 0
+        },
+        "12": {
+          "requirement": 3,
+          "type": 0
+        },
+        "15": {
+          "requirement": 4,
           "type": 0
         }
       }
