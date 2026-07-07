@@ -235,8 +235,9 @@ expected to behave equivalently but were not individually re-tested beyond place
 `charstartoutfit_export`, `emit_totem`, `emit_class_quest`, `emit_hunter_pet` / `spell_dbc_export`,
 `emit_trainers`.
 
-**Not on schema contract:** `emit_client` (MPQ patches: `CharBaseInfo.dbc`; optional
-`CharStartOutfit.dbc` in standard/enhanced variants — see `client-patch/*/patch-z.mpq`).
+**Not on schema contract:** `emit_client` (MPQ patches: `CharBaseInfo.dbc` and merged
+`SkillRaceClassInfo.dbc` in all variants; optional `CharStartOutfit.dbc` in standard/enhanced — see
+`client-patch/*/patch-z.mpq`).
 
 ---
 

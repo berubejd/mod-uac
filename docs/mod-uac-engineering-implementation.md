@@ -119,8 +119,10 @@ overrides the file record. The `SkillRaceClassInfoBySkill` lookup map is rebuilt
 The `*_dbc` tables ship **empty** because base game data lives in the `.dbc` files; the tables exist
 purely so operators/modules can add or override records via SQL.
 
-**Consequence — this is the key architectural unlock:** the `SkillRaceClassInfo` records for new
-combos go into the **`skillraceclassinfo_dbc` table as revertable SQL**, not into the binary file.
+**Consequence — this is the key architectural unlock:** on the **server**, `SkillRaceClassInfo`
+records for new combos go into the **`skillraceclassinfo_dbc` table as revertable SQL**, not into
+the server `Data/dbc/` binary files. On the **client**, the same overlay rows are merged into a
+complete `SkillRaceClassInfo.dbc` inside `patch-z.mpq` (MPQ replaces the whole file; see §4.1).
 This removes the last mandatory server-side binary DBC edit.
 
 ### 3.5 `RaceMask`/`ClassMask` are bitmasks; `0` matches everything
@@ -154,7 +156,7 @@ stock outfit row (e.g. Dwarf Mage `(3,8)`) are skipped to avoid `sCharStartOutfi
 | Data | Server needs | Client needs | Home in `mod-uac` |
 |---|---|---|---|
 | `CharBaseInfo.dbc` | No (not loaded) | **Yes** (creation screen) | Generated client MPQ only |
-| `SkillRaceClassInfo` | **Yes** (proficiency gate) | Preview only | `skillraceclassinfo_dbc` overlay **SQL** |
+| `SkillRaceClassInfo` | **Yes** (proficiency gate) | **Yes** (equip tooltips) | Server: `skillraceclassinfo_dbc` SQL; client: merged DBC in all `patch-z.mpq` |
 | `CharStartOutfit.dbc` | **Yes** (equip at creation) | Preview | `charstartoutfit_dbc` overlay SQL |
 | `playercreateinfo(+_action/_spell_custom/_skills)` | **Yes** | No | Module install SQL (+ uninstall) |
 | `player_totem_model` | Yes (off-race shamans) | No | Module install SQL (+ uninstall) |
@@ -168,9 +170,9 @@ stock outfit row (e.g. Dwarf Mage `(3,8)`) are skipped to avoid `sCharStartOutfi
   `playercreateinfo`, `playercreateinfo_action`, `playercreateinfo_spell_custom`,
   `playercreateinfo_skills`, `charstartoutfit_dbc`, `skillraceclassinfo_dbc`, `player_totem_model`.
 - **Client side: three generated MPQs** under `client-patch/` (all named `patch-z.mpq`):
-  **unlock-only** (`CharBaseInfo` only), **standard** (wowgaming v19 `CharStartOutfit` + 74 overlay
-  rows), **enhanced** (HD baseline from `data/client/hd_outfit_*.json` + overlay rows with HD
-  preview displays). Operators pick one directory; see README.
+  **unlock-only** (`CharBaseInfo` + merged `SkillRaceClassInfo`), **standard** (adds wowgaming v19
+  `CharStartOutfit` + 74 overlay rows), **enhanced** (HD baseline from `data/client/hd_outfit_*.json`
+  + overlay rows with HD preview displays). Operators pick one directory; see README.
 
 ### 4.2 The generator: one core, two front-ends
 The only thing the two entry points differ by is the DBC source:
@@ -204,7 +206,8 @@ The only thing the two entry points differ by is the DBC source:
     `playercreateinfo_skills`, and `charstartoutfit_dbc` overlays (schema-driven via snapshot).
   - `TotemEmitter` → `player_totem_model` for off-race shamans.
   - `TrainerEmitter` → starter-zone `creature` spawns for new combos (snapshot-driven; §8 Phase 2b).
-  - `ClientPatchEmitter` → builds `CharBaseInfo.dbc` and packs the MPQ (pure-Python writer).
+  - `ClientPatchEmitter` → builds `CharBaseInfo.dbc`, merged `SkillRaceClassInfo.dbc`, and
+    (in standard/enhanced) `CharStartOutfit.dbc`; packs the MPQ (pure-Python writer).
 
 All world-table SQL emitters share the **`schema_emit` contract**: column order, defaults, and
 signed-int normalization come from the baked world snapshot (`data/snapshot/`), refreshed via
@@ -223,7 +226,7 @@ DbcSource ──► DbcTable(s) ──► ComboMatrix ──► CanonicalKitReso
                         ClientPatchEmitter
                                    │
                                    ▼
-                        CharBaseInfo.dbc → MPQ
+                        CharBaseInfo + SkillRaceClassInfo (+ CharStartOutfit) → MPQ
 ```
 
 ---
@@ -256,6 +259,11 @@ DbcSource ──► DbcTable(s) ──► ComboMatrix ──► CanonicalKitReso
   generator emits the full playable matrix: races `{1,2,3,4,5,6,7,8,10,11}` × classes
   `{1,2,3,4,5,6,7,8,9,11}` = **100 records** (race id 9 = Goblin and class id 10 are not playable and
   are skipped). Including already-valid combos here is harmless.
+- **`SkillRaceClassInfo.dbc`** — 8 fields per `SkillRaceClassInfofmt`. Shipped in **all** client
+  patch variants: stock baseline rows preserved, then 37 mod-uac overlay rows appended (278 records
+  on the v19 canonical source). Mirrors the server `skillraceclassinfo_dbc` overlay so equip tooltips
+  resolve correctly for new combos.
+- **`CharStartOutfit.dbc`** — optional in `standard/` and `enhanced/` only; see §4.1 and README.
 
 ### 5.3 Overlay ID assignment rule
 Compute `base_max = max(ID)` over the source `SkillRaceClassInfo.dbc`. Assign overlay row IDs
@@ -354,7 +362,8 @@ side reverts by removing the MPQ from `Data/`.
 - **1d — `TotemEmitter` + quest investigation.** `player_totem_model` for off-race shamans;
   document why mod-arac's global `quest_template` UPDATE is not replicated.
 - **1e — `ClientPatchEmitter` (complete).** Pure-Python MPQ v1 writer; emits unlock-only,
-  standard, and enhanced `client-patch/*/patch-z.mpq`. HD baseline is checked in as deduplicated JSON
+  standard, and enhanced `client-patch/*/patch-z.mpq` (all include merged `SkillRaceClassInfo.dbc`;
+  standard/enhanced add `CharStartOutfit`). HD baseline is checked in as deduplicated JSON
   (`data/client/hd_outfit_templates.json`, `hd_outfit_stock_index.json`); refresh from patch-k via
   `tools/extract_hd_outfit_baseline.py`.
 - **1f — Module packaging + docs (complete).** `CMakeLists.txt` (data-only); SQL path verified against
@@ -477,7 +486,8 @@ install/uninstall pair for anti-gray rows.
 2. **`skillraceclassinfo_dbc` columns** — mapped from `SkillRaceClassInfofmt` in the emitter; re-verify
    if AC schema changes.
 3. **Client preview DBCs** — **resolved (1e + follow-up).** Three checked-in MPQ variants; see
-   README. `CharStartOutfit` overlays are append-only (74 rows); enhanced uses HD baseline bytes
+   README. All variants ship merged `SkillRaceClassInfo.dbc` (stock + 37 overlay rows). `CharStartOutfit`
+   overlays are append-only (74 rows) in standard/enhanced only; enhanced uses HD baseline bytes
    for stock rows and HD preview displays on overlay rows only.
 4. **`quest_template` edit** — resolved in 1g (§8.1–8.3).
 5. **Shaman Call of Earth at level 4** — faction quest patch + anti-gray shipped (§8.3); spell-grant
@@ -497,7 +507,7 @@ install/uninstall pair for anti-gray rows.
   is Windows-x86 read-only; `mpyq` is read-only — hence the pure-Python writer.)
 - **Core target:** AzerothCore WotLK 3.3.5a.
 - **Canonical DBC source:** `wowgaming/client-data`, pinned at tag **`v19`**.
-- **Distribution:** module repo with checked-in SQL, the generator, and one universal client MPQ.
+- **Distribution:** module repo with checked-in SQL, the generator, and three client MPQ variants.
 
 ### Proposed on-disk layout
 ```
@@ -513,8 +523,8 @@ mod-uac/
       emit_hunter_pet.py  emit_trainers.py  emit_client.py  mpq.py
       snapshot.py  trainer_catalog.py  schema_emit.py
   tools/capture_snapshot.py     # world DB snapshot capture
-  tools/generate_local.py       # LocalDbcSource     -> operator SQL only
-  tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + shared MPQ
+  tools/generate_local.py       # LocalDbcSource     -> operator SQL + standard MPQ
+  tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + client MPQs
   tools/requirements.txt
   client-patch/unlock-only/patch-z.mpq
   client-patch/standard/patch-z.mpq

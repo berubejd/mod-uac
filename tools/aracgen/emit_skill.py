@@ -93,6 +93,33 @@ class SkillRaceClassInfoRow:
         }
 
 
+def append_skill_row(table: DbcTable, row: SkillRaceClassInfoRow) -> None:
+    """Append one SkillRaceClassInfo row to an in-memory DBC table."""
+    if table.format_str != SKILL_RACE_CLASS_INFO:
+        msg = "Expected SkillRaceClassInfo.dbc table"
+        raise ValueError(msg)
+    record_index = table.append_record()
+    table.set_uint32(record_index, 0, row.record_id)
+    table.set_uint32(record_index, 1, row.skill_id)
+    table.set_uint32(record_index, 2, row.race_mask)
+    table.set_uint32(record_index, 3, row.class_mask)
+    table.set_uint32(record_index, 4, row.flags)
+    table.set_uint32(record_index, 5, row.min_level)
+    table.set_uint32(record_index, 6, row.skill_tier_id)
+    table.set_uint32(record_index, 7, row.skill_cost_index)
+
+
+def merge_skill_overlays(
+    stock: DbcTable,
+    overlay_rows: tuple[SkillRaceClassInfoRow, ...],
+) -> DbcTable:
+    """Return stock SkillRaceClassInfo.dbc plus mod-uac overlay rows for the client MPQ."""
+    table = DbcTable.read(stock.write(), SKILL_RACE_CLASS_INFO)
+    for row in overlay_rows:
+        append_skill_row(table, row)
+    return table
+
+
 @dataclass(frozen=True, slots=True)
 class SkillOverlayResult:
     dbc_max_id: int

@@ -46,15 +46,15 @@ mod-uac/
       emit_hunter_pet.py  emit_trainers.py  emit_client.py  mpq.py
       snapshot.py  trainer_catalog.py  schema_emit.py
   tools/capture_snapshot.py     # world DB snapshot capture (PyMySQL)
-  tools/generate_local.py       # LocalDbcSource     -> operator SQL only
-  tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + shared MPQ
+  tools/generate_local.py       # LocalDbcSource     -> operator SQL + standard MPQ
+  tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + client MPQs
   data/snapshot/                # baked world snapshot (schemas + trainer extracts)
   data/item_prototypes.json     # minimal outfit item class/subclass lookup (from snapshot refresh)
   data/trainer_overrides.yaml   # optional trainer placement overrides
   tools/requirements.txt
-  client-patch/unlock-only/patch-z.mpq   # CharBaseInfo only
-  client-patch/standard/patch-z.mpq      # v19 CharStartOutfit + overlays
-  client-patch/enhanced/patch-z.mpq      # HD baseline CharStartOutfit + overlays
+  client-patch/unlock-only/patch-z.mpq   # CharBaseInfo + SkillRaceClassInfo
+  client-patch/standard/patch-z.mpq      # above + v19 CharStartOutfit + overlays
+  client-patch/enhanced/patch-z.mpq      # above + HD baseline CharStartOutfit + overlays
   data/client/hd_outfit_templates.json   # deduplicated HD stock outfit templates (54)
   data/client/hd_outfit_stock_index.json # 126 stock rows -> template_id
   CMakeLists.txt                # data-only module stub

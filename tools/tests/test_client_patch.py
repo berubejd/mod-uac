@@ -13,17 +13,20 @@ from aracgen.emit_client import (
     CLIENT_PATCH_STANDARD_DIR,
     CLIENT_PATCH_UNLOCK_ONLY_DIR,
     LISTFILE_MPQ_PATH,
+    SKILL_RACE_CLASS_INFO_MPQ_PATH,
     ClientPatchVariant,
     build_char_base_info_table,
     build_client_patch_bytes,
+    build_skill_race_class_info_table,
 )
-from aracgen.formats import CHAR_BASE_INFO, CHAR_START_OUTFIT
+from aracgen.emit_skill import compute_skill_overlay
+from aracgen.formats import CHAR_BASE_INFO, CHAR_START_OUTFIT, SKILL_RACE_CLASS_INFO
 from aracgen.hd_outfit_baseline import (
     HD_OUTFIT_STOCK_INDEX_PATH,
     HD_OUTFIT_TEMPLATES_PATH,
     load_hd_charstartoutfit_baseline,
 )
-from aracgen.matrix import PLAYABLE_CLASSES, PLAYABLE_RACES
+from aracgen.matrix import PLAYABLE_CLASSES, PLAYABLE_RACES, ComboMatrix, mask_covers_race_class
 from aracgen.mpq import MpqFileEntry, build_mpq_v1, decrypt, encrypt, hash_string, read_mpq_file
 from aracgen.sources import ZipDbcSource
 
@@ -65,7 +68,10 @@ def dbc_source() -> ZipDbcSource:
     return ZipDbcSource(DATA_ZIP)
 
 
-def test_unlock_only_patch_has_char_base_info_only(dbc_source: ZipDbcSource) -> None:
+def test_unlock_only_patch_has_char_base_info_and_skill_overlay(
+    dbc_source: ZipDbcSource,
+) -> None:
+    stock_skill = dbc_source.load_skill_race_class_info()
     payload = build_client_patch_bytes(
         dbc_source,
         variant=ClientPatchVariant.UNLOCK_ONLY,
@@ -75,7 +81,46 @@ def test_unlock_only_patch_has_char_base_info_only(dbc_source: ZipDbcSource) -> 
     assert table.record_count == 100
     listfile = read_mpq_file(payload, LISTFILE_MPQ_PATH).decode("ascii")
     assert CHAR_BASE_INFO_MPQ_PATH in listfile
+    assert SKILL_RACE_CLASS_INFO_MPQ_PATH in listfile
     assert CHAR_START_OUTFIT_MPQ_PATH not in listfile
+    skill_raw = read_mpq_file(payload, SKILL_RACE_CLASS_INFO_MPQ_PATH)
+    patched_skill = DbcTable.read(skill_raw, SKILL_RACE_CLASS_INFO)
+    overlay = compute_skill_overlay(stock_skill, ComboMatrix.stock())
+    assert patched_skill.record_count == stock_skill.record_count + len(overlay.rows)
+    for index in range(stock_skill.record_count):
+        assert patched_skill.records[index] == stock_skill.records[index]
+
+
+def test_all_patch_variants_include_skill_race_class_info(dbc_source: ZipDbcSource) -> None:
+    for variant in ClientPatchVariant:
+        payload = build_client_patch_bytes(dbc_source, variant=variant)
+        listfile = read_mpq_file(payload, LISTFILE_MPQ_PATH).decode("ascii")
+        assert SKILL_RACE_CLASS_INFO_MPQ_PATH in listfile
+        patched = DbcTable.read(
+            read_mpq_file(payload, SKILL_RACE_CLASS_INFO_MPQ_PATH),
+            SKILL_RACE_CLASS_INFO,
+        )
+        assert patched.record_count == 278
+
+
+def test_skill_overlay_covers_night_elf_shaman_mail_gate(dbc_source: ZipDbcSource) -> None:
+    table = build_skill_race_class_info_table(dbc_source)
+    mail_rows = [
+        (
+            table.get_uint32(index, 0),
+            table.get_uint32(index, 5),
+        )
+        for index in range(table.record_count)
+        if table.get_uint32(index, 1) == 413
+        and mask_covers_race_class(
+            table.get_uint32(index, 2),
+            table.get_uint32(index, 3),
+            4,
+            7,
+        )
+    ]
+    assert mail_rows
+    assert all(min_level == 40 for _, min_level in mail_rows)
 
 
 def test_standard_patch_appends_char_start_outfit_overlays(dbc_source: ZipDbcSource) -> None:

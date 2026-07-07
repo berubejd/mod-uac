@@ -42,7 +42,8 @@ For each new combo the module provides:
 | Concern | Mechanism |
 |---------|-----------|
 | Creation allowed (server) | `playercreateinfo` + action/item/spell rows |
-| Armor & weapon skills | `skillraceclassinfo_dbc` overlay |
+| Armor & weapon skills (server) | `skillraceclassinfo_dbc` overlay |
+| Equip restriction tooltips (client) | Merged `SkillRaceClassInfo.dbc` in any `client-patch/*/patch-z.mpq` |
 | Creation screen tiles (client) | `CharBaseInfo.dbc` in any `client-patch/*/patch-z.mpq` |
 | Dressing-room preview gear (client) | `standard/` or `enhanced/` patch (see below) |
 | Off-race shaman totems | `player_totem_model` |
@@ -88,9 +89,9 @@ Choose **one** checked-in MPQ and copy it to your WoW 3.3.5 client `Data/` folde
 
 | Directory | What it changes | Best for |
 |-----------|-----------------|----------|
-| **`client-patch/unlock-only/`** | `CharBaseInfo.dbc` only — unlocks all tiles | Minimal install; creation previews use whatever your client already has |
-| **`client-patch/standard/`** | `CharBaseInfo` + `CharStartOutfit` (wowgaming v19 + mod-uac overlay rows) | Reference / stock 3.3.5 clients — new combos show **starter-gear** creation previews |
-| **`client-patch/enhanced/`** | `CharBaseInfo` + `CharStartOutfit` (HD patch-k baseline + overlay rows with HD showcase displays) | Official HD 3.3.5a client — preserves retail-style creation previews for stock combos |
+| **`client-patch/unlock-only/`** | `CharBaseInfo` + `SkillRaceClassInfo` (v19 + overlay rows) | Minimal install; creation outfit previews use whatever your client already has |
+| **`client-patch/standard/`** | Above + `CharStartOutfit` (wowgaming v19 + mod-uac overlay rows) | Reference / stock 3.3.5 clients — new combos show **starter-gear** creation previews |
+| **`client-patch/enhanced/`** | Above + `CharStartOutfit` (HD patch-k baseline + overlay rows with HD showcase displays) | Official HD 3.3.5a client — preserves retail-style creation previews for stock combos |
 
 Example:
 
@@ -101,7 +102,10 @@ client-patch/enhanced/patch-z.mpq  →  <WoW>/Data/patch-z.mpq
 All three files are named `patch-z.mpq`; only the source directory differs.
 
 The client loads `CharBaseInfo.dbc` so all race/class tiles appear on the creation screen.
-The server does not read this file — `playercreateinfo` rows gate creation server-side.
+`SkillRaceClassInfo.dbc` mirrors the server `skillraceclassinfo_dbc` overlay so equip tooltips
+show correct armor/weapon restrictions for new combos (stock rows are preserved; 37 overlay rows
+are appended). The server does not read either file — `playercreateinfo` rows gate creation
+server-side.
 
 **Outfit patches (`standard/` and `enhanced/`):** append 74 `CharStartOutfit` overlay rows (37 new
 combos × 2 sexes) for dressing-room preview on **new** mod-uac combinations. Server starting gear
@@ -116,10 +120,12 @@ are preview-only.
   `patch-k.mpq` via `tools/extract_hd_outfit_baseline.py`.
 
 **Unlock-only** does not ship `CharStartOutfit` at all, so it never replaces your client's existing
-outfit file (including HD `patch-k`).
+outfit file (including HD `patch-k`). It still ships the merged `SkillRaceClassInfo.dbc` needed for
+correct in-game equip tooltips on new combos.
 
-Operators with a custom DBC baseline can still run `tools/generate_local.py` to produce a
-`standard`-style outfit patch from their own extracted `Data/dbc/`.
+Operators with a custom DBC baseline can still run `tools/generate_local.py` to produce
+operator-specific SQL and a `standard`-style client MPQ (`CharBaseInfo` + merged
+`SkillRaceClassInfo` + `CharStartOutfit`) from their own extracted `Data/dbc/`.
 
 **Patch file name:** use `patch-z.mpq` so the patch loads **late** in the MPQ chain (after HD
 `patch-k` and most stock patches). On the official HD client, **`z` was an open single-letter slot**
@@ -249,8 +255,9 @@ Or copy [tools/snapshot.conf.dist](tools/snapshot.conf.dist) to `tools/snapshot.
 
 ### `generate_local.py`
 
-Operator-specific output when your DBC baseline or overlay max IDs differ from stock. Writes to
-`tools/output/` by default (not the checked-in `data/sql/` tree).
+Operator-specific output when your DBC baseline or overlay max IDs differ from stock. Writes SQL
+and a `standard`-style `patch-z.mpq` to `tools/output/` by default (not the checked-in `data/sql/`
+tree).
 
 ```bash
 python tools/generate_local.py /path/to/dbc --db-max-id 970
@@ -312,6 +319,7 @@ Regenerate SQL after changes. Full emitter design: [docs/mod-uac-trainer-emitter
 - [ ] Apply install SQL on a stock AC world DB; worldserver starts cleanly
 - [ ] Remove client patch; off-race combos absent on creation screen
 - [ ] Install one `client-patch/*/patch-z.mpq` (see table above); all race/class tiles selectable
+- [ ] On an off-race combo (e.g. Night Elf Shaman), item tooltips show red for gear you cannot wear yet (mail at level 1, daggers)
 - [ ] Dressing-room preview shows starter gear on a new combo (e.g. Tauren Mage), not naked
 - [ ] Create off-race shaman; totems display with faction-appropriate models (not invisible)
 - [ ] Create Dwarf Warlock; complete imp quest chain in Dun Morogh (tier A)

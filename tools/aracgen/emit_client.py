@@ -9,6 +9,7 @@ from pathlib import Path
 from aracgen.charstartoutfit_export import merge_outfit_overlays
 from aracgen.dbc import DbcTable
 from aracgen.emit_player import build_resolver, compute_player_create
+from aracgen.emit_skill import compute_skill_overlay, merge_skill_overlays
 from aracgen.formats import CHAR_BASE_INFO
 from aracgen.hd_outfit_baseline import (
     HD_OUTFIT_STOCK_INDEX_PATH,
@@ -16,13 +17,14 @@ from aracgen.hd_outfit_baseline import (
     apply_hd_preview_displays,
     load_hd_outfit_catalog,
 )
-from aracgen.matrix import PLAYABLE_CLASSES, PLAYABLE_RACES
+from aracgen.matrix import PLAYABLE_CLASSES, PLAYABLE_RACES, ComboMatrix
 from aracgen.mpq import MpqFileEntry, build_mpq_v1
 from aracgen.sources import DbcSource
 
 # WoW 3.3.5a client lookup paths inside the MPQ.
 CHAR_BASE_INFO_MPQ_PATH = "DBFilesClient\\CharBaseInfo.dbc"
 CHAR_START_OUTFIT_MPQ_PATH = "DBFilesClient\\CharStartOutfit.dbc"
+SKILL_RACE_CLASS_INFO_MPQ_PATH = "DBFilesClient\\SkillRaceClassInfo.dbc"
 LISTFILE_MPQ_PATH = "(listfile)"
 
 # Single-letter patch slot; loads late on stock clients. See README for rename guidance.
@@ -53,6 +55,13 @@ def build_char_base_info_table() -> DbcTable:
     return table
 
 
+def build_skill_race_class_info_table(source: DbcSource) -> DbcTable:
+    """Stock SkillRaceClassInfo.dbc plus mod-uac overlay rows for client equip tooltips."""
+    stock = source.load_skill_race_class_info()
+    overlay = compute_skill_overlay(stock, ComboMatrix.stock())
+    return merge_skill_overlays(stock, overlay.rows)
+
+
 def build_client_patch_bytes(
     source: DbcSource,
     *,
@@ -62,10 +71,12 @@ def build_client_patch_bytes(
 ) -> bytes:
     """Build the client MPQ payload for the requested variant."""
     char_base_info = build_char_base_info_table().write()
-    listfile_lines = [CHAR_BASE_INFO_MPQ_PATH]
+    skill_race_class_info = build_skill_race_class_info_table(source).write()
+    listfile_lines = [CHAR_BASE_INFO_MPQ_PATH, SKILL_RACE_CLASS_INFO_MPQ_PATH]
 
     entries: list[MpqFileEntry] = [
         MpqFileEntry(path=CHAR_BASE_INFO_MPQ_PATH, data=char_base_info),
+        MpqFileEntry(path=SKILL_RACE_CLASS_INFO_MPQ_PATH, data=skill_race_class_info),
     ]
 
     if variant is not ClientPatchVariant.UNLOCK_ONLY:
