@@ -4,10 +4,14 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass
+from pathlib import Path
 
 from aracgen.dbc import DbcTable
 from aracgen.formats import SKILL_RACE_CLASS_INFO
 from aracgen.matrix import ComboMatrix, mask_covers_race_class, race_bit
+from aracgen.schema_emit import render_insert
+from aracgen.snapshot import load_snapshot
+from aracgen.snapshot_model import Snapshot
 
 # World DB columns aligned with skillraceclassinfo_dbc + SkillRaceClassInfofmt field order.
 SKILL_RACE_CLASS_INFO_COLUMNS: tuple[str, ...] = (
@@ -25,6 +29,8 @@ SKILL_RACE_CLASS_INFO_COLUMNS: tuple[str, ...] = (
 SKILL_RACE_CLASS_INFO_FIELD_INDEX: dict[str, int] = {
     name: index for index, name in enumerate(SKILL_RACE_CLASS_INFO_COLUMNS)
 }
+
+SKILL_OVERLAY_TABLE = "skillraceclassinfo_dbc"
 
 
 @dataclass(frozen=True, slots=True)
@@ -73,6 +79,18 @@ class SkillRaceClassInfoRow:
             skill_tier_id=self.skill_tier_id,
             skill_cost_index=self.skill_cost_index,
         )
+
+    def logical_values(self) -> dict[str, int]:
+        return {
+            "ID": self.record_id,
+            "SkillID": self.skill_id,
+            "RaceMask": self.race_mask,
+            "ClassMask": self.class_mask,
+            "Flags": self.flags,
+            "MinLevel": self.min_level,
+            "SkillTierID": self.skill_tier_id,
+            "SkillCostIndex": self.skill_cost_index,
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -198,26 +216,21 @@ def compute_skill_overlay(
     return SkillOverlayResult(dbc_max_id=dbc_max_id, db_max_id=db_max_id, rows=tuple(overlay_rows))
 
 
-def _sql_value(column: str, row: SkillRaceClassInfoRow) -> int:
-    return {
-        "ID": row.record_id,
-        "SkillID": row.skill_id,
-        "RaceMask": row.race_mask,
-        "ClassMask": row.class_mask,
-        "Flags": row.flags,
-        "MinLevel": row.min_level,
-        "SkillTierID": row.skill_tier_id,
-        "SkillCostIndex": row.skill_cost_index,
-    }[column]
+def _resolve_snapshot(snapshot: Snapshot | None) -> Snapshot:
+    return snapshot if snapshot is not None else load_snapshot()
 
 
-def render_install_sql(result: SkillOverlayResult) -> str:
+def render_install_sql(
+    result: SkillOverlayResult,
+    *,
+    snapshot: Snapshot | None = None,
+) -> str:
     if not result.rows:
         return (
             "-- mod-uac: no skillraceclassinfo_dbc overlay rows required for this baseline.\n"
         )
 
-    columns = ", ".join(f"`{name}`" for name in SKILL_RACE_CLASS_INFO_COLUMNS)
+    schema = _resolve_snapshot(snapshot).schema(SKILL_OVERLAY_TABLE)
     id_list = ", ".join(str(record_id) for record_id in result.overlay_ids)
     lines = [
         "-- mod-uac: skillraceclassinfo_dbc overlay (Unlock All Classes)",
@@ -226,8 +239,7 @@ def render_install_sql(result: SkillOverlayResult) -> str:
         "",
     ]
     for row in result.rows:
-        values = ", ".join(str(_sql_value(col, row)) for col in SKILL_RACE_CLASS_INFO_COLUMNS)
-        lines.append(f"INSERT INTO `skillraceclassinfo_dbc` ({columns}) VALUES ({values});")
+        lines.append(render_insert(SKILL_OVERLAY_TABLE, schema, row.logical_values()))
     lines.append("")
     return "\n".join(lines)
 
@@ -244,7 +256,7 @@ def render_uninstall_sql(result: SkillOverlayResult) -> str:
             "-- mod-uac: revert skillraceclassinfo_dbc overlay",
             f"-- removes exactly these IDs: {id_list}",
             "",
-            f"DELETE FROM `skillraceclassinfo_dbc` WHERE `ID` IN ({id_list});",
+            f"DELETE FROM `{SKILL_OVERLAY_TABLE}` WHERE `ID` IN ({id_list});",
             "",
         ]
     )
@@ -256,16 +268,32 @@ class SkillOverlayEmitter:
         table: DbcTable,
         matrix: ComboMatrix | None = None,
         db_max_id: int = 0,
+        snapshot: Snapshot | None = None,
     ) -> None:
         self.table = table
         self.matrix = matrix or ComboMatrix.stock()
         self.db_max_id = db_max_id
+        self.snapshot = snapshot
 
     def compute(self) -> SkillOverlayResult:
         return compute_skill_overlay(self.table, self.matrix, db_max_id=self.db_max_id)
 
     def render_install(self, result: SkillOverlayResult | None = None) -> str:
-        return render_install_sql(result or self.compute())
+        return render_install_sql(result or self.compute(), snapshot=self.snapshot)
 
     def render_uninstall(self, result: SkillOverlayResult | None = None) -> str:
         return render_uninstall_sql(result or self.compute())
+
+
+def regenerate_checked_in_skill_sql(
+    table: DbcTable,
+    *,
+    snapshot_path: Path | None = None,
+    db_max_id: int = 0,
+) -> tuple[str, str]:
+    """Helper for tests and regeneration: install + uninstall SQL pair."""
+    snapshot = load_snapshot(snapshot_path) if snapshot_path else load_snapshot()
+    result = compute_skill_overlay(table, ComboMatrix.stock(), db_max_id=db_max_id)
+    install = render_install_sql(result, snapshot=snapshot)
+    uninstall = render_uninstall_sql(result)
+    return install, uninstall

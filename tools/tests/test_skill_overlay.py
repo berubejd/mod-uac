@@ -18,6 +18,20 @@ from aracgen.matrix import ComboMatrix, mask_covers_race_class, race_bit
 from aracgen.sources import ZipDbcSource
 
 DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "Data.zip"
+CHECKED_IN_INSTALL = (
+    Path(__file__).resolve().parents[2]
+    / "data"
+    / "sql"
+    / "db-world"
+    / "mod_uac_skillraceclassinfo_dbc.sql"
+)
+CHECKED_IN_UNINSTALL = (
+    Path(__file__).resolve().parents[2]
+    / "data"
+    / "sql"
+    / "db-uninstall"
+    / "mod_uac_skillraceclassinfo_dbc_uninstall.sql"
+)
 
 
 @pytest.fixture(scope="session")
@@ -139,3 +153,25 @@ def test_overlay_row_with_race_mask() -> None:
     assert updated.record_id == 971
     assert updated.race_mask == race_bit(6)
     assert updated.skill_id == 6
+
+
+def test_install_sql_matches_checked_in_artifact(
+    canonical_skill_table,
+    stock_matrix: ComboMatrix,
+) -> None:
+    if not CHECKED_IN_INSTALL.is_file():
+        pytest.skip(f"Checked-in SQL not found: {CHECKED_IN_INSTALL}")
+    result = compute_skill_overlay(canonical_skill_table, stock_matrix)
+    generated = render_install_sql(result)
+    assert generated == CHECKED_IN_INSTALL.read_text(encoding="utf-8")
+
+
+def test_uninstall_sql_matches_checked_in_artifact(
+    canonical_skill_table,
+    stock_matrix: ComboMatrix,
+) -> None:
+    if not CHECKED_IN_UNINSTALL.is_file():
+        pytest.skip(f"Checked-in SQL not found: {CHECKED_IN_UNINSTALL}")
+    result = compute_skill_overlay(canonical_skill_table, stock_matrix)
+    generated = render_uninstall_sql(result)
+    assert generated == CHECKED_IN_UNINSTALL.read_text(encoding="utf-8")
