@@ -4,8 +4,10 @@ import pytest
 
 from aracgen.schema_emit import (
     format_sql_literal,
+    normalize_int_for_column,
     prepare_row,
     render_insert,
+    render_replace,
     resolve_logical_column,
 )
 from aracgen.snapshot import load_snapshot
@@ -72,3 +74,25 @@ def test_render_insert_matches_skill_overlay_shape(skill_schema) -> None:
 def test_format_sql_literal_null_and_string() -> None:
     assert format_sql_literal(None) == "NULL"
     assert format_sql_literal("it's") == "'it''s'"
+
+
+def test_normalize_int_for_column_signed_wrap() -> None:
+    column = ColumnDef("ItemID_1", 6, "int", False, "0")
+    assert normalize_int_for_column(0x80000001, column) == -2147483647
+
+
+def test_render_replace_prefixes_insert() -> None:
+    schema = TableSchema(
+        table="charstartoutfit_dbc",
+        columns=(
+            ColumnDef("ID", 1, "int", False, None),
+            ColumnDef("RaceID", 2, "tinyint unsigned", False, "0"),
+        ),
+    )
+    sql = render_replace(
+        "charstartoutfit_dbc",
+        schema,
+        {"ID": 971, "RaceID": 1},
+    )
+    assert sql.startswith("REPLACE INTO `charstartoutfit_dbc`")
+    assert "971, 1" in sql

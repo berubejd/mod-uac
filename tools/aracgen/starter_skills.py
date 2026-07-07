@@ -6,9 +6,9 @@ from dataclasses import dataclass
 
 from aracgen.item_prototypes import (
     RANGED_WEAPON_SKILLS,
+    SKILL_WEAPON_SUBCLASSES,
     THROWN_SKILL,
     ItemPrototypeStore,
-    SKILL_WEAPON_SUBCLASSES,
 )
 from aracgen.matrix import mask_covers_race_class
 from aracgen.stock_loader import CreateInfoSkill, StockKitStore

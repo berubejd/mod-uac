@@ -5,29 +5,21 @@ from pathlib import Path
 import pytest
 
 from aracgen.emit_player import PlayerCreateEmitter, build_resolver
-from aracgen.item_prototypes import ItemPrototypeStore
+from aracgen.item_prototypes import DEFAULT_ITEM_PROTOTYPES_PATH, ItemPrototypeStore
+from aracgen.sources import ZipDbcSource
 from aracgen.starter_skills import compute_starter_skills
 from aracgen.stock_loader import StockKitStore
-from aracgen.sources import ZipDbcSource
 
 DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "cache" / "client-data-v19.zip"
 STOCK_DIR = Path(__file__).resolve().parents[2] / "data" / "stock" / "db_world"
-AC_ITEM_TEMPLATE = (
-    Path(__file__).resolve().parents[3]
-    / "azerothcore-wotlk"
-    / "data"
-    / "sql"
-    / "base"
-    / "db_world"
-    / "item_template.sql"
-)
+ITEM_PROTOTYPES = DEFAULT_ITEM_PROTOTYPES_PATH
 
 
 @pytest.fixture(scope="session")
 def item_prototypes() -> ItemPrototypeStore:
-    if not AC_ITEM_TEMPLATE.is_file():
-        pytest.skip(f"item_template.sql not found: {AC_ITEM_TEMPLATE}")
-    return ItemPrototypeStore(AC_ITEM_TEMPLATE)
+    if not ITEM_PROTOTYPES.is_file():
+        pytest.skip(f"Item prototypes not found: {ITEM_PROTOTYPES}")
+    return ItemPrototypeStore(ITEM_PROTOTYPES)
 
 
 @pytest.fixture(scope="session")
@@ -38,7 +30,7 @@ def resolver(item_prototypes: ItemPrototypeStore):
     return build_resolver(
         source.load_char_start_outfit(),
         stock_dir=STOCK_DIR,
-        item_template_path=AC_ITEM_TEMPLATE,
+        item_prototypes_path=ITEM_PROTOTYPES,
     )
 
 

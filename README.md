@@ -165,7 +165,8 @@ Run generators from the **mod-uac repo root** (paths below are relative to that 
 
 Writes checked-in SQL under `data/sql/`, the client MPQ under `client-patch/`, and
 `docs/trainer_worksheet.md`. Uses pinned [wowgaming/client-data](https://github.com/wowgaming/client-data)
-tag **v19** (cached under `data/cache/`) and the baked world snapshot under `data/snapshot/`.
+tag **v19** (cached under `data/cache/`), the baked world snapshot under `data/snapshot/`, and
+minimal outfit item metadata in `data/item_prototypes.json`.
 
 ```bash
 pip install -r tools/requirements.txt
@@ -182,7 +183,7 @@ python tools/generate_canonical.py
 | `--outfit-db-max-id` | `0` | `MAX(ID)` already in `charstartoutfit_dbc` on your world DB |
 | `--snapshot` | baked pointer | Path to a world DB snapshot JSON |
 | `--snapshot-dir` | `data/snapshot/` | Directory with `world.latest.json` when `--snapshot` is omitted |
-| `--refresh-snapshot` | off | Capture a fresh snapshot from your world DB before emitting trainers |
+| `--refresh-snapshot` | off | Capture a fresh snapshot from your world DB before emitting SQL |
 | `--snapshot-config` | `tools/snapshot.conf` | Config file for `--refresh-snapshot` (see below) |
 | `--dsn` | *(from config)* | AC-style `WorldDatabaseInfo`: `host;port;user;password;database` |
 | `--trainer-guid-base` | `6000000` | Base GUID for mod-uac starter trainer spawns |
@@ -232,8 +233,9 @@ python tools/generate_local.py /path/to/dbc \
 
 ### `capture_snapshot.py`
 
-Standalone snapshot capture (schema + trainer extracts only). The generator front-ends call the same
-logic when you pass `--refresh-snapshot`; use this tool when you only want to refresh the baked JSON.
+Standalone snapshot capture (schema + trainer extracts + outfit item prototypes). The generator
+front-ends call the same logic when you pass `--refresh-snapshot`; use this tool when you only want
+to refresh the baked JSON artifacts.
 
 ```bash
 python tools/capture_snapshot.py --dsn "127.0.0.1;3306;acore;password;acore_world"
@@ -245,6 +247,9 @@ python tools/capture_snapshot.py --config tools/snapshot.conf --output-dir data/
 | `--config` | `tools/snapshot.conf` | Snapshot config (`WorldDatabaseInfo = "host;port;user;pass;db"`) |
 | `--dsn` | *(from config)* | AC-style world DB connection string |
 | `--output-dir` | `data/snapshot/` | Writes `world.<version>.json` and updates `world.latest.json` |
+
+Also writes `data/item_prototypes.json` (62 outfit item class/subclass pairs) when canonical
+client-data is cached under `data/cache/`.
 
 PyMySQL is required only for snapshot capture (`pip install -r tools/requirements.txt`). Emitters
 read the JSON snapshot and do not connect to MySQL.

@@ -3237,6 +3237,2546 @@
         }
       ],
       "table": "skillraceclassinfo_dbc"
+    },
+    "player_totem_model": {
+      "table": "player_totem_model",
+      "columns": [
+        {
+          "name": "TotemID",
+          "ordinal": 2,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": null
+        },
+        {
+          "name": "RaceID",
+          "ordinal": 3,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": null
+        },
+        {
+          "name": "ModelID",
+          "ordinal": 4,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": null
+        }
+      ]
+    },
+    "quest_template": {
+      "table": "quest_template",
+      "columns": [
+        {
+          "name": "ID",
+          "ordinal": 2,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "QuestType",
+          "ordinal": 3,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": "2"
+        },
+        {
+          "name": "QuestLevel",
+          "ordinal": 4,
+          "type": "smallint",
+          "nullable": false,
+          "default": "1"
+        },
+        {
+          "name": "MinLevel",
+          "ordinal": 5,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "QuestSortID",
+          "ordinal": 6,
+          "type": "smallint",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "QuestInfoID",
+          "ordinal": 7,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SuggestedGroupNum",
+          "ordinal": 8,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredFactionId1",
+          "ordinal": 9,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredFactionId2",
+          "ordinal": 10,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredFactionValue1",
+          "ordinal": 11,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredFactionValue2",
+          "ordinal": 12,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardNextQuest",
+          "ordinal": 13,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardXPDifficulty",
+          "ordinal": 14,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardMoney",
+          "ordinal": 15,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardMoneyDifficulty",
+          "ordinal": 16,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardDisplaySpell",
+          "ordinal": 17,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardSpell",
+          "ordinal": 18,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardHonor",
+          "ordinal": 19,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardKillHonor",
+          "ordinal": 20,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "StartItem",
+          "ordinal": 21,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Flags",
+          "ordinal": 22,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredPlayerKills",
+          "ordinal": 23,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardItem1",
+          "ordinal": 24,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardAmount1",
+          "ordinal": 25,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardItem2",
+          "ordinal": 26,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardAmount2",
+          "ordinal": 27,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardItem3",
+          "ordinal": 28,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardAmount3",
+          "ordinal": 29,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardItem4",
+          "ordinal": 30,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardAmount4",
+          "ordinal": 31,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ItemDrop1",
+          "ordinal": 32,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ItemDropQuantity1",
+          "ordinal": 33,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ItemDrop2",
+          "ordinal": 34,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ItemDropQuantity2",
+          "ordinal": 35,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ItemDrop3",
+          "ordinal": 36,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ItemDropQuantity3",
+          "ordinal": 37,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ItemDrop4",
+          "ordinal": 38,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ItemDropQuantity4",
+          "ordinal": 39,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemID1",
+          "ordinal": 40,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemQuantity1",
+          "ordinal": 41,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemID2",
+          "ordinal": 42,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemQuantity2",
+          "ordinal": 43,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemID3",
+          "ordinal": 44,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemQuantity3",
+          "ordinal": 45,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemID4",
+          "ordinal": 46,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemQuantity4",
+          "ordinal": 47,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemID5",
+          "ordinal": 48,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemQuantity5",
+          "ordinal": 49,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemID6",
+          "ordinal": 50,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardChoiceItemQuantity6",
+          "ordinal": 51,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "POIContinent",
+          "ordinal": 52,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "POIx",
+          "ordinal": 53,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "POIy",
+          "ordinal": 54,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "POIPriority",
+          "ordinal": 55,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardTitle",
+          "ordinal": 56,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardTalents",
+          "ordinal": 57,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardArenaPoints",
+          "ordinal": 58,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardFactionID1",
+          "ordinal": 59,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0' COMMENT 'faction id from Faction.dbc in this case"
+        },
+        {
+          "name": "RewardFactionValue1",
+          "ordinal": 60,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardFactionOverride1",
+          "ordinal": 61,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardFactionID2",
+          "ordinal": 62,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0' COMMENT 'faction id from Faction.dbc in this case"
+        },
+        {
+          "name": "RewardFactionValue2",
+          "ordinal": 63,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardFactionOverride2",
+          "ordinal": 64,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardFactionID3",
+          "ordinal": 65,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0' COMMENT 'faction id from Faction.dbc in this case"
+        },
+        {
+          "name": "RewardFactionValue3",
+          "ordinal": 66,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardFactionOverride3",
+          "ordinal": 67,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardFactionID4",
+          "ordinal": 68,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0' COMMENT 'faction id from Faction.dbc in this case"
+        },
+        {
+          "name": "RewardFactionValue4",
+          "ordinal": 69,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardFactionOverride4",
+          "ordinal": 70,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardFactionID5",
+          "ordinal": 71,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0' COMMENT 'faction id from Faction.dbc in this case"
+        },
+        {
+          "name": "RewardFactionValue5",
+          "ordinal": 72,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardFactionOverride5",
+          "ordinal": 73,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "TimeAllowed",
+          "ordinal": 74,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "AllowableRaces",
+          "ordinal": 75,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "LogTitle",
+          "ordinal": 76,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "LogDescription",
+          "ordinal": 77,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "QuestDescription",
+          "ordinal": 78,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AreaDescription",
+          "ordinal": 79,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "QuestCompletionLog",
+          "ordinal": 80,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "RequiredNpcOrGo1",
+          "ordinal": 81,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredNpcOrGo2",
+          "ordinal": 82,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredNpcOrGo3",
+          "ordinal": 83,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredNpcOrGo4",
+          "ordinal": 84,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredNpcOrGoCount1",
+          "ordinal": 85,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredNpcOrGoCount2",
+          "ordinal": 86,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredNpcOrGoCount3",
+          "ordinal": 87,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredNpcOrGoCount4",
+          "ordinal": 88,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemId1",
+          "ordinal": 89,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemId2",
+          "ordinal": 90,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemId3",
+          "ordinal": 91,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemId4",
+          "ordinal": 92,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemId5",
+          "ordinal": 93,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemId6",
+          "ordinal": 94,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemCount1",
+          "ordinal": 95,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemCount2",
+          "ordinal": 96,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemCount3",
+          "ordinal": 97,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemCount4",
+          "ordinal": 98,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemCount5",
+          "ordinal": 99,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredItemCount6",
+          "ordinal": 100,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Unknown0",
+          "ordinal": 101,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ObjectiveText1",
+          "ordinal": 102,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "ObjectiveText2",
+          "ordinal": 103,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "ObjectiveText3",
+          "ordinal": 104,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "ObjectiveText4",
+          "ordinal": 105,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "VerifiedBuild",
+          "ordinal": 106,
+          "type": "int",
+          "nullable": true,
+          "default": null
+        }
+      ]
+    },
+    "quest_template_addon": {
+      "table": "quest_template_addon",
+      "columns": [
+        {
+          "name": "ID",
+          "ordinal": 2,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "MaxLevel",
+          "ordinal": 3,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "AllowableClasses",
+          "ordinal": 4,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SourceSpellID",
+          "ordinal": 5,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "PrevQuestID",
+          "ordinal": 6,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "NextQuestID",
+          "ordinal": 7,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ExclusiveGroup",
+          "ordinal": 8,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "BreadcrumbForQuestId",
+          "ordinal": 9,
+          "type": "mediumint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardMailTemplateID",
+          "ordinal": 10,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RewardMailDelay",
+          "ordinal": 11,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredSkillID",
+          "ordinal": 12,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredSkillPoints",
+          "ordinal": 13,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredMinRepFaction",
+          "ordinal": 14,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredMaxRepFaction",
+          "ordinal": 15,
+          "type": "smallint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredMinRepValue",
+          "ordinal": 16,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredMaxRepValue",
+          "ordinal": 17,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ProvidedItemCount",
+          "ordinal": 18,
+          "type": "tinyint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpecialFlags",
+          "ordinal": 19,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        }
+      ]
+    },
+    "spell_dbc": {
+      "table": "spell_dbc",
+      "columns": [
+        {
+          "name": "ID",
+          "ordinal": 2,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Category",
+          "ordinal": 3,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "DispelType",
+          "ordinal": 4,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Mechanic",
+          "ordinal": 5,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Attributes",
+          "ordinal": 6,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "AttributesEx",
+          "ordinal": 7,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "AttributesEx2",
+          "ordinal": 8,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "AttributesEx3",
+          "ordinal": 9,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "AttributesEx4",
+          "ordinal": 10,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "AttributesEx5",
+          "ordinal": 11,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "AttributesEx6",
+          "ordinal": 12,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "AttributesEx7",
+          "ordinal": 13,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ShapeshiftMask",
+          "ordinal": 14,
+          "type": "bigint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "unk_320_2",
+          "ordinal": 15,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ShapeshiftExclude",
+          "ordinal": 16,
+          "type": "bigint unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "unk_320_3",
+          "ordinal": 17,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Targets",
+          "ordinal": 18,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "TargetCreatureType",
+          "ordinal": 19,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiresSpellFocus",
+          "ordinal": 20,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "FacingCasterFlags",
+          "ordinal": 21,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "CasterAuraState",
+          "ordinal": 22,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "TargetAuraState",
+          "ordinal": 23,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ExcludeCasterAuraState",
+          "ordinal": 24,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ExcludeTargetAuraState",
+          "ordinal": 25,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "CasterAuraSpell",
+          "ordinal": 26,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "TargetAuraSpell",
+          "ordinal": 27,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ExcludeCasterAuraSpell",
+          "ordinal": 28,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ExcludeTargetAuraSpell",
+          "ordinal": 29,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "CastingTimeIndex",
+          "ordinal": 30,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RecoveryTime",
+          "ordinal": 31,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "CategoryRecoveryTime",
+          "ordinal": 32,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "InterruptFlags",
+          "ordinal": 33,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "AuraInterruptFlags",
+          "ordinal": 34,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ChannelInterruptFlags",
+          "ordinal": 35,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ProcTypeMask",
+          "ordinal": 36,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ProcChance",
+          "ordinal": 37,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ProcCharges",
+          "ordinal": 38,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "MaxLevel",
+          "ordinal": 39,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "BaseLevel",
+          "ordinal": 40,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellLevel",
+          "ordinal": 41,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "DurationIndex",
+          "ordinal": 42,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "PowerType",
+          "ordinal": 43,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ManaCost",
+          "ordinal": 44,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ManaCostPerLevel",
+          "ordinal": 45,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ManaPerSecond",
+          "ordinal": 46,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ManaPerSecondPerLevel",
+          "ordinal": 47,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RangeIndex",
+          "ordinal": 48,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Speed",
+          "ordinal": 49,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ModalNextSpell",
+          "ordinal": 50,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "CumulativeAura",
+          "ordinal": 51,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Totem_1",
+          "ordinal": 52,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Totem_2",
+          "ordinal": 53,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Reagent_1",
+          "ordinal": 54,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Reagent_2",
+          "ordinal": 55,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Reagent_3",
+          "ordinal": 56,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Reagent_4",
+          "ordinal": 57,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Reagent_5",
+          "ordinal": 58,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Reagent_6",
+          "ordinal": 59,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Reagent_7",
+          "ordinal": 60,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Reagent_8",
+          "ordinal": 61,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ReagentCount_1",
+          "ordinal": 62,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ReagentCount_2",
+          "ordinal": 63,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ReagentCount_3",
+          "ordinal": 64,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ReagentCount_4",
+          "ordinal": 65,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ReagentCount_5",
+          "ordinal": 66,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ReagentCount_6",
+          "ordinal": 67,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ReagentCount_7",
+          "ordinal": 68,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ReagentCount_8",
+          "ordinal": 69,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EquippedItemClass",
+          "ordinal": 70,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EquippedItemSubclass",
+          "ordinal": 71,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EquippedItemInvTypes",
+          "ordinal": 72,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Effect_1",
+          "ordinal": 73,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Effect_2",
+          "ordinal": 74,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Effect_3",
+          "ordinal": 75,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectDieSides_1",
+          "ordinal": 76,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectDieSides_2",
+          "ordinal": 77,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectDieSides_3",
+          "ordinal": 78,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectRealPointsPerLevel_1",
+          "ordinal": 79,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectRealPointsPerLevel_2",
+          "ordinal": 80,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectRealPointsPerLevel_3",
+          "ordinal": 81,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectBasePoints_1",
+          "ordinal": 82,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectBasePoints_2",
+          "ordinal": 83,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectBasePoints_3",
+          "ordinal": 84,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMechanic_1",
+          "ordinal": 85,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMechanic_2",
+          "ordinal": 86,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMechanic_3",
+          "ordinal": 87,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ImplicitTargetA_1",
+          "ordinal": 88,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ImplicitTargetA_2",
+          "ordinal": 89,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ImplicitTargetA_3",
+          "ordinal": 90,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ImplicitTargetB_1",
+          "ordinal": 91,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ImplicitTargetB_2",
+          "ordinal": 92,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ImplicitTargetB_3",
+          "ordinal": 93,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectRadiusIndex_1",
+          "ordinal": 94,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectRadiusIndex_2",
+          "ordinal": 95,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectRadiusIndex_3",
+          "ordinal": 96,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectAura_1",
+          "ordinal": 97,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectAura_2",
+          "ordinal": 98,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectAura_3",
+          "ordinal": 99,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectAuraPeriod_1",
+          "ordinal": 100,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectAuraPeriod_2",
+          "ordinal": 101,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectAuraPeriod_3",
+          "ordinal": 102,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMultipleValue_1",
+          "ordinal": 103,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMultipleValue_2",
+          "ordinal": 104,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMultipleValue_3",
+          "ordinal": 105,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectChainTargets_1",
+          "ordinal": 106,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectChainTargets_2",
+          "ordinal": 107,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectChainTargets_3",
+          "ordinal": 108,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectItemType_1",
+          "ordinal": 109,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectItemType_2",
+          "ordinal": 110,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectItemType_3",
+          "ordinal": 111,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMiscValue_1",
+          "ordinal": 112,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMiscValue_2",
+          "ordinal": 113,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMiscValue_3",
+          "ordinal": 114,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMiscValueB_1",
+          "ordinal": 115,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMiscValueB_2",
+          "ordinal": 116,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectMiscValueB_3",
+          "ordinal": 117,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectTriggerSpell_1",
+          "ordinal": 118,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectTriggerSpell_2",
+          "ordinal": 119,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectTriggerSpell_3",
+          "ordinal": 120,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectPointsPerCombo_1",
+          "ordinal": 121,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectPointsPerCombo_2",
+          "ordinal": 122,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectPointsPerCombo_3",
+          "ordinal": 123,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectSpellClassMaskA_1",
+          "ordinal": 124,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectSpellClassMaskA_2",
+          "ordinal": 125,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectSpellClassMaskA_3",
+          "ordinal": 126,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectSpellClassMaskB_1",
+          "ordinal": 127,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectSpellClassMaskB_2",
+          "ordinal": 128,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectSpellClassMaskB_3",
+          "ordinal": 129,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectSpellClassMaskC_1",
+          "ordinal": 130,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectSpellClassMaskC_2",
+          "ordinal": 131,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectSpellClassMaskC_3",
+          "ordinal": 132,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellVisualID_1",
+          "ordinal": 133,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellVisualID_2",
+          "ordinal": 134,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellIconID",
+          "ordinal": 135,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ActiveIconID",
+          "ordinal": 136,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellPriority",
+          "ordinal": 137,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Name_Lang_enUS",
+          "ordinal": 138,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_enGB",
+          "ordinal": 139,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_koKR",
+          "ordinal": 140,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_frFR",
+          "ordinal": 141,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_deDE",
+          "ordinal": 142,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_enCN",
+          "ordinal": 143,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_zhCN",
+          "ordinal": 144,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_enTW",
+          "ordinal": 145,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_zhTW",
+          "ordinal": 146,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_esES",
+          "ordinal": 147,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_esMX",
+          "ordinal": 148,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_ruRU",
+          "ordinal": 149,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_ptPT",
+          "ordinal": 150,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_ptBR",
+          "ordinal": 151,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_itIT",
+          "ordinal": 152,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_Unk",
+          "ordinal": 153,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Name_Lang_Mask",
+          "ordinal": 154,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "NameSubtext_Lang_enUS",
+          "ordinal": 155,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_enGB",
+          "ordinal": 156,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_koKR",
+          "ordinal": 157,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_frFR",
+          "ordinal": 158,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_deDE",
+          "ordinal": 159,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_enCN",
+          "ordinal": 160,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_zhCN",
+          "ordinal": 161,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_enTW",
+          "ordinal": 162,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_zhTW",
+          "ordinal": 163,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_esES",
+          "ordinal": 164,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_esMX",
+          "ordinal": 165,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_ruRU",
+          "ordinal": 166,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_ptPT",
+          "ordinal": 167,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_ptBR",
+          "ordinal": 168,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_itIT",
+          "ordinal": 169,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_Unk",
+          "ordinal": 170,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "NameSubtext_Lang_Mask",
+          "ordinal": 171,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "Description_Lang_enUS",
+          "ordinal": 172,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_enGB",
+          "ordinal": 173,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_koKR",
+          "ordinal": 174,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_frFR",
+          "ordinal": 175,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_deDE",
+          "ordinal": 176,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_enCN",
+          "ordinal": 177,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_zhCN",
+          "ordinal": 178,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_enTW",
+          "ordinal": 179,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_zhTW",
+          "ordinal": 180,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_esES",
+          "ordinal": 181,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_esMX",
+          "ordinal": 182,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_ruRU",
+          "ordinal": 183,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_ptPT",
+          "ordinal": 184,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_ptBR",
+          "ordinal": 185,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_itIT",
+          "ordinal": 186,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_Unk",
+          "ordinal": 187,
+          "type": "text",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "Description_Lang_Mask",
+          "ordinal": 188,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "AuraDescription_Lang_enUS",
+          "ordinal": 189,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_enGB",
+          "ordinal": 190,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_koKR",
+          "ordinal": 191,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_frFR",
+          "ordinal": 192,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_deDE",
+          "ordinal": 193,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_enCN",
+          "ordinal": 194,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_zhCN",
+          "ordinal": 195,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_enTW",
+          "ordinal": 196,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_zhTW",
+          "ordinal": 197,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_esES",
+          "ordinal": 198,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_esMX",
+          "ordinal": 199,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_ruRU",
+          "ordinal": 200,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_ptPT",
+          "ordinal": 201,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_ptBR",
+          "ordinal": 202,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_itIT",
+          "ordinal": 203,
+          "type": "varchar(550)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_Unk",
+          "ordinal": 204,
+          "type": "varchar(100)",
+          "nullable": true,
+          "default": null
+        },
+        {
+          "name": "AuraDescription_Lang_Mask",
+          "ordinal": 205,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "ManaCostPct",
+          "ordinal": 206,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "StartRecoveryCategory",
+          "ordinal": 207,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "StartRecoveryTime",
+          "ordinal": 208,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "MaxTargetLevel",
+          "ordinal": 209,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellClassSet",
+          "ordinal": 210,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellClassMask_1",
+          "ordinal": 211,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellClassMask_2",
+          "ordinal": 212,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellClassMask_3",
+          "ordinal": 213,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "MaxTargets",
+          "ordinal": 214,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "DefenseType",
+          "ordinal": 215,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "PreventionType",
+          "ordinal": 216,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "StanceBarOrder",
+          "ordinal": 217,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectChainAmplitude_1",
+          "ordinal": 218,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectChainAmplitude_2",
+          "ordinal": 219,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectChainAmplitude_3",
+          "ordinal": 220,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "MinFactionID",
+          "ordinal": 221,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "MinReputation",
+          "ordinal": 222,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredAuraVision",
+          "ordinal": 223,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredTotemCategoryID_1",
+          "ordinal": 224,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredTotemCategoryID_2",
+          "ordinal": 225,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RequiredAreasID",
+          "ordinal": 226,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SchoolMask",
+          "ordinal": 227,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "RuneCostID",
+          "ordinal": 228,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellMissileID",
+          "ordinal": 229,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "PowerDisplayID",
+          "ordinal": 230,
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectBonusMultiplier_1",
+          "ordinal": 231,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectBonusMultiplier_2",
+          "ordinal": 232,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "EffectBonusMultiplier_3",
+          "ordinal": 233,
+          "type": "float",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellDescriptionVariableID",
+          "ordinal": 234,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "SpellDifficultyID",
+          "ordinal": 235,
+          "type": "int unsigned",
+          "nullable": false,
+          "default": "0"
+        }
+      ]
     }
   },
   "source": "127.0.0.1;3306;acore;***;acore_world",

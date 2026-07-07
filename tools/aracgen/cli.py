@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import warnings
 from pathlib import Path
 
+from aracgen.dbc import DbcTable
 from aracgen.emit_class_quest import ClassQuestEmitter
 from aracgen.emit_client import ClientPatchEmitter
 from aracgen.emit_hunter_pet import HunterPetEmitter
@@ -21,6 +23,7 @@ from aracgen.snapshot import (
     DEFAULT_SNAPSHOT_DIR,
     capture_snapshot,
     load_snapshot,
+    refresh_item_prototypes,
     write_snapshot,
 )
 from aracgen.snapshot_dsn import resolve_world_database_info
@@ -31,7 +34,7 @@ from aracgen.trainer_catalog import TRAINER_GUID_BASE
 
 
 def add_snapshot_cli_args(parser: argparse.ArgumentParser) -> None:
-    group = parser.add_argument_group("world snapshot (starter trainers)")
+    group = parser.add_argument_group("world snapshot (schema contract + starter trainers)")
     group.add_argument(
         "--snapshot",
         type=Path,
@@ -52,7 +55,7 @@ def add_snapshot_cli_args(parser: argparse.ArgumentParser) -> None:
     group.add_argument(
         "--refresh-snapshot",
         action="store_true",
-        help="Capture a fresh world DB snapshot before emitting starter trainers",
+        help="Capture a fresh world DB snapshot before emitting schema-contract SQL",
     )
     group.add_argument(
         "--snapshot-config",
@@ -88,7 +91,11 @@ def add_trainer_cli_args(parser: argparse.ArgumentParser) -> None:
     )
 
 
-def resolve_generation_snapshot(args: argparse.Namespace) -> Snapshot:
+def resolve_generation_snapshot(
+    args: argparse.Namespace,
+    *,
+    outfit: DbcTable | None = None,
+) -> Snapshot:
     if getattr(args, "refresh_snapshot", False):
         dsn = resolve_world_database_info(
             config_path=getattr(args, "snapshot_config", None),
@@ -102,6 +109,18 @@ def resolve_generation_snapshot(args: argparse.Namespace) -> Snapshot:
         )
         print(f"Wrote {versioned}")
         print(f"Wrote pointer {pointer} -> {versioned.name}")
+        if outfit is None:
+            warnings.warn(
+                "No CharStartOutfit.dbc source; skipped item_prototypes refresh",
+                stacklevel=2,
+            )
+        else:
+            item_path, item_count = refresh_item_prototypes(
+                dsn,
+                outfit,
+                version=snapshot.version_raw,
+            )
+            print(f"Wrote {item_path} ({item_count} outfit item prototypes)")
         return snapshot
 
     snapshot_path = getattr(args, "snapshot", None)
@@ -190,12 +209,13 @@ def write_player_create_sql(
     uninstall_dir: Path,
     *,
     db_max_outfit_id: int = 0,
+    snapshot: Snapshot | None = None,
 ) -> None:
     resolver = build_resolver(
         source.load_char_start_outfit(),
         db_max_outfit_id=db_max_outfit_id,
     )
-    emitter = PlayerCreateEmitter(resolver)
+    emitter = PlayerCreateEmitter(resolver, snapshot=snapshot)
     result = emitter.compute()
     install_files = emitter.render_install_files(result)
     uninstall_files = emitter.render_uninstall_files(result)
@@ -222,9 +242,11 @@ def write_player_create_sql(
 def write_totem_sql(
     install_path: Path,
     uninstall_path: Path,
+    *,
+    snapshot: Snapshot | None = None,
 ) -> None:
     matrix = ComboMatrix.stock()
-    emitter = TotemEmitter(matrix)
+    emitter = TotemEmitter(matrix, snapshot=snapshot)
     result = emitter.compute()
 
     install_path.parent.mkdir(parents=True, exist_ok=True)
@@ -240,10 +262,12 @@ def write_totem_sql(
 def write_class_quest_sql(
     install_dir: Path,
     uninstall_dir: Path,
+    *,
+    snapshot: Snapshot | None = None,
 ) -> None:
     matrix = ComboMatrix.stock()
     store = StockKitStore.load()
-    emitter = ClassQuestEmitter(matrix, store)
+    emitter = ClassQuestEmitter(matrix, store, snapshot=snapshot)
     result = emitter.compute()
     install_files = emitter.render_install_files(result)
     uninstall_files = emitter.render_uninstall_files(result)
@@ -273,8 +297,9 @@ def write_hunter_pet_sql(
     uninstall_dir: Path,
     *,
     dbc_source: Path | None = None,
+    snapshot: Snapshot | None = None,
 ) -> None:
-    emitter = HunterPetEmitter(dbc_source=dbc_source)
+    emitter = HunterPetEmitter(dbc_source=dbc_source, snapshot=snapshot)
     result = emitter.compute()
     install_files = emitter.render_install_files(result)
     uninstall_files = emitter.render_uninstall_files(result)

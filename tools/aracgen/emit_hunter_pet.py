@@ -7,8 +7,12 @@ from pathlib import Path
 
 from aracgen.class_quest_catalog import HUNTER_CLASS_ID, HUNTER_PET_SPELL_IDS
 from aracgen.matrix import class_bit
+from aracgen.schema_emit import render_insert
+from aracgen.snapshot_model import Snapshot
 from aracgen.sources import DEFAULT_CANONICAL_PIN, cached_client_data_zip
 from aracgen.spell_dbc_export import render_spell_dbc_install, render_spell_dbc_uninstall
+
+SPELL_CUSTOM_TABLE = "playercreateinfo_spell_custom"
 
 HUNTER_CLASS_MASK = class_bit(HUNTER_CLASS_ID)
 ALL_RACES_MASK = 0
@@ -31,7 +35,20 @@ def compute_hunter_pet_spells() -> HunterPetResult:
     )
 
 
-def render_spell_custom_install(result: HunterPetResult) -> str:
+def _resolve_snapshot(snapshot: Snapshot | None) -> Snapshot:
+    if snapshot is not None:
+        return snapshot
+    from aracgen.snapshot import load_snapshot
+
+    return load_snapshot()
+
+
+def render_spell_custom_install(
+    result: HunterPetResult,
+    *,
+    snapshot: Snapshot | None = None,
+) -> str:
+    schema = _resolve_snapshot(snapshot).schema(SPELL_CUSTOM_TABLE)
     lines = [
         "-- mod-uac: level-1 hunter pet spells for ALL hunters (optional — revert separately)",
         "-- Requires worldserver.conf: PlayerStart.CustomSpells = 1",
@@ -40,9 +57,16 @@ def render_spell_custom_install(result: HunterPetResult) -> str:
     ]
     for row in result.spell_rows:
         lines.append(
-            "INSERT INTO `playercreateinfo_spell_custom` "
-            "(`racemask`, `classmask`, `Spell`, `Note`) "
-            f"VALUES ({ALL_RACES_MASK}, {HUNTER_CLASS_MASK}, {row.spell_id}, '{HUNTER_PET_NOTE}');"
+            render_insert(
+                SPELL_CUSTOM_TABLE,
+                schema,
+                {
+                    "racemask": ALL_RACES_MASK,
+                    "classmask": HUNTER_CLASS_MASK,
+                    "Spell": row.spell_id,
+                    "Note": HUNTER_PET_NOTE,
+                },
+            )
         )
     lines.append("")
     return "\n".join(lines)
@@ -69,6 +93,7 @@ def render_spell_custom_uninstall(result: HunterPetResult) -> str:
 class HunterPetEmitter:
     dbc_source: Path | None = None
     canonical_pin: str = DEFAULT_CANONICAL_PIN
+    snapshot: Snapshot | None = None
 
     def compute(self) -> HunterPetResult:
         return compute_hunter_pet_spells()
@@ -84,10 +109,14 @@ class HunterPetEmitter:
     def render_install_files(self, result: HunterPetResult | None = None) -> dict[str, str]:
         data = result or self.compute()
         return {
-            "hunter_pet_spell_custom": render_spell_custom_install(data),
+            "hunter_pet_spell_custom": render_spell_custom_install(
+                data,
+                snapshot=self.snapshot,
+            ),
             "hunter_pet_spell_dbc": render_spell_dbc_install(
                 HUNTER_PET_SPELL_IDS,
                 self._dbc_source(),
+                snapshot=self.snapshot,
             ),
         }
 

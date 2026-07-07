@@ -8,33 +8,26 @@ import pytest
 
 from aracgen.charstartoutfit_export import dbc_max_outfit_id, stock_outfit_covers
 from aracgen.emit_player import PlayerCreateEmitter, build_resolver
+from aracgen.item_prototypes import DEFAULT_ITEM_PROTOTYPES_PATH
 from aracgen.kits import CanonicalKitResolver
 from aracgen.sources import ZipDbcSource
 
 DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "cache" / "client-data-v19.zip"
 STOCK_DIR = Path(__file__).resolve().parents[2] / "data" / "stock" / "db_world"
-AC_ITEM_TEMPLATE = (
-    Path(__file__).resolve().parents[3]
-    / "azerothcore-wotlk"
-    / "data"
-    / "sql"
-    / "base"
-    / "db_world"
-    / "item_template.sql"
-)
+ITEM_PROTOTYPES = DEFAULT_ITEM_PROTOTYPES_PATH
 
 
 @pytest.fixture(scope="session")
 def resolver() -> CanonicalKitResolver:
     if not DATA_ZIP.is_file():
         pytest.skip(f"Canonical data not found: {DATA_ZIP}")
-    if not AC_ITEM_TEMPLATE.is_file():
-        pytest.skip(f"item_template.sql not found: {AC_ITEM_TEMPLATE}")
+    if not ITEM_PROTOTYPES.is_file():
+        pytest.skip(f"Item prototypes not found: {ITEM_PROTOTYPES}")
     source = ZipDbcSource(DATA_ZIP)
     return build_resolver(
         source.load_char_start_outfit(),
         stock_dir=STOCK_DIR,
-        item_template_path=AC_ITEM_TEMPLATE,
+        item_prototypes_path=ITEM_PROTOTYPES,
     )
 
 

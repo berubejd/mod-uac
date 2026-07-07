@@ -36,6 +36,59 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SNAPSHOT_DIR = REPO_ROOT / "data" / "snapshot"
 
 
+def capture_item_prototypes(
+    connection,
+    item_ids: frozenset[int],
+) -> dict[int, tuple[int, int]]:
+    """Load (class, subclass) for outfit item IDs from the world DB."""
+    if not item_ids:
+        return {}
+    sorted_ids = sorted(item_ids)
+    placeholders = ", ".join(["%s"] * len(sorted_ids))
+    query = (
+        f"SELECT entry, class, subclass FROM item_template "
+        f"WHERE entry IN ({placeholders})"
+    )
+    with connection.cursor() as cursor:
+        cursor.execute(query, sorted_ids)
+        rows = cursor.fetchall()
+    found = {
+        int(row["entry"]): (int(row["class"]), int(row["subclass"])) for row in rows
+    }
+    missing = set(item_ids) - found.keys()
+    if missing:
+        msg = f"item_template missing entries: {sorted(missing)}"
+        raise ValueError(msg)
+    return found
+
+
+def refresh_item_prototypes(
+    dsn: DatabaseDsn,
+    outfit,
+    *,
+    output_path: Path | None = None,
+    version: str | None = None,
+) -> tuple[Path, int]:
+    """Capture minimal item class/subclass data for mod-uac outfit overlays."""
+    from aracgen.item_prototypes import DEFAULT_ITEM_PROTOTYPES_PATH, write_item_prototypes_file
+    from aracgen.outfit_items import collect_mod_uac_outfit_item_ids
+
+    item_ids = collect_mod_uac_outfit_item_ids(outfit)
+    connection = _connect(dsn)
+    try:
+        items = capture_item_prototypes(connection, item_ids)
+    finally:
+        connection.close()
+    target = output_path or DEFAULT_ITEM_PROTOTYPES_PATH
+    write_item_prototypes_file(
+        target,
+        items,
+        source=dsn.redacted,
+        version=version,
+    )
+    return target, len(items)
+
+
 def _connect(dsn: DatabaseDsn):
     try:
         import pymysql
@@ -591,6 +644,28 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Wrote pointer {pointer} -> {versioned.name}")
     print(f"Starter zones: {len(trainers['starter_zones'])}")
     print(f"Trainer spawns (starter zones): {len(trainers['creature_spawns'])}")
+
+    from aracgen.sources import DEFAULT_CANONICAL_PIN, CanonicalDbcSource, cached_client_data_zip
+
+    cache_dir = REPO_ROOT / "data" / "cache"
+    zip_path = cached_client_data_zip(cache_dir)
+    if zip_path.is_file():
+        outfit = CanonicalDbcSource(
+            pin=DEFAULT_CANONICAL_PIN,
+            cache_dir=cache_dir,
+        ).load_char_start_outfit()
+        item_path, item_count = refresh_item_prototypes(
+            dsn,
+            outfit,
+            version=snapshot.version_raw,
+        )
+        print(f"Wrote {item_path} ({item_count} outfit item prototypes)")
+    else:
+        warnings.warn(
+            "client-data cache missing; skipped item_prototypes refresh "
+            f"(expected {zip_path})",
+            stacklevel=2,
+        )
     return 0
 
 

@@ -5,34 +5,30 @@ from pathlib import Path
 import pytest
 
 from aracgen.emit_player import PlayerCreateEmitter, build_resolver
+from aracgen.item_prototypes import DEFAULT_ITEM_PROTOTYPES_PATH
 from aracgen.kits import CanonicalKitResolver
+from aracgen.snapshot import load_snapshot
 from aracgen.sources import ZipDbcSource
 from aracgen.stock_loader import StockKitStore, spawn_for_race
 
 DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "cache" / "client-data-v19.zip"
 STOCK_DIR = Path(__file__).resolve().parents[2] / "data" / "stock" / "db_world"
-AC_ITEM_TEMPLATE = (
-    Path(__file__).resolve().parents[3]
-    / "azerothcore-wotlk"
-    / "data"
-    / "sql"
-    / "base"
-    / "db_world"
-    / "item_template.sql"
-)
+ITEM_PROTOTYPES = DEFAULT_ITEM_PROTOTYPES_PATH
+SQL_ROOT = Path(__file__).resolve().parents[2] / "data" / "sql"
+SNAPSHOT_DIR = Path(__file__).resolve().parents[2] / "data" / "snapshot"
 
 
 @pytest.fixture(scope="session")
 def resolver() -> CanonicalKitResolver:
     if not DATA_ZIP.is_file():
         pytest.skip(f"Canonical data not found: {DATA_ZIP}")
-    if not AC_ITEM_TEMPLATE.is_file():
-        pytest.skip(f"item_template.sql not found: {AC_ITEM_TEMPLATE}")
+    if not ITEM_PROTOTYPES.is_file():
+        pytest.skip(f"Item prototypes not found: {ITEM_PROTOTYPES}")
     source = ZipDbcSource(DATA_ZIP)
     return build_resolver(
         source.load_char_start_outfit(),
         stock_dir=STOCK_DIR,
-        item_template_path=AC_ITEM_TEMPLATE,
+        item_prototypes_path=ITEM_PROTOTYPES,
     )
 
 
@@ -156,3 +152,68 @@ def test_uninstall_sql_targets_exact_combos(resolver: CanonicalKitResolver) -> N
         "playercreateinfo"
     ]
     assert "(6, 8)" in uninstall["playercreateinfo_action"]
+
+
+@pytest.fixture
+def fresh_resolver() -> CanonicalKitResolver:
+    if not DATA_ZIP.is_file():
+        pytest.skip(f"Canonical data not found: {DATA_ZIP}")
+    if not ITEM_PROTOTYPES.is_file():
+        pytest.skip(f"Item prototypes not found: {ITEM_PROTOTYPES}")
+    source = ZipDbcSource(DATA_ZIP)
+    return build_resolver(
+        source.load_char_start_outfit(),
+        stock_dir=STOCK_DIR,
+        item_prototypes_path=ITEM_PROTOTYPES,
+    )
+
+
+@pytest.fixture(scope="session")
+def baked_snapshot():
+    try:
+        return load_snapshot(snapshot_dir=SNAPSHOT_DIR)
+    except FileNotFoundError:
+        pytest.skip("baked world snapshot not present")
+
+
+@pytest.mark.parametrize(
+    "table",
+    [
+        "playercreateinfo",
+        "playercreateinfo_action",
+        "charstartoutfit_dbc",
+        "playercreateinfo_skills",
+    ],
+)
+def test_install_sql_matches_checked_in_artifact(
+    fresh_resolver: CanonicalKitResolver,
+    baked_snapshot,
+    table: str,
+) -> None:
+    install_path = SQL_ROOT / "db-world" / f"mod_uac_{table}.sql"
+    if not install_path.is_file():
+        pytest.skip(f"Checked-in SQL not found: {install_path}")
+    emitter = PlayerCreateEmitter(fresh_resolver, snapshot=baked_snapshot)
+    generated = emitter.render_install_files()[table]
+    assert generated == install_path.read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize(
+    "table",
+    [
+        "playercreateinfo",
+        "playercreateinfo_action",
+        "charstartoutfit_dbc",
+        "playercreateinfo_skills",
+    ],
+)
+def test_uninstall_sql_matches_checked_in_artifact(
+    fresh_resolver: CanonicalKitResolver,
+    table: str,
+) -> None:
+    uninstall_path = SQL_ROOT / "db-uninstall" / f"mod_uac_{table}_uninstall.sql"
+    if not uninstall_path.is_file():
+        pytest.skip(f"Checked-in SQL not found: {uninstall_path}")
+    emitter = PlayerCreateEmitter(fresh_resolver)
+    generated = emitter.render_uninstall_files()[table]
+    assert generated == uninstall_path.read_text(encoding="utf-8")

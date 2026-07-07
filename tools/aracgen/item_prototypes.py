@@ -2,21 +2,16 @@
 
 from __future__ import annotations
 
+import json
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass
-from functools import lru_cache
+from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-AC_ITEM_TEMPLATE = (
-    REPO_ROOT.parent
-    / "azerothcore-wotlk"
-    / "data"
-    / "sql"
-    / "base"
-    / "db_world"
-    / "item_template.sql"
-)
+DEFAULT_ITEM_PROTOTYPES_PATH = REPO_ROOT / "data" / "item_prototypes.json"
 
 ITEM_CLASS_WEAPON = 2
 ITEM_CLASS_ARMOR = 4
@@ -97,32 +92,107 @@ class ItemPrototype:
 _ITEM_ROW = re.compile(r"^\((\d+),(\d+),(\d+),")
 
 
-@lru_cache(maxsize=1)
-def _load_all_prototypes(path: Path) -> dict[int, ItemPrototype]:
-    text = path.read_text(encoding="utf-8", errors="replace")
+def items_payload_to_prototypes(items: Mapping[str | int, Any]) -> dict[int, ItemPrototype]:
     prototypes: dict[int, ItemPrototype] = {}
+    for raw_id, raw_values in items.items():
+        item_id = int(raw_id)
+        if not isinstance(raw_values, (list, tuple)) or len(raw_values) != 2:
+            msg = f"Invalid item prototype entry for {item_id!r}: {raw_values!r}"
+            raise ValueError(msg)
+        item_class, sub_class = (int(value) for value in raw_values)
+        prototypes[item_id] = ItemPrototype(item_id, item_class, sub_class)
+    return prototypes
+
+
+def load_item_prototypes_payload(path: Path) -> dict[str, Any]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        msg = f"Invalid item prototypes file (expected object): {path}"
+        raise ValueError(msg)
+    return payload
+
+
+def write_item_prototypes_file(
+    path: Path,
+    items: Mapping[int, tuple[int, int]],
+    *,
+    source: str | None = None,
+    version: str | None = None,
+) -> Path:
+    payload = {
+        "captured_at": datetime.now(UTC).isoformat(),
+        "source": source,
+        "version": version,
+        "items": {
+            str(item_id): [item_class, sub_class]
+            for item_id, (item_class, sub_class) in sorted(items.items())
+        },
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
+def extract_item_prototypes_from_ac_sql(
+    sql_path: Path,
+    item_ids: frozenset[int],
+) -> dict[int, tuple[int, int]]:
+    """Bootstrap helper: scan AC base item_template.sql for requested entries only."""
+    if not item_ids:
+        return {}
+    wanted = set(item_ids)
+    found: dict[int, tuple[int, int]] = {}
+    text = sql_path.read_text(encoding="utf-8", errors="replace")
     for line in text.splitlines():
         match = _ITEM_ROW.match(line.strip())
         if match is None:
             continue
         item_id, item_class, sub_class = (int(value) for value in match.groups())
-        prototypes[item_id] = ItemPrototype(item_id, item_class, sub_class)
-    return prototypes
+        if item_id not in wanted:
+            continue
+        found[item_id] = (item_class, sub_class)
+        if len(found) == len(wanted):
+            break
+    missing = wanted - found.keys()
+    if missing:
+        msg = f"item_template.sql missing entries: {sorted(missing)}"
+        raise ValueError(msg)
+    return found
 
 
 class ItemPrototypeStore:
-    def __init__(self, sql_path: Path | None = None) -> None:
-        path = sql_path or AC_ITEM_TEMPLATE
-        if not path.is_file():
-            msg = f"item_template.sql not found: {path}"
+    def __init__(self, path: Path | None = None) -> None:
+        target = path or DEFAULT_ITEM_PROTOTYPES_PATH
+        if not target.is_file():
+            msg = (
+                f"Item prototypes not found: {target}. "
+                "Run generate_* with --refresh-snapshot or ensure data/item_prototypes.json "
+                "is present."
+            )
             raise FileNotFoundError(msg)
-        self._prototypes = _load_all_prototypes(path)
+        payload = load_item_prototypes_payload(target)
+        items = payload.get("items")
+        if not isinstance(items, dict):
+            msg = f"Invalid item prototypes file (missing items map): {target}"
+            raise ValueError(msg)
+        self._prototypes = items_payload_to_prototypes(items)
+        self._path = target
+
+    @classmethod
+    def from_items(cls, items: Mapping[int, tuple[int, int]]) -> ItemPrototypeStore:
+        store = cls.__new__(cls)
+        store._prototypes = {
+            item_id: ItemPrototype(item_id, item_class, sub_class)
+            for item_id, (item_class, sub_class) in items.items()
+        }
+        store._path = None
+        return store
 
     def get(self, item_id: int) -> ItemPrototype:
         try:
             return self._prototypes[item_id]
         except KeyError as exc:
-            msg = f"Item {item_id} not found in item template source"
+            msg = f"Item {item_id} not found in item prototype source"
             raise KeyError(msg) from exc
 
     def skills_for_items(self, item_ids: set[int]) -> frozenset[int]:

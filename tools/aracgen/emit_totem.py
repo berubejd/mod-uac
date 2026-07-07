@@ -6,6 +6,10 @@ from dataclasses import dataclass
 
 from aracgen.kits import ALLIANCE_RACES, HORDE_RACES
 from aracgen.matrix import ComboMatrix
+from aracgen.schema_emit import render_insert_bulk
+from aracgen.snapshot_model import Snapshot
+
+TOTEM_TABLE = "player_totem_model"
 
 SHAMAN_CLASS_ID = 7
 
@@ -34,6 +38,14 @@ class TotemModelRow:
 @dataclass(frozen=True, slots=True)
 class TotemModelResult:
     rows: tuple[TotemModelRow, ...]
+
+
+def _resolve_snapshot(snapshot: Snapshot | None) -> Snapshot:
+    if snapshot is not None:
+        return snapshot
+    from aracgen.snapshot import load_snapshot
+
+    return load_snapshot()
 
 
 def off_race_shaman_races(matrix: ComboMatrix) -> tuple[int, ...]:
@@ -67,24 +79,33 @@ def compute_totem_models(matrix: ComboMatrix) -> TotemModelResult:
     return TotemModelResult(rows=tuple(rows))
 
 
-def render_totem_install(result: TotemModelResult) -> str:
+def render_totem_install(
+    result: TotemModelResult,
+    *,
+    snapshot: Snapshot | None = None,
+) -> str:
     if not result.rows:
         return "-- mod-uac: no player_totem_model rows required.\n"
 
+    schema = _resolve_snapshot(snapshot).schema(TOTEM_TABLE)
     race_ids = sorted({row.race_id for row in result.rows})
     race_list = ", ".join(str(race_id) for race_id in race_ids)
+    logical_rows = [
+        {
+            "TotemID": row.totem_id,
+            "RaceID": row.race_id,
+            "ModelID": row.model_id,
+        }
+        for row in result.rows
+    ]
     lines = [
         "-- mod-uac: totem display models for off-race shamans",
         f"-- races: {race_list} (Alliance -> Dwarf models, Horde -> Orc models)",
         "",
-        f"DELETE FROM `player_totem_model` WHERE `RaceID` IN ({race_list});",
-        "INSERT INTO `player_totem_model` (`TotemID`, `RaceID`, `ModelID`) VALUES",
+        f"DELETE FROM `{TOTEM_TABLE}` WHERE `RaceID` IN ({race_list});",
+        render_insert_bulk(TOTEM_TABLE, schema, logical_rows),
+        "",
     ]
-    value_lines = [
-        f"({row.totem_id}, {row.race_id}, {row.model_id})" for row in result.rows
-    ]
-    lines.append(",\n".join(value_lines) + ";")
-    lines.append("")
     return "\n".join(lines)
 
 
@@ -98,7 +119,7 @@ def render_totem_uninstall(result: TotemModelResult) -> str:
         [
             "-- mod-uac: revert player_totem_model rows for off-race shamans",
             "",
-            f"DELETE FROM `player_totem_model` WHERE `RaceID` IN ({race_list});",
+            f"DELETE FROM `{TOTEM_TABLE}` WHERE `RaceID` IN ({race_list});",
             "",
         ]
     )
@@ -107,12 +128,13 @@ def render_totem_uninstall(result: TotemModelResult) -> str:
 @dataclass(slots=True)
 class TotemEmitter:
     matrix: ComboMatrix
+    snapshot: Snapshot | None = None
 
     def compute(self) -> TotemModelResult:
         return compute_totem_models(self.matrix)
 
     def render_install(self, result: TotemModelResult | None = None) -> str:
-        return render_totem_install(result or self.compute())
+        return render_totem_install(result or self.compute(), snapshot=self.snapshot)
 
     def render_uninstall(self, result: TotemModelResult | None = None) -> str:
         return render_totem_uninstall(result or self.compute())

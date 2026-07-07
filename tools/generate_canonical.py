@@ -83,7 +83,8 @@ def main() -> None:
         hunter_dbc_source = source.zip_path
         print(f"Using canonical client-data {args.pin}: {source.zip_path}")
 
-    snapshot = resolve_generation_snapshot(args)
+    outfit = source.load_char_start_outfit()
+    snapshot = resolve_generation_snapshot(args, outfit=outfit)
 
     write_skill_overlay_sql(
         source,
@@ -97,13 +98,20 @@ def main() -> None:
         INSTALL_DIR,
         UNINSTALL_DIR,
         db_max_outfit_id=args.outfit_db_max_id,
+        snapshot=snapshot,
     )
     write_totem_sql(
         INSTALL_DIR / "mod_uac_player_totem_model.sql",
         UNINSTALL_DIR / "mod_uac_player_totem_model_uninstall.sql",
+        snapshot=snapshot,
     )
-    write_class_quest_sql(INSTALL_DIR, UNINSTALL_DIR)
-    write_hunter_pet_sql(INSTALL_DIR, UNINSTALL_DIR, dbc_source=hunter_dbc_source)
+    write_class_quest_sql(INSTALL_DIR, UNINSTALL_DIR, snapshot=snapshot)
+    write_hunter_pet_sql(
+        INSTALL_DIR,
+        UNINSTALL_DIR,
+        dbc_source=hunter_dbc_source,
+        snapshot=snapshot,
+    )
     write_client_patch(REPO_ROOT / "client-patch" / "patch-A.mpq")
 
     write_trainer_sql(

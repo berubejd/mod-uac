@@ -2,8 +2,8 @@
 
 **Module:** `mod-uac` (Unlock All Classes) — provisional name
 **Target:** AzerothCore, WotLK 3.3.5a
-**Status:** Phase 1 complete (generator + data module). Starter trainer emitter (Phase 2b) complete.
-Remaining Phase 2 work: gameplay QA and polish.
+**Status:** Phase 1 complete (generator + data module). Starter trainer emitter (Phase 2b) and
+schema-contract retrofit (Phase 2e) complete. Remaining Phase 2 work: gameplay QA and polish.
 **Supersedes:** the design intent of `heyitsbench/mod-arac`, rebuilt for maintainability.
 
 ---
@@ -201,10 +201,14 @@ The only thing the two entry points differ by is the DBC source:
 - **Emitters** (each produces install + uninstall SQL, except the client emitter):
   - `SkillOverlayEmitter` → minimal `skillraceclassinfo_dbc` delta (§3.5), new IDs above source max.
   - `PlayerCreateEmitter` → `playercreateinfo`, `playercreateinfo_action`,
-    `playercreateinfo_skills`, and `charstartoutfit_dbc` overlays.
+    `playercreateinfo_skills`, and `charstartoutfit_dbc` overlays (schema-driven via snapshot).
   - `TotemEmitter` → `player_totem_model` for off-race shamans.
   - `TrainerEmitter` → starter-zone `creature` spawns for new combos (snapshot-driven; §8 Phase 2b).
   - `ClientPatchEmitter` → builds `CharBaseInfo.dbc` and packs the MPQ (pure-Python writer).
+
+All world-table SQL emitters share the **`schema_emit` contract**: column order, defaults, and
+signed-int normalization come from the baked world snapshot (`data/snapshot/`), refreshed via
+`--refresh-snapshot` on the generator front-ends.
 
 ### 4.4 Data flow
 ```
@@ -451,6 +455,13 @@ install/uninstall pair for anti-gray rows.
   `data/snapshot/`) + `TrainerEmitter` → `mod_uac_starter_trainers.sql` (26 spawns, GUIDs
   `6000000–6000025`), placement worksheet, YAML overrides. Wired into `generate_canonical.py` /
   `generate_local.py`. Spec: [mod-uac-trainer-emitter-spec.md](mod-uac-trainer-emitter-spec.md).
+- **2e — Schema contract retrofit (complete).** All world-table emitters
+  (`emit_skill`, `emit_player`, `emit_totem`, `emit_class_quest`, `emit_hunter_pet`,
+  `emit_trainers`) render SQL from snapshot `TableSchema` via `schema_emit.py`;
+  generator front-ends pass one resolved snapshot through all emitters
+  (`--refresh-snapshot` captures live column layouts; maintain versioned JSON for
+  older servers). `spell_dbc_export` no longer parses AC base `spell_dbc.sql` for
+  column order — it uses the snapshot schema like the other emitters.
 - **Remaining gameplay QA.** Shaman Call of Earth spell-grant fallback if quest patching fails QA;
   druid form spot-checks; trainer coordinate nudges via `trainer_overrides.yaml`.
 
@@ -490,7 +501,8 @@ install/uninstall pair for anti-gray rows.
 mod-uac/
   data/sql/db-world/            # install SQL (auto-applied by AC updater)
   data/sql/db-uninstall/        # companion revert SQL (manual)
-  data/snapshot/                # baked world snapshot for trainer emitter
+  data/snapshot/                # baked world snapshot (schemas + trainer extracts)
+  data/item_prototypes.json     # minimal outfit item class/subclass lookup
   data/trainer_overrides.yaml   # optional trainer placement overrides
   tools/aracgen/                # generator package
       dbc.py  sources.py  matrix.py  kits.py

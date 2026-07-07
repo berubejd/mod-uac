@@ -7,7 +7,12 @@ import pytest
 from aracgen.class_quest_catalog import HUNTER_PET_SPELL_IDS
 from aracgen.emit_hunter_pet import HunterPetEmitter, compute_hunter_pet_spells
 from aracgen.matrix import class_bit
+from aracgen.snapshot import load_snapshot
 from aracgen.sources import cached_client_data_zip
+
+SQL_ROOT = Path(__file__).resolve().parents[2] / "data" / "sql"
+SNAPSHOT_DIR = Path(__file__).resolve().parents[2] / "data" / "snapshot"
+CACHE_DIR = Path(__file__).resolve().parents[2] / "data" / "cache"
 
 
 def test_hunter_pet_grants_all_hunters_classwide() -> None:
@@ -46,3 +51,27 @@ def test_hunter_pet_spell_dbc_sets_level_one() -> None:
     # Tame Beast (1515): patched row should expose level 1 in aligned BaseLevel/SpellLevel slots.
     tame_beast = sql.split("-- spell 1515", maxsplit=1)[1].split("-- spell ", maxsplit=1)[0]
     assert ", 1, 1," in tame_beast or ", 1, 1, " in tame_beast
+
+
+@pytest.fixture(scope="session")
+def baked_snapshot():
+    try:
+        return load_snapshot(snapshot_dir=SNAPSHOT_DIR)
+    except FileNotFoundError:
+        pytest.skip("baked world snapshot not present")
+
+
+@pytest.mark.parametrize(
+    "stem",
+    ["hunter_pet_spell_custom", "hunter_pet_spell_dbc"],
+)
+def test_install_sql_matches_checked_in_artifact(baked_snapshot, stem: str) -> None:
+    install_path = SQL_ROOT / "db-world" / f"mod_uac_{stem}.sql"
+    if not install_path.is_file():
+        pytest.skip(f"Checked-in SQL not found: {install_path}")
+    zip_path = cached_client_data_zip(CACHE_DIR)
+    if not zip_path.exists():
+        pytest.skip("canonical client-data cache not present")
+    emitter = HunterPetEmitter(dbc_source=zip_path, snapshot=baked_snapshot)
+    generated = emitter.render_install_files()[stem]
+    assert generated == install_path.read_text(encoding="utf-8")

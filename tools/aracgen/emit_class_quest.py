@@ -15,9 +15,23 @@ from aracgen.class_quest_catalog import (
 from aracgen.geography import quest_access_tier, spawn_zone_for_race
 from aracgen.kits import ALLIANCE_RACES, HORDE_RACES
 from aracgen.matrix import ComboMatrix, class_bit, race_bit
+from aracgen.schema_emit import render_insert, render_update
+from aracgen.snapshot_model import Snapshot
 from aracgen.stock_loader import StockKitStore
 
+QUEST_TEMPLATE_TABLE = "quest_template"
+QUEST_TEMPLATE_ADDON_TABLE = "quest_template_addon"
+SPELL_CUSTOM_TABLE = "playercreateinfo_spell_custom"
+
 SPELL_CUSTOM_CLASSES: frozenset[int] = frozenset(EMITTED_CLASS_CHAINS)
+
+
+def _resolve_snapshot(snapshot: Snapshot | None) -> Snapshot:
+    if snapshot is not None:
+        return snapshot
+    from aracgen.snapshot import load_snapshot
+
+    return load_snapshot()
 
 
 @dataclass(frozen=True, slots=True)
@@ -230,10 +244,15 @@ def compute_class_quests(matrix: ComboMatrix, store: StockKitStore) -> ClassQues
     )
 
 
-def render_quest_install(result: ClassQuestResult) -> str:
+def render_quest_install(
+    result: ClassQuestResult,
+    *,
+    snapshot: Snapshot | None = None,
+) -> str:
     if not result.quest_patches:
         return "-- mod-uac: no quest_template race-mask patches required.\n"
 
+    schema = _resolve_snapshot(snapshot).schema(QUEST_TEMPLATE_TABLE)
     lines = [
         "-- mod-uac: quest_template AllowableRaces patches (Phase 1g)",
         "-- warlock tier A/B per-combo; §8.3 faction-wide unlock for travel-gated classes",
@@ -248,36 +267,52 @@ def render_quest_install(result: ClassQuestResult) -> str:
         if patch.note:
             lines.append(f"--   {patch.note}")
         lines.append(
-            "UPDATE `quest_template` "
-            f"SET `AllowableRaces` = {patch.new_allowable_races} "
-            f"WHERE `ID` = {patch.quest_id};"
+            render_update(
+                QUEST_TEMPLATE_TABLE,
+                schema,
+                {"AllowableRaces": patch.new_allowable_races},
+                {"ID": patch.quest_id},
+            )
         )
     lines.append("")
     return "\n".join(lines)
 
 
-def render_quest_uninstall(result: ClassQuestResult) -> str:
+def render_quest_uninstall(
+    result: ClassQuestResult,
+    *,
+    snapshot: Snapshot | None = None,
+) -> str:
     if not result.quest_patches:
         return "-- mod-uac: no quest_template patches to revert.\n"
 
+    schema = _resolve_snapshot(snapshot).schema(QUEST_TEMPLATE_TABLE)
     lines = [
         "-- mod-uac: revert quest_template AllowableRaces patches",
         "",
     ]
     for patch in result.quest_patches:
         lines.append(
-            "UPDATE `quest_template` "
-            f"SET `AllowableRaces` = {patch.original_allowable_races} "
-            f"WHERE `ID` = {patch.quest_id};"
+            render_update(
+                QUEST_TEMPLATE_TABLE,
+                schema,
+                {"AllowableRaces": patch.original_allowable_races},
+                {"ID": patch.quest_id},
+            )
         )
     lines.append("")
     return "\n".join(lines)
 
 
-def render_addon_install(result: ClassQuestResult) -> str:
+def render_addon_install(
+    result: ClassQuestResult,
+    *,
+    snapshot: Snapshot | None = None,
+) -> str:
     if not result.addon_patches:
         return "-- mod-uac: no quest_template_addon anti-gray patches required.\n"
 
+    schema = _resolve_snapshot(snapshot).schema(QUEST_TEMPLATE_ADDON_TABLE)
     lines = [
         "-- mod-uac: quest_template_addon MaxLevel patches (§8.3 anti-gray)",
         "",
@@ -288,46 +323,68 @@ def render_addon_install(result: ClassQuestResult) -> str:
             f"{patch.new_max_level}"
         )
         lines.append(
-            "UPDATE `quest_template_addon` "
-            f"SET `MaxLevel` = {patch.new_max_level} "
-            f"WHERE `ID` = {patch.quest_id};"
+            render_update(
+                QUEST_TEMPLATE_ADDON_TABLE,
+                schema,
+                {"MaxLevel": patch.new_max_level},
+                {"ID": patch.quest_id},
+            )
         )
     lines.append("")
     return "\n".join(lines)
 
 
-def render_addon_uninstall(result: ClassQuestResult) -> str:
+def render_addon_uninstall(
+    result: ClassQuestResult,
+    *,
+    snapshot: Snapshot | None = None,
+) -> str:
     if not result.addon_patches:
         return "-- mod-uac: no quest_template_addon patches to revert.\n"
 
+    schema = _resolve_snapshot(snapshot).schema(QUEST_TEMPLATE_ADDON_TABLE)
     lines = [
         "-- mod-uac: revert quest_template_addon MaxLevel patches",
         "",
     ]
     for patch in result.addon_patches:
         lines.append(
-            "UPDATE `quest_template_addon` "
-            f"SET `MaxLevel` = {patch.original_max_level} "
-            f"WHERE `ID` = {patch.quest_id};"
+            render_update(
+                QUEST_TEMPLATE_ADDON_TABLE,
+                schema,
+                {"MaxLevel": patch.original_max_level},
+                {"ID": patch.quest_id},
+            )
         )
     lines.append("")
     return "\n".join(lines)
 
 
-def render_spell_install(result: ClassQuestResult) -> str:
+def render_spell_install(
+    result: ClassQuestResult,
+    *,
+    snapshot: Snapshot | None = None,
+) -> str:
     if not result.spell_grants:
         return "-- mod-uac: no playercreateinfo_spell_custom rows required.\n"
 
+    schema = _resolve_snapshot(snapshot).schema(SPELL_CUSTOM_TABLE)
     lines = [
         "-- mod-uac: creation spell grants for cross-continent class combos (Phase 1g tier C)",
         "",
     ]
     for row in result.spell_grants:
         lines.append(
-            "INSERT INTO `playercreateinfo_spell_custom` "
-            "(`racemask`, `classmask`, `Spell`, `Note`) "
-            f"VALUES ({race_bit(row.race_id)}, {class_bit(row.class_id)}, "
-            f"{row.spell_id}, '{row.note}');"
+            render_insert(
+                SPELL_CUSTOM_TABLE,
+                schema,
+                {
+                    "racemask": race_bit(row.race_id),
+                    "classmask": class_bit(row.class_id),
+                    "Spell": row.spell_id,
+                    "Note": row.note,
+                },
+            )
         )
     lines.append("")
     return "\n".join(lines)
@@ -356,22 +413,25 @@ def render_spell_uninstall(result: ClassQuestResult) -> str:
 class ClassQuestEmitter:
     matrix: ComboMatrix
     store: StockKitStore
+    snapshot: Snapshot | None = None
 
     def compute(self) -> ClassQuestResult:
         return compute_class_quests(self.matrix, self.store)
 
     def render_install_files(self, result: ClassQuestResult | None = None) -> dict[str, str]:
         data = result or self.compute()
+        snapshot = self.snapshot
         return {
-            "quest_template": render_quest_install(data),
-            "quest_template_addon": render_addon_install(data),
-            "playercreateinfo_spell_custom": render_spell_install(data),
+            "quest_template": render_quest_install(data, snapshot=snapshot),
+            "quest_template_addon": render_addon_install(data, snapshot=snapshot),
+            "playercreateinfo_spell_custom": render_spell_install(data, snapshot=snapshot),
         }
 
     def render_uninstall_files(self, result: ClassQuestResult | None = None) -> dict[str, str]:
         data = result or self.compute()
+        snapshot = self.snapshot
         return {
-            "quest_template": render_quest_uninstall(data),
-            "quest_template_addon": render_addon_uninstall(data),
+            "quest_template": render_quest_uninstall(data, snapshot=snapshot),
+            "quest_template_addon": render_addon_uninstall(data, snapshot=snapshot),
             "playercreateinfo_spell_custom": render_spell_uninstall(data),
         }

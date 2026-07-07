@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+from pathlib import Path
+
+import pytest
+
 from aracgen.class_quest_catalog import (
     ALLIANCE_FACTION_MASK,
     HORDE_FACTION_MASK,
@@ -8,7 +12,11 @@ from aracgen.class_quest_catalog import (
 from aracgen.emit_class_quest import ClassQuestEmitter, ClassQuestResult, compute_class_quests
 from aracgen.geography import quest_access_tier
 from aracgen.matrix import ComboMatrix, class_bit, race_bit
+from aracgen.snapshot import load_snapshot
 from aracgen.stock_loader import StockKitStore
+
+SQL_ROOT = Path(__file__).resolve().parents[2] / "data" / "sql"
+SNAPSHOT_DIR = Path(__file__).resolve().parents[2] / "data" / "snapshot"
 
 
 def _faction_patches_for_class(result: ClassQuestResult, class_id: int):
@@ -111,3 +119,28 @@ def test_uninstall_sql_restores_stock_masks_and_removes_spell_grants() -> None:
         f"WHERE `racemask` = {race_bit(4)} AND `classmask` = {class_bit(9)} "
         f"AND `Spell` = {SUMMON_IMP_SPELL_ID}"
     ) in spell_uninstall
+
+
+@pytest.fixture(scope="session")
+def baked_snapshot():
+    try:
+        return load_snapshot(snapshot_dir=SNAPSHOT_DIR)
+    except FileNotFoundError:
+        pytest.skip("baked world snapshot not present")
+
+
+@pytest.mark.parametrize(
+    "table",
+    ["quest_template", "quest_template_addon", "playercreateinfo_spell_custom"],
+)
+def test_install_sql_matches_checked_in_artifact(baked_snapshot, table: str) -> None:
+    install_path = SQL_ROOT / "db-world" / f"mod_uac_{table}.sql"
+    if not install_path.is_file():
+        pytest.skip(f"Checked-in SQL not found: {install_path}")
+    emitter = ClassQuestEmitter(
+        ComboMatrix.stock(),
+        StockKitStore.load(),
+        snapshot=baked_snapshot,
+    )
+    generated = emitter.render_install_files()[table]
+    assert generated == install_path.read_text(encoding="utf-8")

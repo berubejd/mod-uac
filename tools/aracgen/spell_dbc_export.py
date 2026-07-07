@@ -2,85 +2,23 @@
 
 from __future__ import annotations
 
-import re
 import zipfile
-from dataclasses import dataclass
-from functools import lru_cache
 from pathlib import Path
 
 from aracgen.dbc import DbcTable, FieldKind
 from aracgen.formats import SPELL, SPELL_BASE_LEVEL_FIELD, SPELL_SPELL_LEVEL_FIELD
+from aracgen.schema_emit import compact_float_format, render_replace
+from aracgen.snapshot_model import Snapshot, TableSchema
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-AC_SPELL_DBC_SCHEMA = (
-    REPO_ROOT.parent
-    / "azerothcore-wotlk"
-    / "data"
-    / "sql"
-    / "base"
-    / "db_world"
-    / "spell_dbc.sql"
-)
+SPELL_DBC_TABLE = "spell_dbc"
 
 
-@dataclass(frozen=True)
-class _SchemaColumn:
-    name: str
-    signed: bool
+def _resolve_snapshot(snapshot: Snapshot | None) -> Snapshot:
+    if snapshot is not None:
+        return snapshot
+    from aracgen.snapshot import load_snapshot
 
-
-@lru_cache(maxsize=1)
-def _load_spell_schema() -> tuple[_SchemaColumn, ...]:
-    text = AC_SPELL_DBC_SCHEMA.read_text(encoding="utf-8", errors="replace")
-    match = re.search(r"CREATE TABLE.*?\((.*?)\) ENGINE", text, re.S)
-    if match is None:
-        msg = f"Could not parse spell_dbc schema from {AC_SPELL_DBC_SCHEMA}"
-        raise ValueError(msg)
-    cols: list[_SchemaColumn] = []
-    for line in match.group(1).splitlines():
-        stripped = line.strip()
-        if not stripped or stripped.startswith("PRIMARY"):
-            continue
-        name = stripped.split()[0].strip("`")
-        signed = "` int NOT NULL" in stripped and "unsigned" not in stripped
-        cols.append(_SchemaColumn(name=name, signed=signed))
-    return tuple(cols)
-
-
-def _load_spell_columns() -> list[str]:
-    return [column.name for column in _load_spell_schema()]
-
-
-def _to_signed_int32(value: int) -> int:
-    value &= 0xFFFFFFFF
-    if value >= 0x80000000:
-        return value - 0x100000000
-    return value
-
-
-def _sql_literal(value: int | float | str | None, *, signed: bool = False) -> str:
-    if value is None:
-        return "NULL"
-    if isinstance(value, float):
-        text = f"{value:g}"
-        return text if text != "-0" else "0"
-    if isinstance(value, int):
-        if signed:
-            return str(_to_signed_int32(value))
-        return str(value)
-    escaped = value.replace("\\", "\\\\").replace("'", "''")
-    return f"'{escaped}'"
-
-
-def _render_row_literals(values: list[int | float | str | None]) -> str:
-    schema = _load_spell_schema()
-    if len(values) != len(schema):
-        msg = f"spell_dbc row width {len(values)} != schema columns {len(schema)}"
-        raise ValueError(msg)
-    return ", ".join(
-        _sql_literal(value, signed=column.signed)
-        for column, value in zip(schema, values, strict=True)
-    )
+    return load_snapshot()
 
 
 def _string_group_values(table: DbcTable, record_index: int, start_field: int) -> list[str | None]:
@@ -155,8 +93,12 @@ def _append_dbc_field(
     raise ValueError(msg)
 
 
-def _record_values(table: DbcTable, record_index: int) -> list[int | float | str | None]:
-    """Build the 234-column spell_dbc row AC expects (client DBC + locale expansion)."""
+def _record_values(
+    table: DbcTable,
+    record_index: int,
+    schema: TableSchema,
+) -> list[int | float | str | None]:
+    """Build the spell_dbc row AC expects (client DBC + locale expansion)."""
     values: list[int | float | str | None] = []
 
     for field_idx in range(_NAME_STRING_FIELD):
@@ -170,7 +112,7 @@ def _record_values(table: DbcTable, record_index: int) -> list[int | float | str
     for field_idx in range(_TAIL_NUMERIC_FIELD, len(table._fields)):  # noqa: SLF001
         _append_dbc_field(table, record_index, field_idx, values)
 
-    columns = _load_spell_columns()
+    columns = schema.column_names()
     if len(values) != len(columns):
         msg = f"spell_dbc row width {len(values)} != schema columns {len(columns)}"
         raise ValueError(msg)
@@ -195,21 +137,32 @@ def find_spell_record(table: DbcTable, spell_id: int) -> int:
     raise ValueError(msg)
 
 
-def export_spell_row(table: DbcTable, spell_id: int, *, base_level: int = 1) -> str:
+def export_spell_row(
+    table: DbcTable,
+    spell_id: int,
+    *,
+    snapshot: Snapshot | None = None,
+    base_level: int = 1,
+) -> str:
+    schema = _resolve_snapshot(snapshot).schema(SPELL_DBC_TABLE)
     record_index = find_spell_record(table, spell_id)
     table.set_uint32(record_index, SPELL_BASE_LEVEL_FIELD, base_level)
     table.set_uint32(record_index, SPELL_SPELL_LEVEL_FIELD, base_level)
-    values = _record_values(table, record_index)
-    columns = _load_spell_columns()
-    rendered = _render_row_literals(values)
-    col_list = ", ".join(f"`{name}`" for name in columns)
-    return f"REPLACE INTO `spell_dbc` ({col_list}) VALUES ({rendered});"
+    values = _record_values(table, record_index, schema)
+    logical = dict(zip(schema.column_names(), values, strict=True))
+    return render_replace(
+        SPELL_DBC_TABLE,
+        schema,
+        logical,
+        float_format=compact_float_format,
+    )
 
 
 def render_spell_dbc_install(
     spell_ids: tuple[int, ...],
     dbc_source: Path,
     *,
+    snapshot: Snapshot | None = None,
     base_level: int = 1,
 ) -> str:
     if dbc_source.suffix.lower() == ".dbc":
@@ -223,7 +176,14 @@ def render_spell_dbc_install(
     ]
     for spell_id in spell_ids:
         lines.append(f"-- spell {spell_id}")
-        lines.append(export_spell_row(table, spell_id, base_level=base_level))
+        lines.append(
+            export_spell_row(
+                table,
+                spell_id,
+                snapshot=snapshot,
+                base_level=base_level,
+            )
+        )
     lines.append("")
     return "\n".join(lines)
 
@@ -234,7 +194,7 @@ def render_spell_dbc_uninstall(spell_ids: tuple[int, ...]) -> str:
         [
             "-- mod-uac: remove hunter pet spell_dbc overlays (revert to client Spell.dbc)",
             "",
-            f"DELETE FROM `spell_dbc` WHERE `ID` IN ({ids});",
+            f"DELETE FROM `{SPELL_DBC_TABLE}` WHERE `ID` IN ({ids});",
             "",
         ]
     )

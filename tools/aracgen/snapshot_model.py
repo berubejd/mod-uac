@@ -30,6 +30,10 @@ SCHEMA_TABLES: tuple[str, ...] = (
     "playercreateinfo_skills",
     "charstartoutfit_dbc",
     "skillraceclassinfo_dbc",
+    "player_totem_model",
+    "quest_template",
+    "quest_template_addon",
+    "spell_dbc",
 )
 
 
@@ -197,3 +201,81 @@ def build_spawn_defaults(
 
 def creature_entry_column(schema: TableSchema) -> str:
     return schema.resolve_logical("entry")
+
+
+_CREATE_TABLE = re.compile(
+    r"CREATE TABLE `(?P<table>[^`]+)` \((?P<body>.*?)\) ENGINE",
+    re.S | re.I,
+)
+_COLUMN_LINE = re.compile(r"^\s*`(?P<name>[^`]+)`\s+(?P<def>.+?)\s*,?\s*$")
+
+
+def _parse_column_default(definition: str) -> Any:
+    upper = definition.upper()
+    if "DEFAULT" not in upper:
+        return None
+    default_idx = upper.index("DEFAULT")
+    default_raw = definition[default_idx + len("DEFAULT") :].strip()
+    if default_raw.upper().startswith("NULL"):
+        return None
+    if default_raw.startswith("'") and default_raw.endswith("'"):
+        return default_raw[1:-1]
+    if default_raw.startswith('"') and default_raw.endswith('"'):
+        return default_raw[1:-1]
+    try:
+        if "." in default_raw:
+            return float(default_raw)
+        return int(default_raw)
+    except ValueError:
+        return default_raw
+
+
+def _parse_column_type(definition: str) -> tuple[str, bool]:
+    upper = definition.upper()
+    nullable = "NOT NULL" not in upper or "DEFAULT NULL" in upper
+    type_part = definition.split(" NOT NULL", 1)[0]
+    type_part = type_part.split(" DEFAULT ", 1)[0]
+    type_part = type_part.split(" CHARACTER SET ", 1)[0]
+    type_part = type_part.split(" COLLATE ", 1)[0]
+    return type_part.strip(), nullable
+
+
+def parse_create_table_ddl(ddl: str, table: str) -> TableSchema:
+    match = _CREATE_TABLE.search(ddl)
+    if match is None or match.group("table") != table:
+        msg = f"Could not parse CREATE TABLE for {table!r}"
+        raise ValueError(msg)
+
+    columns: list[ColumnDef] = []
+    for ordinal, raw_line in enumerate(match.group("body").splitlines(), start=1):
+        line = raw_line.strip()
+        if not line or line.startswith("PRIMARY") or line.startswith("KEY"):
+            continue
+        col_match = _COLUMN_LINE.match(line)
+        if col_match is None:
+            continue
+        name = col_match.group("name")
+        definition = col_match.group("def")
+        column_type, nullable = _parse_column_type(definition)
+        columns.append(
+            ColumnDef(
+                name=name,
+                ordinal=ordinal,
+                type=column_type,
+                nullable=nullable,
+                default=_parse_column_default(definition),
+            )
+        )
+
+    if not columns:
+        msg = f"No columns parsed for table {table!r}"
+        raise ValueError(msg)
+    return TableSchema(table=table, columns=tuple(columns))
+
+
+def load_table_schema_from_ac_base(ac_base_dir: Path, table: str) -> TableSchema:
+    sql_path = ac_base_dir / f"{table}.sql"
+    if not sql_path.is_file():
+        msg = f"AC base schema file not found: {sql_path}"
+        raise FileNotFoundError(msg)
+    return parse_create_table_ddl(sql_path.read_text(encoding="utf-8", errors="replace"), table)

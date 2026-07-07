@@ -48,7 +48,8 @@ mod-uac/
   tools/capture_snapshot.py     # world DB snapshot capture (PyMySQL)
   tools/generate_local.py       # LocalDbcSource     -> operator SQL only
   tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + shared MPQ
-  data/snapshot/                # baked world snapshot for trainer emitter
+  data/snapshot/                # baked world snapshot (schemas + trainer extracts)
+  data/item_prototypes.json     # minimal outfit item class/subclass lookup (from snapshot refresh)
   data/trainer_overrides.yaml   # optional trainer placement overrides
   tools/requirements.txt
   client-patch/patch-A.mpq      # universal client artifact
@@ -72,6 +73,11 @@ mod-uac/
   `data/sql/db-world/` and `data/sql/db-uninstall/`; never hand-edit
   checked-in SQL — regenerate via `generate_canonical.py` (or
   `generate_local.py` for operator baselines).
+- **Schema-driven SQL.** World-table emitters (`emit_skill`, `emit_player`,
+  `emit_totem`, `emit_class_quest`, `emit_hunter_pet`, `emit_trainers`) render
+  INSERT/REPLACE/UPDATE rows from the baked snapshot's `TableSchema` via
+  `schema_emit.py` — column lists and defaults come from the operator's world DB
+  capture (or AC base DDL bootstrap), not hardcoded in emitters.
 
 ---
 
@@ -121,9 +127,10 @@ Work is tracked in [README.md](README.md) and
 | **1f** | `CMakeLists.txt`, `README.md`, docs |
 | **1g** | `emit_class_quest.py`, `class_quest_catalog.py`, `mod_uac_quest_template.sql`, optional `mod_uac_hunter_pet_*.sql` |
 | **2b** | `emit_trainers.py`, `snapshot.py`, `mod_uac_starter_trainers.sql`, `docs/trainer_worksheet.md` |
+| **2e** | Schema contract on all world-table emitters (`schema_emit.py`, snapshot schemas) |
 
-Phase 1 and the starter trainer emitter (**2b**) are **complete**. Remaining Phase 2 work is
-gameplay QA and polish (see engineering doc §8).
+Phase 1, starter trainers (**2b**), and schema-contract retrofit (**2e**) are **complete**.
+Remaining Phase 2 work is gameplay QA and polish (see engineering doc §8).
 
 Generator entry points: `tools/generate_canonical.py` (checked-in artifacts),
 `tools/generate_local.py` (operator-specific SQL). Shared wiring lives in

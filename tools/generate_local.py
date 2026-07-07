@@ -59,7 +59,8 @@ def main() -> None:
     args = parser.parse_args()
 
     source = LocalDbcSource(args.dbc_dir)
-    snapshot = resolve_generation_snapshot(args)
+    outfit = source.load_char_start_outfit()
+    snapshot = resolve_generation_snapshot(args, outfit=outfit)
     install_path = args.output_dir / "mod_uac_skillraceclassinfo_dbc.sql"
     uninstall_path = args.output_dir / "mod_uac_skillraceclassinfo_dbc_uninstall.sql"
 
@@ -70,16 +71,24 @@ def main() -> None:
         db_max_id=args.db_max_id,
         snapshot=snapshot,
     )
-    write_player_create_sql(source, args.output_dir, args.output_dir, db_max_outfit_id=args.outfit_db_max_id)
+    write_player_create_sql(
+        source,
+        args.output_dir,
+        args.output_dir,
+        db_max_outfit_id=args.outfit_db_max_id,
+        snapshot=snapshot,
+    )
     write_totem_sql(
         args.output_dir / "mod_uac_player_totem_model.sql",
         args.output_dir / "mod_uac_player_totem_model_uninstall.sql",
+        snapshot=snapshot,
     )
-    write_class_quest_sql(args.output_dir, args.output_dir)
+    write_class_quest_sql(args.output_dir, args.output_dir, snapshot=snapshot)
     write_hunter_pet_sql(
         args.output_dir,
         args.output_dir,
         dbc_source=args.dbc_dir / "Spell.dbc",
+        snapshot=snapshot,
     )
     write_client_patch(args.output_dir / "patch-A.mpq")
 
