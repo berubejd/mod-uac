@@ -10,7 +10,7 @@ from aracgen.item_prototypes import (
     THROWN_SKILL,
     ItemPrototypeStore,
 )
-from aracgen.matrix import mask_covers_race_class
+from aracgen.matrix import class_bit, mask_covers_race_class, race_bit
 from aracgen.stock_loader import CreateInfoSkill, StockKitStore
 
 
@@ -82,3 +82,29 @@ def compute_starter_skills(
         StarterSkillRow(race_id=race_id, class_id=class_id, skill_id=skill_id)
         for skill_id in sorted(needed)
     )
+
+
+def starter_skill_row_to_create_info(row: StarterSkillRow) -> CreateInfoSkill:
+    return CreateInfoSkill(
+        race_mask=race_bit(row.race_id),
+        class_mask=class_bit(row.class_id),
+        skill_id=row.skill_id,
+        rank=row.rank,
+    )
+
+
+def load_playercreateinfo_skills_catalog(
+    source_outfit,
+    *,
+    resolver=None,
+) -> tuple[CreateInfoSkill, ...]:
+    """Stock plus mod-uac gear-skill rows — the full server starting-skill grant set."""
+    from aracgen.emit_player import build_resolver, compute_player_create
+
+    kit_resolver = resolver or build_resolver(source_outfit)
+    mod_skills = tuple(
+        starter_skill_row_to_create_info(row)
+        for kit in compute_player_create(kit_resolver).kits
+        for row in kit.skills
+    )
+    return kit_resolver.store.create_skills + mod_skills

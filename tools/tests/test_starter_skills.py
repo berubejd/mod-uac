@@ -7,7 +7,7 @@ import pytest
 from aracgen.emit_player import PlayerCreateEmitter, build_resolver
 from aracgen.item_prototypes import DEFAULT_ITEM_PROTOTYPES_PATH, ItemPrototypeStore
 from aracgen.sources import ZipDbcSource
-from aracgen.starter_skills import compute_starter_skills
+from aracgen.starter_skills import compute_starter_skills, load_playercreateinfo_skills_catalog
 from aracgen.stock_loader import StockKitStore
 
 DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "cache" / "client-data-v19.zip"
@@ -67,3 +67,14 @@ def test_starter_skills_install_sql_includes_human_hunter_gun(resolver) -> None:
     uninstall = PlayerCreateEmitter(resolver).render_uninstall_files()["playercreateinfo_skills"]
     assert "raceMask` = 1" in uninstall
     assert "skill` IN (46)" in uninstall
+
+
+def test_playercreateinfo_skills_catalog_includes_mod_uac_gear_rows(resolver) -> None:
+    outfit = resolver.outfit
+    catalog = load_playercreateinfo_skills_catalog(outfit, resolver=resolver)
+    stock_count = len(resolver.store.create_skills)
+    assert len(catalog) == stock_count + 7
+    assert any(
+        row.race_mask == 1 and row.class_mask == 4 and row.skill_id == 46
+        for row in catalog[stock_count:]
+    )

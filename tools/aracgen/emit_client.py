@@ -11,6 +11,7 @@ from aracgen.dbc import DbcTable
 from aracgen.emit_player import build_resolver, compute_player_create
 from aracgen.emit_skill import (
     compute_client_language_overlay,
+    compute_client_starter_skill_overlay,
     compute_skill_overlay,
     merge_skill_overlays,
 )
@@ -24,6 +25,7 @@ from aracgen.hd_outfit_baseline import (
 from aracgen.matrix import PLAYABLE_CLASSES, PLAYABLE_RACES, ComboMatrix
 from aracgen.mpq import MpqFileEntry, build_mpq_v1
 from aracgen.sources import DbcSource
+from aracgen.starter_skills import load_playercreateinfo_skills_catalog
 
 # WoW 3.3.5a client lookup paths inside the MPQ.
 CHAR_BASE_INFO_MPQ_PATH = "DBFilesClient\\CharBaseInfo.dbc"
@@ -60,12 +62,16 @@ def build_char_base_info_table() -> DbcTable:
 
 
 def build_skill_race_class_info_table(source: DbcSource) -> DbcTable:
-    """Stock SkillRaceClassInfo.dbc plus equip and client language overlay rows."""
+    """Stock SkillRaceClassInfo.dbc plus equip and client UI overlay rows."""
     stock = source.load_skill_race_class_info()
+    outfit = source.load_char_start_outfit()
+    create_skills = load_playercreateinfo_skills_catalog(outfit)
     equip_overlay = compute_skill_overlay(stock, ComboMatrix.stock())
     merged = merge_skill_overlays(stock, equip_overlay.rows)
     language_overlay = compute_client_language_overlay(merged)
-    return merge_skill_overlays(merged, language_overlay)
+    merged = merge_skill_overlays(merged, language_overlay)
+    starter_overlay = compute_client_starter_skill_overlay(merged, create_skills)
+    return merge_skill_overlays(merged, starter_overlay)
 
 
 def build_client_patch_bytes(

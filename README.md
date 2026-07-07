@@ -1,11 +1,11 @@
 # mod-uac
 
-Unlock All Classes — AzerothCore WotLK 3.3.5a module.
+Unlock All Classes — AzerothCore WotLK 3.3.5 module.
 
 ## Purpose
 
 Allow any playable WotLK race to create and play any playable class — the combinations Blizzard
-did not ship in 3.3.5a (e.g. Tauren Mage, Human Shaman, Blood Elf Warrior). The module is built for
+did not ship in 3.3.5 (e.g. Tauren Mage, Human Shaman, Blood Elf Warrior). The module is built for
 **operators running stock or lightly customized AzerothCore**: every change is **revertable**, artifacts
 are **generated from known sources** (no mystery binaries on the server), and install is handled by
 the normal DB updater plus one small client patch.
@@ -104,9 +104,10 @@ All three files are named `patch-z.mpq`; only the source directory differs.
 The client loads `CharBaseInfo.dbc` so all race/class tiles appear on the creation screen.
 `SkillRaceClassInfo.dbc` mirrors the server `skillraceclassinfo_dbc` overlay so equip tooltips
 show correct armor/weapon restrictions for new combos (stock rows are preserved; 37 equip overlay
-rows are appended, plus 10 client-only per-race faction language rows so Common/Orcish and chat
-language selection work with the expanded `CharBaseInfo` matrix). The server does not read either
-file — `playercreateinfo` rows gate creation server-side.
+rows are appended, plus client-only UI normalization: per-race faction language rows and per-race
+copies of every `playercreateinfo_skills` grant (stock plus mod-uac gear-skill rows) so skills list,
+weapon proficiencies, and chat language selection work with the expanded `CharBaseInfo` matrix). The
+server does not read either file — `playercreateinfo` rows gate creation server-side.
 
 **Outfit patches (`standard/` and `enhanced/`):** append 74 `CharStartOutfit` overlay rows (37 new
 combos × 2 sexes) for dressing-room preview on **new** mod-uac combinations. Server starting gear
@@ -134,7 +135,7 @@ at the time of testing.
 
 If `patch-z.mpq` is already taken in your `Data/` folder, **rename the mod-uac file** to any
 **free** `patch-<letter>.mpq` slot (e.g. `patch-y.mpq`). The client only loads names matching
-`patch-<single letter>.mpq` — custom names like `patch-uac.mpq` are **not** loaded on stock 3.3.5a.
+`patch-<single letter>.mpq` — custom names like `patch-uac.mpq` are **not** loaded on stock 3.3.5.
 
 **Windows note:** the filesystem is case-insensitive. Do **not** use `patch-A.mpq` for this mod if
 you already have an HD or third-party `patch-a.mpq` — they collide and one will overwrite the other.

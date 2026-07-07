@@ -8,10 +8,17 @@ from pathlib import Path
 
 from aracgen.dbc import DbcTable
 from aracgen.formats import SKILL_RACE_CLASS_INFO
-from aracgen.matrix import ComboMatrix, mask_covers_race_class, race_bit
+from aracgen.matrix import (
+    PLAYABLE_CLASSES,
+    PLAYABLE_RACES,
+    ComboMatrix,
+    mask_covers_race_class,
+    race_bit,
+)
 from aracgen.schema_emit import render_insert
 from aracgen.snapshot import load_snapshot
 from aracgen.snapshot_model import Snapshot
+from aracgen.stock_loader import CreateInfoSkill
 
 # World DB columns aligned with skillraceclassinfo_dbc + SkillRaceClassInfofmt field order.
 SKILL_RACE_CLASS_INFO_COLUMNS: tuple[str, ...] = (
@@ -144,6 +151,69 @@ def _has_single_race_row(
         and row.flags == flags
         for row in rows
     )
+
+
+def _has_single_race_row_for_combo(
+    rows: list[SkillRaceClassInfoRow],
+    skill_id: int,
+    race_id: int,
+    class_id: int,
+) -> bool:
+    bit = race_bit(race_id)
+    return any(
+        row.skill_id == skill_id
+        and row.race_mask == bit
+        and mask_covers_race_class(row.race_mask, row.class_mask, race_id, class_id)
+        for row in rows
+    )
+
+
+def compute_client_starter_skill_overlay(
+    table: DbcTable,
+    create_skills: tuple[CreateInfoSkill, ...],
+    matrix: ComboMatrix | None = None,
+) -> tuple[SkillRaceClassInfoRow, ...]:
+    """Client-only rows: per-race copies of bundled playercreateinfo skill grants."""
+    rows = _baseline_rows(table)
+    matrix = matrix or ComboMatrix.stock()
+    next_id = max(row.record_id for row in rows) + 1
+    target_combos = {
+        (race_id, class_id)
+        for race_id in PLAYABLE_RACES
+        for class_id in PLAYABLE_CLASSES
+        if class_id != 6
+    }
+
+    pending: dict[
+        tuple[int, int, int, int, int, int, int],
+        SkillRaceClassInfoRow,
+    ] = {}
+    for race_id, class_id in sorted(target_combos):
+        for skill in create_skills:
+            if not mask_covers_race_class(
+                skill.race_mask, skill.class_mask, race_id, class_id
+            ):
+                continue
+            if _has_single_race_row_for_combo(rows, skill.skill_id, race_id, class_id):
+                continue
+            template = _find_template(rows, matrix.existing, skill.skill_id, class_id)
+            if template is None or template.race_mask == race_bit(race_id):
+                continue
+            key = (
+                skill.skill_id,
+                race_id,
+                template.class_mask,
+                template.flags,
+                template.min_level,
+                template.skill_tier_id,
+                template.skill_cost_index,
+            )
+            if key in pending:
+                continue
+            pending[key] = template.with_race_mask(next_id, race_bit(race_id))
+            next_id += 1
+
+    return tuple(pending[key] for key in sorted(pending))
 
 
 def compute_client_language_overlay(table: DbcTable) -> tuple[SkillRaceClassInfoRow, ...]:

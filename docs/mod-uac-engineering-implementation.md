@@ -260,10 +260,30 @@ DbcSource ──► DbcTable(s) ──► ComboMatrix ──► CanonicalKitReso
   `{1,2,3,4,5,6,7,8,9,11}` = **100 records** (race id 9 = Goblin and class id 10 are not playable and
   are skipped). Including already-valid combos here is harmless.
 - **`SkillRaceClassInfo.dbc`** — 8 fields per `SkillRaceClassInfofmt`. Shipped in **all** client
-  patch variants: stock baseline rows preserved, then 37 mod-uac overlay rows appended (278 records
-  on the v19 canonical source). Mirrors the server `skillraceclassinfo_dbc` overlay so equip tooltips
-  resolve correctly for new combos.
+  patch variants with three overlay layers on top of the stock baseline (see §5.5):
+  1. **Equip overlay** (37 rows) — mirrors server `skillraceclassinfo_dbc` SQL for new-combo equip
+     tooltips.
+  2. **Language normalization** (10 rows, client-only) — per-race Common/Orcish rows.
+  3. **Starter-skill normalization** (client-only) — per-race copies of every
+     `playercreateinfo_skills` grant (stock **plus** mod-uac gear-skill rows) so the skills UI and
+     chat language menu honor the expanded `CharBaseInfo` matrix.
 - **`CharStartOutfit.dbc`** — optional in `standard/` and `enhanced/` only; see §4.1 and README.
+
+### 5.5 Client UI normalization for `SkillRaceClassInfo`
+The 3.3.5 client intersects `CharBaseInfo` with `SkillRaceClassInfo` when rendering the character
+skills list and chat language menu. Stock `CharBaseInfo` has 62 combos; mod-uac ships 100. With the
+expanded matrix, the client ignores bundled multi-race `RaceMask` rows (e.g. Common `1101`, weapon
+proficiencies `163839`) even though AzerothCore's server-side `GetSkillRaceClassInfo` accepts them.
+
+**Rule (codified in `compute_client_starter_skill_overlay`):** for every skill the server grants via
+`playercreateinfo_skills` — stock rows **and** mod-uac gear-skill overlays from
+`load_playercreateinfo_skills_catalog()` — the client patch must include a **single-race**
+`SkillRaceClassInfo` row for that `(race, class)` pair. Template fields (`ClassMask`, `Flags`,
+`MinLevel`, …) are cloned from the lowest-ID stock row that already covers a reference combo of the
+same class; only `RaceMask` is narrowed to `1 << (race - 1)`.
+
+Server SQL is unchanged; normalization rows are append-only and client-only. Equip-overlay rows remain
+the separate, minimal server-mirrored slice for proficiency tooltips on new combos.
 
 ### 5.3 Overlay ID assignment rule
 Compute `base_max = max(ID)` over the source `SkillRaceClassInfo.dbc`. Assign overlay row IDs

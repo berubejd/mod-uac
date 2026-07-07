@@ -21,6 +21,7 @@ from aracgen.emit_client import (
 )
 from aracgen.emit_skill import (
     compute_client_language_overlay,
+    compute_client_starter_skill_overlay,
     compute_skill_overlay,
     merge_skill_overlays,
 )
@@ -39,9 +40,23 @@ from aracgen.matrix import (
 )
 from aracgen.mpq import MpqFileEntry, build_mpq_v1, decrypt, encrypt, hash_string, read_mpq_file
 from aracgen.sources import ZipDbcSource
+from aracgen.starter_skills import load_playercreateinfo_skills_catalog
 
 DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "cache" / "client-data-v19.zip"
 ITEM_PROTOTYPES = Path(__file__).resolve().parents[2] / "data" / "item_prototypes.json"
+
+
+def _expected_skill_record_count(dbc_source: ZipDbcSource) -> int:
+    stock_skill = dbc_source.load_skill_race_class_info()
+    create_skills = load_playercreateinfo_skills_catalog(dbc_source.load_char_start_outfit())
+    equip_overlay = compute_skill_overlay(stock_skill, ComboMatrix.stock())
+    merged = merge_skill_overlays(stock_skill, equip_overlay.rows)
+    language_overlay = compute_client_language_overlay(merged)
+    merged = merge_skill_overlays(merged, language_overlay)
+    starter_overlay = compute_client_starter_skill_overlay(merged, create_skills)
+    return stock_skill.record_count + len(equip_overlay.rows) + len(language_overlay) + len(
+        starter_overlay
+    )
 
 
 def test_encrypt_decrypt_round_trip() -> None:
@@ -96,11 +111,19 @@ def test_unlock_only_patch_has_char_base_info_and_skill_overlay(
     skill_raw = read_mpq_file(payload, SKILL_RACE_CLASS_INFO_MPQ_PATH)
     patched_skill = DbcTable.read(skill_raw, SKILL_RACE_CLASS_INFO)
     overlay = compute_skill_overlay(stock_skill, ComboMatrix.stock())
+    create_skills = load_playercreateinfo_skills_catalog(dbc_source.load_char_start_outfit())
     language_overlay = compute_client_language_overlay(
         merge_skill_overlays(stock_skill, overlay.rows)
     )
+    starter_overlay = compute_client_starter_skill_overlay(
+        merge_skill_overlays(stock_skill, overlay.rows + language_overlay),
+        create_skills,
+    )
     assert patched_skill.record_count == (
-        stock_skill.record_count + len(overlay.rows) + len(language_overlay)
+        stock_skill.record_count
+        + len(overlay.rows)
+        + len(language_overlay)
+        + len(starter_overlay)
     )
     for index in range(stock_skill.record_count):
         assert patched_skill.records[index] == stock_skill.records[index]
@@ -115,7 +138,7 @@ def test_all_patch_variants_include_skill_race_class_info(dbc_source: ZipDbcSour
             read_mpq_file(payload, SKILL_RACE_CLASS_INFO_MPQ_PATH),
             SKILL_RACE_CLASS_INFO,
         )
-        assert patched.record_count == 288
+        assert patched.record_count == _expected_skill_record_count(dbc_source)
 
 
 def test_skill_overlay_covers_night_elf_shaman_mail_gate(dbc_source: ZipDbcSource) -> None:
@@ -164,8 +187,18 @@ def test_client_language_overlay_adds_per_race_faction_languages(
     language_overlay = compute_client_language_overlay(
         merge_skill_overlays(stock_skill, equip_overlay.rows)
     )
+    create_skills = load_playercreateinfo_skills_catalog(dbc_source.load_char_start_outfit())
+    starter_overlay = compute_client_starter_skill_overlay(
+        merge_skill_overlays(stock_skill, equip_overlay.rows + language_overlay),
+        create_skills,
+    )
     assert len(language_overlay) == 10
-    assert merged.record_count == stock_skill.record_count + len(equip_overlay.rows) + 10
+    assert merged.record_count == (
+        stock_skill.record_count
+        + len(equip_overlay.rows)
+        + len(language_overlay)
+        + len(starter_overlay)
+    )
 
     for race_id in (1, 3, 4, 7, 11):
         assert _language_rows(merged, 98, race_id)
@@ -187,6 +220,67 @@ def test_new_combo_night_elf_hunter_has_chat_language_rows(dbc_source: ZipDbcSou
         4,
         3,
     )
+
+
+def test_ne_hunter_has_single_race_two_handed_axes_row(dbc_source: ZipDbcSource) -> None:
+    table = build_skill_race_class_info_table(dbc_source)
+    rows = [
+        table.get_uint32(index, 0)
+        for index in range(table.record_count)
+        if table.get_uint32(index, 1) == 172
+        and table.get_uint32(index, 2) == race_bit(4)
+        and mask_covers_race_class(
+            table.get_uint32(index, 2),
+            table.get_uint32(index, 3),
+            4,
+            3,
+        )
+    ]
+    assert rows
+
+
+def test_human_hunter_has_single_race_guns_row(dbc_source: ZipDbcSource) -> None:
+    table = build_skill_race_class_info_table(dbc_source)
+    rows = [
+        table.get_uint32(index, 0)
+        for index in range(table.record_count)
+        if table.get_uint32(index, 1) == 46
+        and table.get_uint32(index, 2) == race_bit(1)
+        and mask_covers_race_class(
+            table.get_uint32(index, 2),
+            table.get_uint32(index, 3),
+            1,
+            3,
+        )
+    ]
+    assert rows
+
+
+def test_client_starter_overlay_covers_all_playercreateinfo_skills(
+    dbc_source: ZipDbcSource,
+) -> None:
+    table = build_skill_race_class_info_table(dbc_source)
+    create_skills = load_playercreateinfo_skills_catalog(dbc_source.load_char_start_outfit())
+    target = {(r, c) for r in PLAYABLE_RACES for c in PLAYABLE_CLASSES if c != 6}
+    gaps: list[tuple[int, int, int]] = []
+    for race_id, class_id in target:
+        for skill in create_skills:
+            if not mask_covers_race_class(skill.race_mask, skill.class_mask, race_id, class_id):
+                continue
+            has_single = any(
+                table.get_uint32(index, 1) == skill.skill_id
+                and table.get_uint32(index, 2) == race_bit(race_id)
+                and mask_covers_race_class(
+                    table.get_uint32(index, 2),
+                    table.get_uint32(index, 3),
+                    race_id,
+                    class_id,
+                )
+                for index in range(table.record_count)
+            )
+            if not has_single:
+                gaps.append((race_id, class_id, skill.skill_id))
+    assert gaps == []
 
 
 def test_standard_patch_appends_char_start_outfit_overlays(dbc_source: ZipDbcSource) -> None:
