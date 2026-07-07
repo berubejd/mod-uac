@@ -2,7 +2,8 @@
 
 **Module:** `mod-uac` (Unlock All Classes) — provisional name
 **Target:** AzerothCore, WotLK 3.3.5a
-**Status:** Phase 1 complete (generator + data module). Phase 2 (playerbots + gameplay QA) pending.
+**Status:** Phase 1 complete (generator + data module). Starter trainer emitter (Phase 2b) complete.
+Remaining Phase 2 work: gameplay QA and polish.
 **Supersedes:** the design intent of `heyitsbench/mod-arac`, rebuilt for maintainability.
 
 ---
@@ -23,10 +24,16 @@ server operators** running stock or lightly-customized AzerothCore installations
 - Deterministic and reproducible: generation happens against a pinned canonical source, or against
   the operator's own installed DBCs.
 
-### Non-goals (this phase)
-- Playerbot spawning as new combos (deferred to Phase 2 — see §9).
-- Placing "foreign" class trainers into races' starting zones (out of scope / gameplay-QA — see §7).
-- NPC dialogue or any LLM involvement (unrelated to this module).
+### Non-goals
+- Custom NPC dialogue beyond generated trainers and quest patches (unrelated to this module).
+
+**Verified in scope (formerly deferred):**
+- **`mod-playerbots` + new combos** — with mod-uac `playercreateinfo` rows applied, playerbots on
+  typical Playerbot-branch AzerothCore already create and spawn the new race/class pairs; no separate
+  mod-uac factory change required.
+- **Starter-zone class trainers** — shipped via snapshot-driven `mod_uac_starter_trainers.sql`
+  (26 spawns; see [mod-uac-trainer-emitter-spec.md](mod-uac-trainer-emitter-spec.md) and
+  [trainer_worksheet.md](trainer_worksheet.md)).
 
 ---
 
@@ -173,7 +180,8 @@ The only thing the two entry points differ by is the DBC source:
   installed file already has. Operators running other DBC-editing mods have a different baseline than
   canonical.
 - **`generate_canonical.py`** — reads the pinned canonical source
-  (`wowgaming/client-data`, tag **`v19`**). Produces the **checked-in** module SQL and the shared MPQ.
+  (`wowgaming/client-data`, tag **`v19`**) and the baked world snapshot under `data/snapshot/`.
+  Produces the **checked-in** module SQL, starter trainer worksheet, and the shared MPQ.
 
 ### 4.3 Domain model
 - **`DbcTable`** — a decoded WDBC file: header (record count, field count, record size, string-block
@@ -195,6 +203,7 @@ The only thing the two entry points differ by is the DBC source:
   - `PlayerCreateEmitter` → `playercreateinfo`, `playercreateinfo_action`,
     `playercreateinfo_skills`, and `charstartoutfit_dbc` overlays.
   - `TotemEmitter` → `player_totem_model` for off-race shamans.
+  - `TrainerEmitter` → starter-zone `creature` spawns for new combos (snapshot-driven; §8 Phase 2b).
   - `ClientPatchEmitter` → builds `CharBaseInfo.dbc` and packs the MPQ (pure-Python writer).
 
 ### 4.4 Data flow
@@ -203,10 +212,14 @@ DbcSource ──► DbcTable(s) ──► ComboMatrix ──► CanonicalKitReso
                                    │                     │
                                    ▼                     ▼
                         SkillOverlayEmitter      PlayerCreateEmitter
-                        TotemEmitter             ClientPatchEmitter
+                        TotemEmitter             TrainerEmitter (snapshot)
                                    │                     │
                                    ▼                     ▼
-                        install/uninstall SQL     CharBaseInfo.dbc → MPQ
+                        install/uninstall SQL     creature spawns + worksheet
+                        ClientPatchEmitter
+                                   │
+                                   ▼
+                        CharBaseInfo.dbc → MPQ
 ```
 
 ---
@@ -225,6 +238,8 @@ DbcSource ──► DbcTable(s) ──► ComboMatrix ──► CanonicalKitReso
   covers the combo.
 - **`player_totem_model`** — totem display for shamans of races without native totems (Alliance →
   Dwarf totems, Horde → Orc totems, mirroring the approach `mod-arac` used).
+- **`creature`** — starter-zone class trainer spawns for new combos (Phase 2b). Reserved GUID band
+  `6000000–6009999`; idempotent install/uninstall via `mod_uac_starter_trainers.sql`.
 - **`skillraceclassinfo_dbc`** — DBC overlay (§3.4). Columns mirror the `SkillRaceClassInfo` DBC
   layout: `ID`, `SkillID`, `RaceMask`, `ClassMask`, `Flags`, `MinLevel`, `SkillTier`,
   `SkillCostIndex` (8 fields; struct field names `SkillID`/`RaceMask`/`ClassMask` confirmed from
@@ -293,9 +308,9 @@ new combo for anyone. `CharBaseInfo` still includes all DK tiles (harmless), but
 ### Flagged problem combos (QA, not architectural blockers)
 1. **Off-race shamans** (e.g. Human/Gnome/Undead/Blood Elf shaman) — totem display handled by
    `player_totem_model` (§5.1). In scope, Phase 1 (1d).
-2. **Foreign class trainers absent in the race's starting zone** (e.g. Tauren Mage spawns in Red Cloud
-   Mesa with no mage trainer nearby) — pure gameplay friction; the character is fully valid and can
-   travel. Fixing it needs custom NPC placement → **Phase 2 / out of scope**.
+2. **Foreign class trainers in starter zones** (e.g. Tauren Mage in Red Cloud Mesa) — **resolved
+   (Phase 2b).** Snapshot-driven placement beside native trainers; nudge coordinates via
+   `data/trainer_overrides.yaml` if in-game QA finds overlap or bad facing.
 3. **Starting quests with race/class checks** — warlock imp handled in **1g** via tiered quest patches
    and spell grants (§8.1). Hunter pets use a separate class-wide level-1 slice (§8.2). mod-arac's
    global mask is not replicated.
@@ -314,6 +329,7 @@ overlay IDs occupy a known contiguous range above `base_max`, revert is clean:
 - `DELETE FROM skillraceclassinfo_dbc WHERE ID > <base_max>;` (or by the emitted ID range)
 - Revert `quest_template.AllowableRaces` per patched quest ID (1g warlock)
 - `DELETE FROM playercreateinfo_spell_custom` for tier-C warlock spell grants (1g)
+- `DELETE FROM creature WHERE guid BETWEEN 6000000 AND 6009999` (starter trainers, 2b)
 - Hunter pet slice (optional): run `mod_uac_hunter_pet_spell_*_uninstall.sql` pair — removes class-wide hunter spell grants and `spell_dbc` overlays without touching other mod-uac data
 
 Uninstall files live under `data/sql/db-uninstall/` and are documented in the README. The client
@@ -426,12 +442,17 @@ uninstall restores stock addon rows when emitted.
 in `emit_class_quest.py` merges with warlock per-combo patches; optional `quest_template_addon`
 install/uninstall pair for anti-gray rows.
 
-### Phase 2 — playerbots + polish
-- **2a — Playerbot combo enablement.** Investigate how `mod-playerbots` enumerates race/class combos
-  and whether the data alone is sufficient or its factory needs a change. The `playercreateinfo` data
-  makes new combos *possible* for bots for free; whether the factory *selects* them is the open item.
-- **2b — Gameplay QA.** Foreign-class-trainer friction and any remaining problem-combo polish; decide
-  scope.
+### Phase 2 — gameplay QA + polish
+
+- **Playerbots (resolved).** With mod-uac `playercreateinfo` data applied, `mod-playerbots` on
+  Playerbot-branch AzerothCore already enumerates and spawns the new race/class combos; no additional
+  mod-uac emitter work was required beyond the Phase 1 playercreateinfo rows.
+- **2b — Starter trainers (complete).** World DB snapshot (`tools/capture_snapshot.py`,
+  `data/snapshot/`) + `TrainerEmitter` → `mod_uac_starter_trainers.sql` (26 spawns, GUIDs
+  `6000000–6000025`), placement worksheet, YAML overrides. Wired into `generate_canonical.py` /
+  `generate_local.py`. Spec: [mod-uac-trainer-emitter-spec.md](mod-uac-trainer-emitter-spec.md).
+- **Remaining gameplay QA.** Shaman Call of Earth spell-grant fallback if quest patching fails QA;
+  druid form spot-checks; trainer coordinate nudges via `trainer_overrides.yaml`.
 
 ---
 
@@ -446,15 +467,17 @@ install/uninstall pair for anti-gray rows.
    combo tiles; skills/outfit preview is server-authoritative via SQL overlays.
 4. **`quest_template` edit** — resolved in 1g (§8.1–8.3).
 5. **Shaman Call of Earth at level 4** — faction quest patch + anti-gray shipped (§8.3); spell-grant
-   fallback reserved for Phase 2 QA if travel proves insufficient.
-6. **`mod-playerbots` combo enumeration** — Phase 2 investigation (2a).
+   fallback reserved for gameplay QA if travel proves insufficient.
+6. **`mod-playerbots` combo enumeration** — **resolved.** New combos work once `playercreateinfo`
+   rows are applied; verified on Playerbot-branch AzerothCore.
 
 ---
 
 ## 10. Dependencies and environment
 
 - **Language:** Python 3 (pure Python; no native dependencies).
-- **`requirements.txt`:** `requests` (fetch the pinned canonical release). The WDBC codec is stdlib
+- **`requirements.txt`:** `requests` (fetch the pinned canonical release); `PyMySQL` (world DB
+  snapshot capture only — emitters read JSON and stay DB-free). The WDBC codec is stdlib
   `struct`; the MPQ writer is in-repo. (There is **no** cross-platform pip package that *writes*
   MPQs — `mpq`/HearthSim is read/patch-only and states "Writing MPQs is not supported"; `pystormlib`
   is Windows-x86 read-only; `mpyq` is read-only — hence the pure-Python writer.)
@@ -467,10 +490,14 @@ install/uninstall pair for anti-gray rows.
 mod-uac/
   data/sql/db-world/            # install SQL (auto-applied by AC updater)
   data/sql/db-uninstall/        # companion revert SQL (manual)
+  data/snapshot/                # baked world snapshot for trainer emitter
+  data/trainer_overrides.yaml   # optional trainer placement overrides
   tools/aracgen/                # generator package
       dbc.py  sources.py  matrix.py  kits.py
       emit_skill.py  emit_player.py  emit_totem.py  emit_class_quest.py
-      emit_hunter_pet.py  emit_client.py  mpq.py
+      emit_hunter_pet.py  emit_trainers.py  emit_client.py  mpq.py
+      snapshot.py  trainer_catalog.py  schema_emit.py
+  tools/capture_snapshot.py     # world DB snapshot capture
   tools/generate_local.py       # LocalDbcSource     -> operator SQL only
   tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + shared MPQ
   tools/requirements.txt

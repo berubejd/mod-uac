@@ -7,12 +7,16 @@ import argparse
 from pathlib import Path
 
 from aracgen.cli import (
+    add_snapshot_cli_args,
+    add_trainer_cli_args,
+    resolve_generation_snapshot,
     write_class_quest_sql,
     write_client_patch,
     write_hunter_pet_sql,
     write_player_create_sql,
     write_skill_overlay_sql,
     write_totem_sql,
+    write_trainer_sql,
 )
 from aracgen.sources import LocalDbcSource
 
@@ -50,9 +54,12 @@ def main() -> None:
         default=0,
         help="MAX(ID) from SELECT MAX(ID) FROM charstartoutfit_dbc on your world DB",
     )
+    add_snapshot_cli_args(parser)
+    add_trainer_cli_args(parser)
     args = parser.parse_args()
 
     source = LocalDbcSource(args.dbc_dir)
+    snapshot = resolve_generation_snapshot(args)
     install_path = args.output_dir / "mod_uac_skillraceclassinfo_dbc.sql"
     uninstall_path = args.output_dir / "mod_uac_skillraceclassinfo_dbc_uninstall.sql"
 
@@ -61,6 +68,7 @@ def main() -> None:
         install_path,
         uninstall_path,
         db_max_id=args.db_max_id,
+        snapshot=snapshot,
     )
     write_player_create_sql(source, args.output_dir, args.output_dir, db_max_outfit_id=args.outfit_db_max_id)
     write_totem_sql(
@@ -74,6 +82,15 @@ def main() -> None:
         dbc_source=args.dbc_dir / "Spell.dbc",
     )
     write_client_patch(args.output_dir / "patch-A.mpq")
+
+    write_trainer_sql(
+        args.output_dir / "mod_uac_starter_trainers.sql",
+        args.output_dir / "mod_uac_starter_trainers_uninstall.sql",
+        args.output_dir / "trainer_worksheet.md",
+        snapshot=snapshot,
+        overrides_path=args.trainer_overrides,
+        guid_base=args.trainer_guid_base,
+    )
 
 
 if __name__ == "__main__":

@@ -41,10 +41,11 @@ For each new combo the module provides:
 | Creation screen tiles (client) | `CharBaseInfo.dbc` in `patch-A.mpq` |
 | Off-race shaman totems | `player_totem_model` |
 | Class-critical abilities | Tiered quest patches + narrow spell grants (see below) |
+| Starter-zone class trainers | `creature` spawns for new combos (see `mod_uac_starter_trainers.sql`) |
 
-**Not in scope (Phase 1):** spawning playerbots as new combos (Phase 2), placing foreign class
-trainers in starter zones, or custom NPC/dialogue. Off-race characters are fully valid but may need to
-**travel** for class quests and trainers — same as many private-server ARAC setups.
+**Not in scope:** custom NPC/dialogue beyond the generated trainers and quest patches.
+Off-race characters may still need to **travel** for some class quests; starter trainers are placed
+for new combos in each race's starting zone (see [docs/trainer_worksheet.md](docs/trainer_worksheet.md)).
 
 ## Operator install
 
@@ -108,6 +109,10 @@ Stock AzerothCore defaults this to `0`.
 | `mod_uac_quest_template.sql` | Warlock tier A + §8.3 faction-wide class-quest unlocks |
 | `mod_uac_quest_template_addon.sql` | Anti-gray companion (no-op on stock AC; kept for parity) |
 | `mod_uac_playercreateinfo_spell_custom.sql` | Warlock Summon Imp (NE/Draenei tier C) |
+| `mod_uac_starter_trainers.sql` | Class trainers in starter zones for new combos (26 spawns, GUIDs 6000000–6000025) |
+
+Placement worksheet and override file: [docs/trainer_worksheet.md](docs/trainer_worksheet.md),
+[data/trainer_overrides.yaml](data/trainer_overrides.yaml).
 
 ### Optional — hunter pets at level 1
 
@@ -154,18 +159,101 @@ pip install -r requirements.txt
 pytest
 ```
 
-Canonical checked-in SQL + MPQ (pinned [wowgaming/client-data](https://github.com/wowgaming/client-data) tag **v19**, cached under `data/cache/`):
+Run generators from the **mod-uac repo root** (paths below are relative to that root).
+
+### `generate_canonical.py`
+
+Writes checked-in SQL under `data/sql/`, the client MPQ under `client-patch/`, and
+`docs/trainer_worksheet.md`. Uses pinned [wowgaming/client-data](https://github.com/wowgaming/client-data)
+tag **v19** (cached under `data/cache/`) and the baked world snapshot under `data/snapshot/`.
 
 ```bash
 pip install -r tools/requirements.txt
 python tools/generate_canonical.py
 ```
 
-Operator-specific SQL when your DBC baseline or `skillraceclassinfo_dbc` max ID differs:
+| Flag | Default | Purpose |
+|------|---------|---------|
+| `--pin` | `v19` | wowgaming/client-data release tag |
+| `--cache-dir` | `data/cache/` | Download cache for client-data zip |
+| `--refresh` | off | Re-download client data even if cached |
+| `--dbc-dir` | *(download)* | Offline override: read DBCs from this directory instead |
+| `--db-max-id` | `0` | `MAX(ID)` already in `skillraceclassinfo_dbc` on your world DB |
+| `--outfit-db-max-id` | `0` | `MAX(ID)` already in `charstartoutfit_dbc` on your world DB |
+| `--snapshot` | baked pointer | Path to a world DB snapshot JSON |
+| `--snapshot-dir` | `data/snapshot/` | Directory with `world.latest.json` when `--snapshot` is omitted |
+| `--refresh-snapshot` | off | Capture a fresh snapshot from your world DB before emitting trainers |
+| `--snapshot-config` | `tools/snapshot.conf` | Config file for `--refresh-snapshot` (see below) |
+| `--dsn` | *(from config)* | AC-style `WorldDatabaseInfo`: `host;port;user;password;database` |
+| `--trainer-guid-base` | `6000000` | Base GUID for mod-uac starter trainer spawns |
+| `--trainer-overrides` | `data/trainer_overrides.yaml` | YAML placement/entry overrides |
+
+Refresh snapshot from your live world DB, then regenerate everything:
+
+```bash
+python tools/generate_canonical.py --refresh-snapshot \
+  --dsn "127.0.0.1;3306;acore;password;acore_world"
+```
+
+Or copy [tools/snapshot.conf.dist](tools/snapshot.conf.dist) to `tools/snapshot.conf`, set
+`WorldDatabaseInfo`, and run with `--refresh-snapshot` (no `--dsn` needed). You can also set
+`MOD_UAC_WORLD_DATABASE_INFO` or `MOD_UAC_SNAPSHOT_CONFIG` instead of editing the file.
+
+### `generate_local.py`
+
+Operator-specific output when your DBC baseline or overlay max IDs differ from stock. Writes to
+`tools/output/` by default (not the checked-in `data/sql/` tree).
 
 ```bash
 python tools/generate_local.py /path/to/dbc --db-max-id 970
+python tools/generate_local.py /path/to/dbc -o /tmp/mod-uac-sql
 ```
+
+| Flag | Default | Purpose |
+|------|---------|---------|
+| `dbc_dir` | *(required)* | Path to your `dbc/` directory (e.g. server `Data/dbc/`) |
+| `-o`, `--output-dir` | `tools/output/` | Directory for generated SQL and MPQ |
+| `--db-max-id` | `0` | `MAX(ID)` from `skillraceclassinfo_dbc` on your world DB |
+| `--outfit-db-max-id` | `0` | `MAX(ID)` from `charstartoutfit_dbc` on your world DB |
+| `--snapshot` | baked pointer | Same as `generate_canonical.py` |
+| `--snapshot-dir` | `data/snapshot/` | Same as `generate_canonical.py` |
+| `--refresh-snapshot` | off | Same as `generate_canonical.py` |
+| `--snapshot-config` | `tools/snapshot.conf` | Same as `generate_canonical.py` |
+| `--dsn` | *(from config)* | Same as `generate_canonical.py` |
+| `--trainer-guid-base` | `6000000` | Same as `generate_canonical.py` |
+| `--trainer-overrides` | `data/trainer_overrides.yaml` | Same as `generate_canonical.py` |
+
+Local run with a fresh snapshot and custom overrides:
+
+```bash
+python tools/generate_local.py /path/to/dbc \
+  --refresh-snapshot --trainer-overrides data/trainer_overrides.yaml
+```
+
+### `capture_snapshot.py`
+
+Standalone snapshot capture (schema + trainer extracts only). The generator front-ends call the same
+logic when you pass `--refresh-snapshot`; use this tool when you only want to refresh the baked JSON.
+
+```bash
+python tools/capture_snapshot.py --dsn "127.0.0.1;3306;acore;password;acore_world"
+python tools/capture_snapshot.py --config tools/snapshot.conf --output-dir data/snapshot/
+```
+
+| Flag | Default | Purpose |
+|------|---------|---------|
+| `--config` | `tools/snapshot.conf` | Snapshot config (`WorldDatabaseInfo = "host;port;user;pass;db"`) |
+| `--dsn` | *(from config)* | AC-style world DB connection string |
+| `--output-dir` | `data/snapshot/` | Writes `world.<version>.json` and updates `world.latest.json` |
+
+PyMySQL is required only for snapshot capture (`pip install -r tools/requirements.txt`). Emitters
+read the JSON snapshot and do not connect to MySQL.
+
+### Trainer overrides
+
+Edit [data/trainer_overrides.yaml](data/trainer_overrides.yaml) to tweak entry, anchor class, or
+spawn coordinates for specific zone/class rows (labels match [docs/trainer_worksheet.md](docs/trainer_worksheet.md)).
+Regenerate SQL after changes. Full emitter design: [docs/mod-uac-trainer-emitter-spec.md](docs/mod-uac-trainer-emitter-spec.md).
 
 ## Manual QA checklist
 
@@ -176,6 +264,7 @@ python tools/generate_local.py /path/to/dbc --db-max-id 970
 - [ ] Create Dwarf Warlock; complete imp quest chain in Dun Morogh (tier A)
 - [ ] Create Night Elf Warlock; has Summon Imp at creation (tier C spell grant)
 - [ ] Create off-race warrior/shaman/druid/paladin; reference class quest chain is available after travel (§8.3)
+- [ ] Create an off-race combo with a new starter trainer (e.g. Human Shaman); trainer is present in Northshire
 - [ ] Set `PlayerStart.CustomSpells = 1`; create any hunter at level 1; Tame Beast works on a nearby beast
 - [ ] Run hunter pet uninstall SQL only; new hunters lose pet spells until level 10
 - [ ] Run uninstall SQL; new combos no longer creatable; overlay IDs gone

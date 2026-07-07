@@ -25,10 +25,12 @@ server operators** running stock or lightly-customized AzerothCore installations
 - Deterministic and reproducible: generation happens against a pinned canonical source, or against
   the operator's own installed DBCs.
 
-### Non-goals (Phase 2+)
-- Playerbot spawning as new combos (Phase **2a** — see [engineering doc §8 Phase 2](docs/mod-uac-engineering-implementation.md#phase-2--playerbots--polish)).
-- Placing "foreign" class trainers into races' starting zones (gameplay QA / out of scope).
-- NPC dialogue or any LLM involvement (unrelated to this module).
+### Non-goals
+- Custom NPC dialogue beyond the generated trainers and quest patches (unrelated to this module).
+
+**Resolved / in scope (formerly deferred):** `mod-playerbots` already spawns new combos once
+mod-uac's `playercreateinfo` rows are applied. Starter-zone class trainers ship in
+`mod_uac_starter_trainers.sql` (see [docs/trainer_worksheet.md](docs/trainer_worksheet.md)).
 
 ---
 
@@ -41,9 +43,13 @@ mod-uac/
   tools/aracgen/                # generator package
       dbc.py  sources.py  matrix.py  kits.py
       emit_skill.py  emit_player.py  emit_totem.py  emit_class_quest.py
-      emit_hunter_pet.py  emit_client.py  mpq.py
+      emit_hunter_pet.py  emit_trainers.py  emit_client.py  mpq.py
+      snapshot.py  trainer_catalog.py  schema_emit.py
+  tools/capture_snapshot.py     # world DB snapshot capture (PyMySQL)
   tools/generate_local.py       # LocalDbcSource     -> operator SQL only
   tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + shared MPQ
+  data/snapshot/                # baked world snapshot for trainer emitter
+  data/trainer_overrides.yaml   # optional trainer placement overrides
   tools/requirements.txt
   client-patch/patch-A.mpq      # universal client artifact
   CMakeLists.txt                # data-only module stub
@@ -100,11 +106,10 @@ Conventions:
 
 ---
 
-## Phase map (Phase 1)
+## Phase map
 
 Work is tracked in [README.md](README.md) and
 [docs/mod-uac-engineering-implementation.md](docs/mod-uac-engineering-implementation.md) §8.
-Phase 1 is **complete**; Phase 2 (playerbots + gameplay QA) is next.
 
 | Phase | Deliverable (representative paths) |
 |-------|-----------------------------------|
@@ -115,6 +120,10 @@ Phase 1 is **complete**; Phase 2 (playerbots + gameplay QA) is next.
 | **1e** | `tools/aracgen/mpq.py`, `emit_client.py`, `client-patch/patch-A.mpq` |
 | **1f** | `CMakeLists.txt`, `README.md`, docs |
 | **1g** | `emit_class_quest.py`, `class_quest_catalog.py`, `mod_uac_quest_template.sql`, optional `mod_uac_hunter_pet_*.sql` |
+| **2b** | `emit_trainers.py`, `snapshot.py`, `mod_uac_starter_trainers.sql`, `docs/trainer_worksheet.md` |
+
+Phase 1 and the starter trainer emitter (**2b**) are **complete**. Remaining Phase 2 work is
+gameplay QA and polish (see engineering doc §8).
 
 Generator entry points: `tools/generate_canonical.py` (checked-in artifacts),
 `tools/generate_local.py` (operator-specific SQL). Shared wiring lives in
@@ -124,8 +133,8 @@ Generator entry points: `tools/generate_canonical.py` (checked-in artifacts),
 
 ## Multi-phase work: pause at phase boundaries
 
-When a plan is explicitly structured into phases (**1a**, **1b**, … or Phase 2
-slices), **stop after each phase completes** before beginning the next one.
+When a plan is explicitly structured into phases (**1a**, **1b**, … **2b**, or
+later slices), **stop after each phase completes** before beginning the next one.
 
 At the boundary:
 
@@ -183,8 +192,8 @@ Example pivot from this project:
 > **Pivot:** §8.3 faction-wide `quest_template.AllowableRaces` patches
 > for warrior/shaman/druid/paladin — players travel to the stock chain;
 > spell grants reserved for true hard gates only.
-> **Trade-off:** off-race paladins must reach Eversong; no custom trainers
-> until Phase 2.
+> **Trade-off:** off-race paladins must reach Eversong; starter trainers ship separately in
+> `mod_uac_starter_trainers.sql` (Phase **2b**).
 
 Anti-patterns:
 

@@ -7,12 +7,16 @@ import argparse
 from pathlib import Path
 
 from aracgen.cli import (
+    add_snapshot_cli_args,
+    add_trainer_cli_args,
+    resolve_generation_snapshot,
     write_class_quest_sql,
     write_client_patch,
     write_hunter_pet_sql,
     write_player_create_sql,
     write_skill_overlay_sql,
     write_totem_sql,
+    write_trainer_sql,
 )
 from aracgen.sources import DEFAULT_CANONICAL_PIN, CanonicalDbcSource, LocalDbcSource
 
@@ -62,6 +66,8 @@ def main() -> None:
         default=0,
         help="MAX(ID) already in charstartoutfit_dbc (default: 0 for stock DB)",
     )
+    add_snapshot_cli_args(parser)
+    add_trainer_cli_args(parser)
     args = parser.parse_args()
 
     if args.dbc_dir is not None:
@@ -77,11 +83,14 @@ def main() -> None:
         hunter_dbc_source = source.zip_path
         print(f"Using canonical client-data {args.pin}: {source.zip_path}")
 
+    snapshot = resolve_generation_snapshot(args)
+
     write_skill_overlay_sql(
         source,
         INSTALL_DIR / "mod_uac_skillraceclassinfo_dbc.sql",
         UNINSTALL_DIR / "mod_uac_skillraceclassinfo_dbc_uninstall.sql",
         db_max_id=args.db_max_id,
+        snapshot=snapshot,
     )
     write_player_create_sql(
         source,
@@ -96,6 +105,15 @@ def main() -> None:
     write_class_quest_sql(INSTALL_DIR, UNINSTALL_DIR)
     write_hunter_pet_sql(INSTALL_DIR, UNINSTALL_DIR, dbc_source=hunter_dbc_source)
     write_client_patch(REPO_ROOT / "client-patch" / "patch-A.mpq")
+
+    write_trainer_sql(
+        INSTALL_DIR / "mod_uac_starter_trainers.sql",
+        UNINSTALL_DIR / "mod_uac_starter_trainers_uninstall.sql",
+        REPO_ROOT / "docs" / "trainer_worksheet.md",
+        snapshot=snapshot,
+        overrides_path=args.trainer_overrides,
+        guid_base=args.trainer_guid_base,
+    )
 
 
 if __name__ == "__main__":
