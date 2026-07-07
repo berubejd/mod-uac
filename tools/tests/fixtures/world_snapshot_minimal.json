@@ -1,0 +1,318 @@
+{
+  "captured_at": "2026-07-06T22:00:00+00:00",
+  "core_revision": "abc123",
+  "core_version": "AzerothCore",
+  "data": {
+    "trainers": {
+      "creature_default_trainer": {
+        "895": 7
+      },
+      "creature_spawns": [
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 895,
+          "equipment_id": 1,
+          "guid": 123,
+          "map": 0,
+          "npcflag": 0,
+          "o": 1.5,
+          "x": -8850.0,
+          "y": -190.0,
+          "z": 89.0
+        }
+      ],
+      "creature_template": {
+        "895": {
+          "faction": 55,
+          "name": "Thorgas Grimson",
+          "subname": "Hunter Trainer"
+        }
+      },
+      "playercreateinfo": [
+        {
+          "class": 1,
+          "map": 0,
+          "o": 0.0,
+          "race": 1,
+          "x": -8949.95,
+          "y": -132.493,
+          "z": 83.5312,
+          "zone": 12
+        }
+      ],
+      "starter_zones": [
+        {
+          "faction": "A",
+          "map": 0,
+          "x": -8949.95,
+          "y": -132.493,
+          "zone": 12
+        }
+      ],
+      "spawn_defaults": {
+        "895": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        }
+      },
+      "trainer_spell_counts": {
+        "7": 5
+      },
+      "trainers": {
+        "7": {
+          "requirement": 3,
+          "type": 0
+        }
+      }
+    }
+  },
+  "schemas": {
+    "creature": {
+      "columns": [
+        {
+          "default": null,
+          "name": "guid",
+          "nullable": false,
+          "ordinal": 1,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "id",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "map",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "zoneId",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "areaId",
+          "nullable": false,
+          "ordinal": 5,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "1",
+          "name": "spawnMask",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "1",
+          "name": "phaseMask",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "equipment_id",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "tinyint"
+        },
+        {
+          "default": "0",
+          "name": "position_x",
+          "nullable": false,
+          "ordinal": 9,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "position_y",
+          "nullable": false,
+          "ordinal": 10,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "position_z",
+          "nullable": false,
+          "ordinal": 11,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "orientation",
+          "nullable": false,
+          "ordinal": 12,
+          "type": "float"
+        },
+        {
+          "default": "120",
+          "name": "spawntimesecs",
+          "nullable": false,
+          "ordinal": 13,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "wander_distance",
+          "nullable": false,
+          "ordinal": 14,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "currentwaypoint",
+          "nullable": false,
+          "ordinal": 15,
+          "type": "int unsigned"
+        },
+        {
+          "default": "1",
+          "name": "curhealth",
+          "nullable": false,
+          "ordinal": 16,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "curmana",
+          "nullable": false,
+          "ordinal": 17,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "MovementType",
+          "nullable": false,
+          "ordinal": 18,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "npcflag",
+          "nullable": false,
+          "ordinal": 19,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "unit_flags",
+          "nullable": false,
+          "ordinal": 20,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "dynamicflags",
+          "nullable": false,
+          "ordinal": 21,
+          "type": "int unsigned"
+        },
+        {
+          "default": "",
+          "name": "ScriptName",
+          "nullable": true,
+          "ordinal": 22,
+          "type": "char(64)"
+        },
+        {
+          "default": null,
+          "name": "VerifiedBuild",
+          "nullable": true,
+          "ordinal": 23,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "CreateObject",
+          "nullable": false,
+          "ordinal": 24,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": null,
+          "name": "Comment",
+          "nullable": true,
+          "ordinal": 25,
+          "type": "text"
+        }
+      ],
+      "table": "creature"
+    },
+    "playercreateinfo": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "race",
+          "nullable": false,
+          "ordinal": 1,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "class",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "map",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "zone",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "position_x",
+          "nullable": false,
+          "ordinal": 5,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "position_y",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "position_z",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "orientation",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "float"
+        }
+      ],
+      "table": "playercreateinfo"
+    }
+  },
+  "source": "127.0.0.1;3306;acore;***;acore_world",
+  "version": "ACDB_335.17-dev",
+  "version_raw": "ACDB 335.17-dev"
+}

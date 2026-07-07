@@ -16,3 +16,6 @@ venv/
 
 # Operator-specific generator output (checked-in SQL lives under data/sql/)
 tools/output/
+
+# Local snapshot DB credentials (use snapshot.conf.dist as template)
+tools/snapshot.conf

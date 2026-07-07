@@ -1,0 +1,3245 @@
+{
+  "captured_at": "2026-07-06T23:52:35.639848+00:00",
+  "core_revision": "c62dc737741f+",
+  "core_version": "AzerothCore rev. c62dc737741f+ 2026-07-03 09:02:05 -0700 (Playerbot branch) (Unix, RelWithDebInfo, Static)",
+  "data": {
+    "trainers": {
+      "creature_default_trainer": {
+        "15279": 17,
+        "15280": 6,
+        "15283": 32,
+        "15284": 12,
+        "15285": 10,
+        "15513": 8,
+        "16499": 8,
+        "16500": 17,
+        "16501": 6,
+        "16502": 11,
+        "16503": 2,
+        "17089": 15,
+        "198": 17,
+        "2119": 2,
+        "2122": 10,
+        "2123": 12,
+        "2124": 17,
+        "2126": 32,
+        "3059": 2,
+        "3060": 34,
+        "3061": 8,
+        "3062": 15,
+        "3153": 2,
+        "3154": 8,
+        "3155": 10,
+        "3156": 32,
+        "3157": 15,
+        "3593": 2,
+        "3594": 10,
+        "3595": 12,
+        "3596": 8,
+        "3597": 34,
+        "3707": 12,
+        "375": 12,
+        "459": 32,
+        "460": 32,
+        "5884": 17,
+        "837": 12,
+        "895": 8,
+        "911": 2,
+        "912": 2,
+        "915": 10,
+        "916": 10,
+        "925": 6,
+        "926": 6,
+        "944": 17
+      },
+      "creature_spawns": [
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 198,
+          "equipment_id": 1,
+          "guid": 79962,
+          "map": 0,
+          "npcflag": 0,
+          "o": 2.9147,
+          "x": -8851.57,
+          "y": -188.234,
+          "z": 89.4958
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 375,
+          "equipment_id": 1,
+          "guid": 79963,
+          "map": 0,
+          "npcflag": 0,
+          "o": 2.54818,
+          "x": -8853.59,
+          "y": -193.336,
+          "z": 82.1157
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 459,
+          "equipment_id": 1,
+          "guid": 79966,
+          "map": 0,
+          "npcflag": 0,
+          "o": 2.79253,
+          "x": -8926.74,
+          "y": -195.589,
+          "z": 80.7714
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 460,
+          "equipment_id": 1,
+          "guid": 1024,
+          "map": 0,
+          "npcflag": 0,
+          "o": 3.63029,
+          "x": -6048.79,
+          "y": 391.078,
+          "z": 399.202
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 837,
+          "equipment_id": 1,
+          "guid": 1023,
+          "map": 0,
+          "npcflag": 0,
+          "o": 3.68265,
+          "x": -6056.74,
+          "y": 393.548,
+          "z": 392.843
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 895,
+          "equipment_id": 1,
+          "guid": 407,
+          "map": 0,
+          "npcflag": 0,
+          "o": 2.33874,
+          "x": -6091.79,
+          "y": 365.141,
+          "z": 395.623
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 911,
+          "equipment_id": 1,
+          "guid": 79964,
+          "map": 0,
+          "npcflag": 0,
+          "o": 6.05629,
+          "x": -8918.36,
+          "y": -208.411,
+          "z": 82.3088
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 912,
+          "equipment_id": 1,
+          "guid": 406,
+          "map": 0,
+          "npcflag": 0,
+          "o": 3.45575,
+          "x": -6084.77,
+          "y": 382.141,
+          "z": 395.626
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 915,
+          "equipment_id": 1,
+          "guid": 79986,
+          "map": 0,
+          "npcflag": 0,
+          "o": 4.41568,
+          "x": -8863.47,
+          "y": -210.905,
+          "z": 80.755
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 916,
+          "equipment_id": 1,
+          "guid": 421,
+          "map": 0,
+          "npcflag": 0,
+          "o": 4.5204,
+          "x": -6093.75,
+          "y": 404.918,
+          "z": 395.62
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 925,
+          "equipment_id": 1,
+          "guid": 79967,
+          "map": 0,
+          "npcflag": 0,
+          "o": 1.20428,
+          "x": -8914.57,
+          "y": -215.016,
+          "z": 82.2996
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 926,
+          "equipment_id": 1,
+          "guid": 403,
+          "map": 0,
+          "npcflag": 0,
+          "o": 6.16101,
+          "x": -6120.68,
+          "y": 382.089,
+          "z": 395.626
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 944,
+          "equipment_id": 1,
+          "guid": 1025,
+          "map": 0,
+          "npcflag": 0,
+          "o": 3.33358,
+          "x": -6056.09,
+          "y": 388.175,
+          "z": 392.944
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 2119,
+          "equipment_id": 1,
+          "guid": 28464,
+          "map": 0,
+          "npcflag": 0,
+          "o": 2.49582,
+          "x": 1862.46,
+          "y": 1556.33,
+          "z": 94.879
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 2122,
+          "equipment_id": 1,
+          "guid": 28466,
+          "map": 0,
+          "npcflag": 0,
+          "o": 5.81195,
+          "x": 1859.65,
+          "y": 1563.3,
+          "z": 94.39
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 2123,
+          "equipment_id": 1,
+          "guid": 28469,
+          "map": 0,
+          "npcflag": 0,
+          "o": 3.33358,
+          "x": 1848.32,
+          "y": 1627.63,
+          "z": 97.0169
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 2124,
+          "equipment_id": 1,
+          "guid": 28463,
+          "map": 0,
+          "npcflag": 0,
+          "o": 3.87463,
+          "x": 1847.39,
+          "y": 1635.52,
+          "z": 97.0169
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 2126,
+          "equipment_id": 1,
+          "guid": 28467,
+          "map": 0,
+          "npcflag": 0,
+          "o": 5.20108,
+          "x": 1839.03,
+          "y": 1636.54,
+          "z": 97.0169
+        },
+        {
+          "curhealth": 198,
+          "curmana": 0,
+          "entry": 3059,
+          "equipment_id": 1,
+          "guid": 26897,
+          "map": 1,
+          "npcflag": 0,
+          "o": 4.64258,
+          "x": -2880.43,
+          "y": -213.02,
+          "z": 54.9039
+        },
+        {
+          "curhealth": 176,
+          "curmana": 0,
+          "entry": 3060,
+          "equipment_id": 1,
+          "guid": 26898,
+          "map": 1,
+          "npcflag": 0,
+          "o": 2.68781,
+          "x": -2873.57,
+          "y": -268.591,
+          "z": 54.0531
+        },
+        {
+          "curhealth": 222,
+          "curmana": 0,
+          "entry": 3061,
+          "equipment_id": 1,
+          "guid": 26899,
+          "map": 1,
+          "npcflag": 0,
+          "o": 3.10669,
+          "x": -2865.4,
+          "y": -225.731,
+          "z": 54.9617
+        },
+        {
+          "curhealth": 198,
+          "curmana": 0,
+          "entry": 3062,
+          "equipment_id": 1,
+          "guid": 26900,
+          "map": 1,
+          "npcflag": 0,
+          "o": 3.7001,
+          "x": -2873.88,
+          "y": -264.709,
+          "z": 54.0072
+        },
+        {
+          "curhealth": 222,
+          "curmana": 0,
+          "entry": 3153,
+          "equipment_id": 1,
+          "guid": 7651,
+          "map": 1,
+          "npcflag": 0,
+          "o": 5.72468,
+          "x": -639.344,
+          "y": -4230.19,
+          "z": 38.5605
+        },
+        {
+          "curhealth": 156,
+          "curmana": 0,
+          "entry": 3154,
+          "equipment_id": 1,
+          "guid": 7649,
+          "map": 1,
+          "npcflag": 0,
+          "o": 5.09636,
+          "x": -635.462,
+          "y": -4227.52,
+          "z": 38.371
+        },
+        {
+          "curhealth": 156,
+          "curmana": 0,
+          "entry": 3155,
+          "equipment_id": 1,
+          "guid": 7284,
+          "map": 1,
+          "npcflag": 0,
+          "o": 3.63029,
+          "x": -588.703,
+          "y": -4144.94,
+          "z": 41.1033
+        },
+        {
+          "curhealth": 176,
+          "curmana": 0,
+          "entry": 3156,
+          "equipment_id": 1,
+          "guid": 4800,
+          "map": 1,
+          "npcflag": 0,
+          "o": 0.244346,
+          "x": -606.874,
+          "y": -4111.87,
+          "z": 43.028
+        },
+        {
+          "curhealth": 198,
+          "curmana": 0,
+          "entry": 3157,
+          "equipment_id": 1,
+          "guid": 7281,
+          "map": 1,
+          "npcflag": 0,
+          "o": 5.48033,
+          "x": -623.939,
+          "y": -4203.88,
+          "z": 38.4285
+        },
+        {
+          "curhealth": 222,
+          "curmana": 0,
+          "entry": 3593,
+          "equipment_id": 1,
+          "guid": 46178,
+          "map": 1,
+          "npcflag": 0,
+          "o": 2.47837,
+          "x": 10526.6,
+          "y": 778.086,
+          "z": 1329.68
+        },
+        {
+          "curhealth": 222,
+          "curmana": 0,
+          "entry": 3594,
+          "equipment_id": 1,
+          "guid": 46179,
+          "map": 1,
+          "npcflag": 0,
+          "o": 1.53589,
+          "x": 10519.1,
+          "y": 778.014,
+          "z": 1329.68
+        },
+        {
+          "curhealth": 198,
+          "curmana": 0,
+          "entry": 3595,
+          "equipment_id": 1,
+          "guid": 46181,
+          "map": 1,
+          "npcflag": 0,
+          "o": 3.75246,
+          "x": 10458.8,
+          "y": 801.623,
+          "z": 1346.84
+        },
+        {
+          "curhealth": 198,
+          "curmana": 0,
+          "entry": 3596,
+          "equipment_id": 1,
+          "guid": 46182,
+          "map": 1,
+          "npcflag": 0,
+          "o": 2.11185,
+          "x": 10458.5,
+          "y": 827.868,
+          "z": 1381.02
+        },
+        {
+          "curhealth": 222,
+          "curmana": 0,
+          "entry": 3597,
+          "equipment_id": 1,
+          "guid": 46183,
+          "map": 1,
+          "npcflag": 0,
+          "o": 2.89725,
+          "x": 10464.0,
+          "y": 829.538,
+          "z": 1381.02
+        },
+        {
+          "curhealth": 198,
+          "curmana": 0,
+          "entry": 3707,
+          "equipment_id": 1,
+          "guid": 4912,
+          "map": 1,
+          "npcflag": 0,
+          "o": 4.86947,
+          "x": -617.395,
+          "y": -4202.4,
+          "z": 38.2966
+        },
+        {
+          "curhealth": 198,
+          "curmana": 0,
+          "entry": 5884,
+          "equipment_id": 1,
+          "guid": 4798,
+          "map": 1,
+          "npcflag": 0,
+          "o": 0.802851,
+          "x": -625.296,
+          "y": -4210.17,
+          "z": 38.2966
+        },
+        {
+          "curhealth": 100,
+          "curmana": 230,
+          "entry": 15279,
+          "equipment_id": 1,
+          "guid": 54985,
+          "map": 530,
+          "npcflag": 0,
+          "o": 6.10865,
+          "x": 10337.2,
+          "y": -6419.45,
+          "z": 38.6156
+        },
+        {
+          "curhealth": 103,
+          "curmana": 115,
+          "entry": 15280,
+          "equipment_id": 1,
+          "guid": 54986,
+          "map": 530,
+          "npcflag": 0,
+          "o": 0.733038,
+          "x": 10366.7,
+          "y": -6431.53,
+          "z": 38.6157
+        },
+        {
+          "curhealth": 95,
+          "curmana": 230,
+          "entry": 15283,
+          "equipment_id": 1,
+          "guid": 54989,
+          "map": 530,
+          "npcflag": 0,
+          "o": 5.98648,
+          "x": 10337.6,
+          "y": -6405.03,
+          "z": 38.6156
+        },
+        {
+          "curhealth": 95,
+          "curmana": 230,
+          "entry": 15284,
+          "equipment_id": 1,
+          "guid": 54990,
+          "map": 530,
+          "npcflag": 0,
+          "o": 3.33358,
+          "x": 10372.4,
+          "y": -6428.84,
+          "z": 38.6155
+        },
+        {
+          "curhealth": 102,
+          "curmana": 0,
+          "entry": 15285,
+          "equipment_id": 1,
+          "guid": 54991,
+          "map": 530,
+          "npcflag": 0,
+          "o": 3.42085,
+          "x": 10384.5,
+          "y": -6404.99,
+          "z": 38.6156
+        },
+        {
+          "curhealth": 103,
+          "curmana": 115,
+          "entry": 15513,
+          "equipment_id": 1,
+          "guid": 55431,
+          "map": 530,
+          "npcflag": 0,
+          "o": 3.19395,
+          "x": 10384.7,
+          "y": -6410.67,
+          "z": 38.6156
+        },
+        {
+          "curhealth": 138,
+          "curmana": 126,
+          "entry": 16499,
+          "equipment_id": 1,
+          "guid": 84585,
+          "map": 530,
+          "npcflag": 0,
+          "o": 6.17846,
+          "x": -4143.19,
+          "y": -13752.0,
+          "z": 74.632
+        },
+        {
+          "curhealth": 111,
+          "curmana": 259,
+          "entry": 16500,
+          "equipment_id": 1,
+          "guid": 84581,
+          "map": 530,
+          "npcflag": 0,
+          "o": 4.92183,
+          "x": -4117.47,
+          "y": -13739.6,
+          "z": 74.7147
+        },
+        {
+          "curhealth": 115,
+          "curmana": 126,
+          "entry": 16501,
+          "equipment_id": 1,
+          "guid": 57212,
+          "map": 530,
+          "npcflag": 0,
+          "o": 3.75246,
+          "x": -4103.19,
+          "y": -13744.2,
+          "z": 74.7326
+        },
+        {
+          "curhealth": 111,
+          "curmana": 259,
+          "entry": 16502,
+          "equipment_id": 1,
+          "guid": 57213,
+          "map": 530,
+          "npcflag": 0,
+          "o": 0.511774,
+          "x": -4120.99,
+          "y": -13762.1,
+          "z": 73.588
+        },
+        {
+          "curhealth": 120,
+          "curmana": 0,
+          "entry": 16503,
+          "equipment_id": 1,
+          "guid": 84574,
+          "map": 530,
+          "npcflag": 0,
+          "o": 5.60251,
+          "x": -4136.04,
+          "y": -13739.8,
+          "z": 74.6439
+        },
+        {
+          "curhealth": 115,
+          "curmana": 126,
+          "entry": 17089,
+          "equipment_id": 1,
+          "guid": 59513,
+          "map": 530,
+          "npcflag": 0,
+          "o": 4.72984,
+          "x": -4127.28,
+          "y": -13727.2,
+          "z": 74.758
+        }
+      ],
+      "creature_template": {
+        "15279": {
+          "faction": 1604,
+          "name": "Julia Sunstriker",
+          "subname": "Mage Trainer"
+        },
+        "15280": {
+          "faction": 1604,
+          "name": "Jesthenis Sunstriker",
+          "subname": "Paladin Trainer"
+        },
+        "15283": {
+          "faction": 1604,
+          "name": "Summoner Teli'Larien",
+          "subname": "Warlock Trainer"
+        },
+        "15284": {
+          "faction": 1604,
+          "name": "Matron Arena",
+          "subname": "Priest Trainer"
+        },
+        "15285": {
+          "faction": 1604,
+          "name": "Pathstalker Kariel",
+          "subname": "Rogue Trainer"
+        },
+        "15513": {
+          "faction": 1604,
+          "name": "Ranger Sallina",
+          "subname": "Hunter Trainer"
+        },
+        "16499": {
+          "faction": 1638,
+          "name": "Keilnei",
+          "subname": "Hunter Trainer"
+        },
+        "16500": {
+          "faction": 1638,
+          "name": "Valaatu",
+          "subname": "Mage Trainer"
+        },
+        "16501": {
+          "faction": 1638,
+          "name": "Aurelon",
+          "subname": "Paladin Trainer"
+        },
+        "16502": {
+          "faction": 1638,
+          "name": "Zalduun",
+          "subname": "Priest Trainer"
+        },
+        "16503": {
+          "faction": 1638,
+          "name": "Kore",
+          "subname": "Warrior Trainer"
+        },
+        "17089": {
+          "faction": 1638,
+          "name": "Firmanvaar",
+          "subname": "Shaman Trainer"
+        },
+        "198": {
+          "faction": 12,
+          "name": "Khelden Bremen",
+          "subname": "Mage Trainer"
+        },
+        "2119": {
+          "faction": 68,
+          "name": "Dannal Stern",
+          "subname": "Warrior Trainer"
+        },
+        "2122": {
+          "faction": 68,
+          "name": "David Trias",
+          "subname": "Rogue Trainer"
+        },
+        "2123": {
+          "faction": 68,
+          "name": "Dark Cleric Duesten",
+          "subname": "Priest Trainer"
+        },
+        "2124": {
+          "faction": 68,
+          "name": "Isabella",
+          "subname": "Mage Trainer"
+        },
+        "2126": {
+          "faction": 68,
+          "name": "Maximillion",
+          "subname": "Warlock Trainer"
+        },
+        "3059": {
+          "faction": 104,
+          "name": "Harutt Thunderhorn",
+          "subname": "Warrior Trainer"
+        },
+        "3060": {
+          "faction": 104,
+          "name": "Gart Mistrunner",
+          "subname": "Druid Trainer"
+        },
+        "3061": {
+          "faction": 104,
+          "name": "Lanka Farshot",
+          "subname": "Hunter Trainer"
+        },
+        "3062": {
+          "faction": 104,
+          "name": "Meela Dawnstrider",
+          "subname": "Shaman Trainer"
+        },
+        "3153": {
+          "faction": 29,
+          "name": "Frang",
+          "subname": "Warrior Trainer"
+        },
+        "3154": {
+          "faction": 126,
+          "name": "Jen'shan",
+          "subname": "Hunter Trainer"
+        },
+        "3155": {
+          "faction": 29,
+          "name": "Rwag",
+          "subname": "Rogue Trainer"
+        },
+        "3156": {
+          "faction": 29,
+          "name": "Nartok",
+          "subname": "Warlock Trainer"
+        },
+        "3157": {
+          "faction": 29,
+          "name": "Shikrik",
+          "subname": "Shaman Trainer"
+        },
+        "3593": {
+          "faction": 80,
+          "name": "Alyissia",
+          "subname": "Warrior Trainer"
+        },
+        "3594": {
+          "faction": 80,
+          "name": "Frahun Shadewhisper",
+          "subname": "Rogue Trainer"
+        },
+        "3595": {
+          "faction": 80,
+          "name": "Shanda",
+          "subname": "Priest Trainer"
+        },
+        "3596": {
+          "faction": 80,
+          "name": "Ayanna Everstride",
+          "subname": "Hunter Trainer"
+        },
+        "3597": {
+          "faction": 80,
+          "name": "Mardant Strongoak",
+          "subname": "Druid Trainer"
+        },
+        "3707": {
+          "faction": 126,
+          "name": "Ken'jai",
+          "subname": "Priest Trainer"
+        },
+        "375": {
+          "faction": 12,
+          "name": "Priestess Anetta",
+          "subname": "Priest Trainer"
+        },
+        "459": {
+          "faction": 12,
+          "name": "Drusilla La Salle",
+          "subname": "Warlock Trainer"
+        },
+        "460": {
+          "faction": 875,
+          "name": "Alamar Grimm",
+          "subname": "Warlock Trainer"
+        },
+        "5884": {
+          "faction": 126,
+          "name": "Mai'ah",
+          "subname": "Mage Trainer"
+        },
+        "837": {
+          "faction": 55,
+          "name": "Branstock Khalder",
+          "subname": "Priest Trainer"
+        },
+        "895": {
+          "faction": 55,
+          "name": "Thorgas Grimson",
+          "subname": "Hunter Trainer"
+        },
+        "911": {
+          "faction": 12,
+          "name": "Llane Beshere",
+          "subname": "Warrior Trainer"
+        },
+        "912": {
+          "faction": 55,
+          "name": "Thran Khorman",
+          "subname": "Warrior Trainer"
+        },
+        "915": {
+          "faction": 12,
+          "name": "Jorik Kerridan",
+          "subname": "Rogue Trainer"
+        },
+        "916": {
+          "faction": 55,
+          "name": "Solm Hargrin",
+          "subname": "Rogue Trainer"
+        },
+        "925": {
+          "faction": 12,
+          "name": "Brother Sammuel",
+          "subname": "Paladin Trainer"
+        },
+        "926": {
+          "faction": 55,
+          "name": "Bromos Grummner",
+          "subname": "Paladin Trainer"
+        },
+        "944": {
+          "faction": 875,
+          "name": "Marryk Nurribit",
+          "subname": "Mage Trainer"
+        }
+      },
+      "playercreateinfo": [
+        {
+          "class": 1,
+          "map": 0,
+          "o": 0.0,
+          "race": 1,
+          "x": -8949.95,
+          "y": -132.493,
+          "z": 83.5312,
+          "zone": 12
+        },
+        {
+          "class": 2,
+          "map": 0,
+          "o": 0.0,
+          "race": 1,
+          "x": -8949.95,
+          "y": -132.493,
+          "z": 83.5312,
+          "zone": 12
+        },
+        {
+          "class": 3,
+          "map": 0,
+          "o": 0.0,
+          "race": 1,
+          "x": -8949.95,
+          "y": -132.493,
+          "z": 83.5312,
+          "zone": 12
+        },
+        {
+          "class": 4,
+          "map": 0,
+          "o": 0.0,
+          "race": 1,
+          "x": -8949.95,
+          "y": -132.493,
+          "z": 83.5312,
+          "zone": 12
+        },
+        {
+          "class": 5,
+          "map": 0,
+          "o": 0.0,
+          "race": 1,
+          "x": -8949.95,
+          "y": -132.493,
+          "z": 83.5312,
+          "zone": 12
+        },
+        {
+          "class": 6,
+          "map": 609,
+          "o": 3.65997,
+          "race": 1,
+          "x": 2355.84,
+          "y": -5664.77,
+          "z": 426.028,
+          "zone": 4298
+        },
+        {
+          "class": 7,
+          "map": 0,
+          "o": 0.0,
+          "race": 1,
+          "x": -8949.95,
+          "y": -132.493,
+          "z": 83.5312,
+          "zone": 12
+        },
+        {
+          "class": 8,
+          "map": 0,
+          "o": 0.0,
+          "race": 1,
+          "x": -8949.95,
+          "y": -132.493,
+          "z": 83.5312,
+          "zone": 12
+        },
+        {
+          "class": 9,
+          "map": 0,
+          "o": 0.0,
+          "race": 1,
+          "x": -8949.95,
+          "y": -132.493,
+          "z": 83.5312,
+          "zone": 12
+        },
+        {
+          "class": 11,
+          "map": 0,
+          "o": 0.0,
+          "race": 1,
+          "x": -8949.95,
+          "y": -132.493,
+          "z": 83.5312,
+          "zone": 12
+        },
+        {
+          "class": 1,
+          "map": 1,
+          "o": 0.0,
+          "race": 2,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 2,
+          "map": 1,
+          "o": 0.0,
+          "race": 2,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 3,
+          "map": 1,
+          "o": 0.0,
+          "race": 2,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 4,
+          "map": 1,
+          "o": 0.0,
+          "race": 2,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 5,
+          "map": 1,
+          "o": 0.0,
+          "race": 2,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 6,
+          "map": 609,
+          "o": 3.65997,
+          "race": 2,
+          "x": 2358.44,
+          "y": -5666.9,
+          "z": 426.023,
+          "zone": 4298
+        },
+        {
+          "class": 7,
+          "map": 1,
+          "o": 0.0,
+          "race": 2,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 8,
+          "map": 1,
+          "o": 0.0,
+          "race": 2,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 9,
+          "map": 1,
+          "o": 0.0,
+          "race": 2,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 11,
+          "map": 1,
+          "o": 0.0,
+          "race": 2,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 1,
+          "map": 0,
+          "o": 6.17716,
+          "race": 3,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 2,
+          "map": 0,
+          "o": 6.17716,
+          "race": 3,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 3,
+          "map": 0,
+          "o": 6.17716,
+          "race": 3,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 4,
+          "map": 0,
+          "o": 6.17716,
+          "race": 3,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 5,
+          "map": 0,
+          "o": 6.17716,
+          "race": 3,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 6,
+          "map": 609,
+          "o": 3.65997,
+          "race": 3,
+          "x": 2358.44,
+          "y": -5666.9,
+          "z": 426.023,
+          "zone": 4298
+        },
+        {
+          "class": 7,
+          "map": 0,
+          "o": 6.17716,
+          "race": 3,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 8,
+          "map": 0,
+          "o": 6.17716,
+          "race": 3,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 9,
+          "map": 0,
+          "o": 6.17716,
+          "race": 3,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 11,
+          "map": 0,
+          "o": 6.17716,
+          "race": 3,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 1,
+          "map": 1,
+          "o": 5.69632,
+          "race": 4,
+          "x": 10311.3,
+          "y": 832.463,
+          "z": 1326.41,
+          "zone": 141
+        },
+        {
+          "class": 2,
+          "map": 1,
+          "o": 5.69632,
+          "race": 4,
+          "x": 10311.3,
+          "y": 832.463,
+          "z": 1326.41,
+          "zone": 141
+        },
+        {
+          "class": 3,
+          "map": 1,
+          "o": 5.69632,
+          "race": 4,
+          "x": 10311.3,
+          "y": 832.463,
+          "z": 1326.41,
+          "zone": 141
+        },
+        {
+          "class": 4,
+          "map": 1,
+          "o": 5.69632,
+          "race": 4,
+          "x": 10311.3,
+          "y": 832.463,
+          "z": 1326.41,
+          "zone": 141
+        },
+        {
+          "class": 5,
+          "map": 1,
+          "o": 5.69632,
+          "race": 4,
+          "x": 10311.3,
+          "y": 832.463,
+          "z": 1326.41,
+          "zone": 141
+        },
+        {
+          "class": 6,
+          "map": 609,
+          "o": 3.65997,
+          "race": 4,
+          "x": 2356.21,
+          "y": -5662.21,
+          "z": 426.026,
+          "zone": 4298
+        },
+        {
+          "class": 7,
+          "map": 1,
+          "o": 5.69632,
+          "race": 4,
+          "x": 10311.3,
+          "y": 832.463,
+          "z": 1326.41,
+          "zone": 141
+        },
+        {
+          "class": 8,
+          "map": 1,
+          "o": 5.69632,
+          "race": 4,
+          "x": 10311.3,
+          "y": 832.463,
+          "z": 1326.41,
+          "zone": 141
+        },
+        {
+          "class": 9,
+          "map": 1,
+          "o": 5.69632,
+          "race": 4,
+          "x": 10311.3,
+          "y": 832.463,
+          "z": 1326.41,
+          "zone": 141
+        },
+        {
+          "class": 11,
+          "map": 1,
+          "o": 5.69632,
+          "race": 4,
+          "x": 10311.3,
+          "y": 832.463,
+          "z": 1326.41,
+          "zone": 141
+        },
+        {
+          "class": 1,
+          "map": 0,
+          "o": 2.70526,
+          "race": 5,
+          "x": 1676.71,
+          "y": 1678.31,
+          "z": 121.67,
+          "zone": 85
+        },
+        {
+          "class": 2,
+          "map": 0,
+          "o": 2.70526,
+          "race": 5,
+          "x": 1676.71,
+          "y": 1678.31,
+          "z": 121.67,
+          "zone": 85
+        },
+        {
+          "class": 3,
+          "map": 0,
+          "o": 2.70526,
+          "race": 5,
+          "x": 1676.71,
+          "y": 1678.31,
+          "z": 121.67,
+          "zone": 85
+        },
+        {
+          "class": 4,
+          "map": 0,
+          "o": 2.70526,
+          "race": 5,
+          "x": 1676.71,
+          "y": 1678.31,
+          "z": 121.67,
+          "zone": 85
+        },
+        {
+          "class": 5,
+          "map": 0,
+          "o": 2.70526,
+          "race": 5,
+          "x": 1676.71,
+          "y": 1678.31,
+          "z": 121.67,
+          "zone": 85
+        },
+        {
+          "class": 6,
+          "map": 609,
+          "o": 3.65997,
+          "race": 5,
+          "x": 2356.21,
+          "y": -5662.21,
+          "z": 426.026,
+          "zone": 4298
+        },
+        {
+          "class": 7,
+          "map": 0,
+          "o": 2.70526,
+          "race": 5,
+          "x": 1676.71,
+          "y": 1678.31,
+          "z": 121.67,
+          "zone": 85
+        },
+        {
+          "class": 8,
+          "map": 0,
+          "o": 2.70526,
+          "race": 5,
+          "x": 1676.71,
+          "y": 1678.31,
+          "z": 121.67,
+          "zone": 85
+        },
+        {
+          "class": 9,
+          "map": 0,
+          "o": 2.70526,
+          "race": 5,
+          "x": 1676.71,
+          "y": 1678.31,
+          "z": 121.67,
+          "zone": 85
+        },
+        {
+          "class": 11,
+          "map": 0,
+          "o": 2.70526,
+          "race": 5,
+          "x": 1676.71,
+          "y": 1678.31,
+          "z": 121.67,
+          "zone": 85
+        },
+        {
+          "class": 1,
+          "map": 1,
+          "o": 0.0,
+          "race": 6,
+          "x": -2917.58,
+          "y": -257.98,
+          "z": 52.9968,
+          "zone": 215
+        },
+        {
+          "class": 2,
+          "map": 1,
+          "o": 0.0,
+          "race": 6,
+          "x": -2917.58,
+          "y": -257.98,
+          "z": 52.9968,
+          "zone": 215
+        },
+        {
+          "class": 3,
+          "map": 1,
+          "o": 0.0,
+          "race": 6,
+          "x": -2917.58,
+          "y": -257.98,
+          "z": 52.9968,
+          "zone": 215
+        },
+        {
+          "class": 4,
+          "map": 1,
+          "o": 0.0,
+          "race": 6,
+          "x": -2917.58,
+          "y": -257.98,
+          "z": 52.9968,
+          "zone": 215
+        },
+        {
+          "class": 5,
+          "map": 1,
+          "o": 0.0,
+          "race": 6,
+          "x": -2917.58,
+          "y": -257.98,
+          "z": 52.9968,
+          "zone": 215
+        },
+        {
+          "class": 6,
+          "map": 609,
+          "o": 3.65997,
+          "race": 6,
+          "x": 2358.17,
+          "y": -5663.21,
+          "z": 426.027,
+          "zone": 4298
+        },
+        {
+          "class": 7,
+          "map": 1,
+          "o": 0.0,
+          "race": 6,
+          "x": -2917.58,
+          "y": -257.98,
+          "z": 52.9968,
+          "zone": 215
+        },
+        {
+          "class": 8,
+          "map": 1,
+          "o": 0.0,
+          "race": 6,
+          "x": -2917.58,
+          "y": -257.98,
+          "z": 52.9968,
+          "zone": 215
+        },
+        {
+          "class": 9,
+          "map": 1,
+          "o": 0.0,
+          "race": 6,
+          "x": -2917.58,
+          "y": -257.98,
+          "z": 52.9968,
+          "zone": 215
+        },
+        {
+          "class": 11,
+          "map": 1,
+          "o": 0.0,
+          "race": 6,
+          "x": -2917.58,
+          "y": -257.98,
+          "z": 52.9968,
+          "zone": 215
+        },
+        {
+          "class": 1,
+          "map": 0,
+          "o": 0.0,
+          "race": 7,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 2,
+          "map": 0,
+          "o": 0.0,
+          "race": 7,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 3,
+          "map": 0,
+          "o": 0.0,
+          "race": 7,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 4,
+          "map": 0,
+          "o": 0.0,
+          "race": 7,
+          "x": -6240.0,
+          "y": 331.0,
+          "z": 383.0,
+          "zone": 1
+        },
+        {
+          "class": 5,
+          "map": 0,
+          "o": 0.0,
+          "race": 7,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 6,
+          "map": 609,
+          "o": 3.65997,
+          "race": 7,
+          "x": 2355.05,
+          "y": -5661.7,
+          "z": 426.026,
+          "zone": 4298
+        },
+        {
+          "class": 7,
+          "map": 0,
+          "o": 0.0,
+          "race": 7,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 8,
+          "map": 0,
+          "o": 0.0,
+          "race": 7,
+          "x": -6240.0,
+          "y": 331.0,
+          "z": 383.0,
+          "zone": 1
+        },
+        {
+          "class": 9,
+          "map": 0,
+          "o": 0.0,
+          "race": 7,
+          "x": -6240.0,
+          "y": 331.0,
+          "z": 383.0,
+          "zone": 1
+        },
+        {
+          "class": 11,
+          "map": 0,
+          "o": 0.0,
+          "race": 7,
+          "x": -6240.32,
+          "y": 331.033,
+          "z": 382.758,
+          "zone": 1
+        },
+        {
+          "class": 1,
+          "map": 1,
+          "o": 0.0,
+          "race": 8,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 2,
+          "map": 1,
+          "o": 0.0,
+          "race": 8,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 3,
+          "map": 1,
+          "o": 0.0,
+          "race": 8,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 4,
+          "map": 1,
+          "o": 0.0,
+          "race": 8,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 5,
+          "map": 1,
+          "o": 0.0,
+          "race": 8,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 6,
+          "map": 609,
+          "o": 3.65997,
+          "race": 8,
+          "x": 2355.05,
+          "y": -5661.7,
+          "z": 426.026,
+          "zone": 4298
+        },
+        {
+          "class": 7,
+          "map": 1,
+          "o": 0.0,
+          "race": 8,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 8,
+          "map": 1,
+          "o": 0.0,
+          "race": 8,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 9,
+          "map": 1,
+          "o": 0.0,
+          "race": 8,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 11,
+          "map": 1,
+          "o": 0.0,
+          "race": 8,
+          "x": -618.518,
+          "y": -4251.67,
+          "z": 38.718,
+          "zone": 14
+        },
+        {
+          "class": 1,
+          "map": 530,
+          "o": 5.31605,
+          "race": 10,
+          "x": 10349.6,
+          "y": -6357.29,
+          "z": 33.4026,
+          "zone": 3431
+        },
+        {
+          "class": 2,
+          "map": 530,
+          "o": 5.31605,
+          "race": 10,
+          "x": 10349.6,
+          "y": -6357.29,
+          "z": 33.4026,
+          "zone": 3431
+        },
+        {
+          "class": 3,
+          "map": 530,
+          "o": 5.31605,
+          "race": 10,
+          "x": 10349.6,
+          "y": -6357.29,
+          "z": 33.4026,
+          "zone": 3431
+        },
+        {
+          "class": 4,
+          "map": 530,
+          "o": 5.31605,
+          "race": 10,
+          "x": 10349.6,
+          "y": -6357.29,
+          "z": 33.4026,
+          "zone": 3431
+        },
+        {
+          "class": 5,
+          "map": 530,
+          "o": 5.31605,
+          "race": 10,
+          "x": 10349.6,
+          "y": -6357.29,
+          "z": 33.4026,
+          "zone": 3431
+        },
+        {
+          "class": 6,
+          "map": 609,
+          "o": 3.65997,
+          "race": 10,
+          "x": 2355.84,
+          "y": -5664.77,
+          "z": 426.028,
+          "zone": 4298
+        },
+        {
+          "class": 7,
+          "map": 530,
+          "o": 5.31605,
+          "race": 10,
+          "x": 10349.6,
+          "y": -6357.29,
+          "z": 33.4026,
+          "zone": 3431
+        },
+        {
+          "class": 8,
+          "map": 530,
+          "o": 5.31605,
+          "race": 10,
+          "x": 10349.6,
+          "y": -6357.29,
+          "z": 33.4026,
+          "zone": 3431
+        },
+        {
+          "class": 9,
+          "map": 530,
+          "o": 5.31605,
+          "race": 10,
+          "x": 10349.6,
+          "y": -6357.29,
+          "z": 33.4026,
+          "zone": 3431
+        },
+        {
+          "class": 11,
+          "map": 530,
+          "o": 5.31605,
+          "race": 10,
+          "x": 10349.6,
+          "y": -6357.29,
+          "z": 33.4026,
+          "zone": 3431
+        },
+        {
+          "class": 1,
+          "map": 530,
+          "o": 2.08364,
+          "race": 11,
+          "x": -3961.64,
+          "y": -13931.2,
+          "z": 100.615,
+          "zone": 3526
+        },
+        {
+          "class": 2,
+          "map": 530,
+          "o": 2.08364,
+          "race": 11,
+          "x": -3961.64,
+          "y": -13931.2,
+          "z": 100.615,
+          "zone": 3526
+        },
+        {
+          "class": 3,
+          "map": 530,
+          "o": 2.08364,
+          "race": 11,
+          "x": -3961.64,
+          "y": -13931.2,
+          "z": 100.615,
+          "zone": 3526
+        },
+        {
+          "class": 4,
+          "map": 530,
+          "o": 2.08364,
+          "race": 11,
+          "x": -3961.64,
+          "y": -13931.2,
+          "z": 100.615,
+          "zone": 3526
+        },
+        {
+          "class": 5,
+          "map": 530,
+          "o": 2.08364,
+          "race": 11,
+          "x": -3961.64,
+          "y": -13931.2,
+          "z": 100.615,
+          "zone": 3526
+        },
+        {
+          "class": 6,
+          "map": 609,
+          "o": 3.65997,
+          "race": 11,
+          "x": 2358.17,
+          "y": -5663.21,
+          "z": 426.027,
+          "zone": 4298
+        },
+        {
+          "class": 7,
+          "map": 530,
+          "o": 2.08364,
+          "race": 11,
+          "x": -3961.64,
+          "y": -13931.2,
+          "z": 100.615,
+          "zone": 3526
+        },
+        {
+          "class": 8,
+          "map": 530,
+          "o": 2.08364,
+          "race": 11,
+          "x": -3961.64,
+          "y": -13931.2,
+          "z": 100.615,
+          "zone": 3526
+        },
+        {
+          "class": 9,
+          "map": 530,
+          "o": 2.08364,
+          "race": 11,
+          "x": -3961.64,
+          "y": -13931.2,
+          "z": 100.615,
+          "zone": 3526
+        },
+        {
+          "class": 11,
+          "map": 530,
+          "o": 2.08364,
+          "race": 11,
+          "x": -3961.64,
+          "y": -13931.2,
+          "z": 100.615,
+          "zone": 3526
+        }
+      ],
+      "spawn_defaults": {
+        "15279": {
+          "curhealth": 100,
+          "curmana": 230,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "15280": {
+          "curhealth": 103,
+          "curmana": 115,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "15283": {
+          "curhealth": 95,
+          "curmana": 230,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "15284": {
+          "curhealth": 95,
+          "curmana": 230,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "15285": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "15513": {
+          "curhealth": 103,
+          "curmana": 115,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "16499": {
+          "curhealth": 138,
+          "curmana": 126,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "16500": {
+          "curhealth": 111,
+          "curmana": 259,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "16501": {
+          "curhealth": 115,
+          "curmana": 126,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "16502": {
+          "curhealth": 111,
+          "curmana": 259,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "16503": {
+          "curhealth": 120,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "17089": {
+          "curhealth": 115,
+          "curmana": 126,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "198": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "2119": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "2122": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "2123": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "2124": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "2126": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3059": {
+          "curhealth": 198,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3060": {
+          "curhealth": 176,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3061": {
+          "curhealth": 222,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3062": {
+          "curhealth": 198,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3153": {
+          "curhealth": 222,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3154": {
+          "curhealth": 156,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3155": {
+          "curhealth": 156,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3156": {
+          "curhealth": 176,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3157": {
+          "curhealth": 198,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3593": {
+          "curhealth": 222,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3594": {
+          "curhealth": 222,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3595": {
+          "curhealth": 198,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3596": {
+          "curhealth": 198,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3597": {
+          "curhealth": 222,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "3707": {
+          "curhealth": 198,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "375": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "459": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "460": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "5884": {
+          "curhealth": 198,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "837": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "895": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "911": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "912": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "915": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "916": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "925": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "926": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        },
+        "944": {
+          "curhealth": 102,
+          "curmana": 0,
+          "equipment_id": 1,
+          "npcflag": 0
+        }
+      },
+      "starter_zones": [
+        {
+          "faction": "A",
+          "map": 0,
+          "x": -6240.32,
+          "y": 331.033,
+          "zone": 1
+        },
+        {
+          "faction": "A",
+          "map": 0,
+          "x": -8949.95,
+          "y": -132.493,
+          "zone": 12
+        },
+        {
+          "faction": "H",
+          "map": 0,
+          "x": 1676.71,
+          "y": 1678.31,
+          "zone": 85
+        },
+        {
+          "faction": "H",
+          "map": 1,
+          "x": -618.518,
+          "y": -4251.67,
+          "zone": 14
+        },
+        {
+          "faction": "A",
+          "map": 1,
+          "x": 10311.3,
+          "y": 832.463,
+          "zone": 141
+        },
+        {
+          "faction": "H",
+          "map": 1,
+          "x": -2917.58,
+          "y": -257.98,
+          "zone": 215
+        },
+        {
+          "faction": "H",
+          "map": 530,
+          "x": 10349.6,
+          "y": -6357.29,
+          "zone": 3431
+        },
+        {
+          "faction": "A",
+          "map": 530,
+          "x": -3961.64,
+          "y": -13931.2,
+          "zone": 3526
+        }
+      ],
+      "trainer_spell_counts": {
+        "10": 5,
+        "11": 240,
+        "12": 5,
+        "15": 4,
+        "17": 6,
+        "2": 6,
+        "32": 6,
+        "34": 5,
+        "6": 5,
+        "8": 5
+      },
+      "trainers": {
+        "10": {
+          "requirement": 4,
+          "type": 0
+        },
+        "11": {
+          "requirement": 5,
+          "type": 0
+        },
+        "12": {
+          "requirement": 5,
+          "type": 0
+        },
+        "15": {
+          "requirement": 7,
+          "type": 0
+        },
+        "17": {
+          "requirement": 8,
+          "type": 0
+        },
+        "2": {
+          "requirement": 1,
+          "type": 0
+        },
+        "32": {
+          "requirement": 9,
+          "type": 0
+        },
+        "34": {
+          "requirement": 11,
+          "type": 0
+        },
+        "6": {
+          "requirement": 2,
+          "type": 0
+        },
+        "8": {
+          "requirement": 3,
+          "type": 0
+        }
+      }
+    }
+  },
+  "schemas": {
+    "charstartoutfit_dbc": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "ID",
+          "nullable": false,
+          "ordinal": 1,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "RaceID",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "ClassID",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "SexID",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "OutfitID",
+          "nullable": false,
+          "ordinal": 5,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_1",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_2",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_3",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_4",
+          "nullable": false,
+          "ordinal": 9,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_5",
+          "nullable": false,
+          "ordinal": 10,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_6",
+          "nullable": false,
+          "ordinal": 11,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_7",
+          "nullable": false,
+          "ordinal": 12,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_8",
+          "nullable": false,
+          "ordinal": 13,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_9",
+          "nullable": false,
+          "ordinal": 14,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_10",
+          "nullable": false,
+          "ordinal": 15,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_11",
+          "nullable": false,
+          "ordinal": 16,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_12",
+          "nullable": false,
+          "ordinal": 17,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_13",
+          "nullable": false,
+          "ordinal": 18,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_14",
+          "nullable": false,
+          "ordinal": 19,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_15",
+          "nullable": false,
+          "ordinal": 20,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_16",
+          "nullable": false,
+          "ordinal": 21,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_17",
+          "nullable": false,
+          "ordinal": 22,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_18",
+          "nullable": false,
+          "ordinal": 23,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_19",
+          "nullable": false,
+          "ordinal": 24,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_20",
+          "nullable": false,
+          "ordinal": 25,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_21",
+          "nullable": false,
+          "ordinal": 26,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_22",
+          "nullable": false,
+          "ordinal": 27,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_23",
+          "nullable": false,
+          "ordinal": 28,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ItemID_24",
+          "nullable": false,
+          "ordinal": 29,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_1",
+          "nullable": false,
+          "ordinal": 30,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_2",
+          "nullable": false,
+          "ordinal": 31,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_3",
+          "nullable": false,
+          "ordinal": 32,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_4",
+          "nullable": false,
+          "ordinal": 33,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_5",
+          "nullable": false,
+          "ordinal": 34,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_6",
+          "nullable": false,
+          "ordinal": 35,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_7",
+          "nullable": false,
+          "ordinal": 36,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_8",
+          "nullable": false,
+          "ordinal": 37,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_9",
+          "nullable": false,
+          "ordinal": 38,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_10",
+          "nullable": false,
+          "ordinal": 39,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_11",
+          "nullable": false,
+          "ordinal": 40,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_12",
+          "nullable": false,
+          "ordinal": 41,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_13",
+          "nullable": false,
+          "ordinal": 42,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_14",
+          "nullable": false,
+          "ordinal": 43,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_15",
+          "nullable": false,
+          "ordinal": 44,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_16",
+          "nullable": false,
+          "ordinal": 45,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_17",
+          "nullable": false,
+          "ordinal": 46,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_18",
+          "nullable": false,
+          "ordinal": 47,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_19",
+          "nullable": false,
+          "ordinal": 48,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_20",
+          "nullable": false,
+          "ordinal": 49,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_21",
+          "nullable": false,
+          "ordinal": 50,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_22",
+          "nullable": false,
+          "ordinal": 51,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_23",
+          "nullable": false,
+          "ordinal": 52,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "DisplayItemID_24",
+          "nullable": false,
+          "ordinal": 53,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_1",
+          "nullable": false,
+          "ordinal": 54,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_2",
+          "nullable": false,
+          "ordinal": 55,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_3",
+          "nullable": false,
+          "ordinal": 56,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_4",
+          "nullable": false,
+          "ordinal": 57,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_5",
+          "nullable": false,
+          "ordinal": 58,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_6",
+          "nullable": false,
+          "ordinal": 59,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_7",
+          "nullable": false,
+          "ordinal": 60,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_8",
+          "nullable": false,
+          "ordinal": 61,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_9",
+          "nullable": false,
+          "ordinal": 62,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_10",
+          "nullable": false,
+          "ordinal": 63,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_11",
+          "nullable": false,
+          "ordinal": 64,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_12",
+          "nullable": false,
+          "ordinal": 65,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_13",
+          "nullable": false,
+          "ordinal": 66,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_14",
+          "nullable": false,
+          "ordinal": 67,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_15",
+          "nullable": false,
+          "ordinal": 68,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_16",
+          "nullable": false,
+          "ordinal": 69,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_17",
+          "nullable": false,
+          "ordinal": 70,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_18",
+          "nullable": false,
+          "ordinal": 71,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_19",
+          "nullable": false,
+          "ordinal": 72,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_20",
+          "nullable": false,
+          "ordinal": 73,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_21",
+          "nullable": false,
+          "ordinal": 74,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_22",
+          "nullable": false,
+          "ordinal": 75,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_23",
+          "nullable": false,
+          "ordinal": 76,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "InventoryType_24",
+          "nullable": false,
+          "ordinal": 77,
+          "type": "int"
+        }
+      ],
+      "table": "charstartoutfit_dbc"
+    },
+    "creature": {
+      "columns": [
+        {
+          "default": null,
+          "name": "guid",
+          "nullable": false,
+          "ordinal": 1,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "id",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "map",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "zoneId",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "areaId",
+          "nullable": false,
+          "ordinal": 5,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "1",
+          "name": "spawnMask",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "1",
+          "name": "phaseMask",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "equipment_id",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "tinyint"
+        },
+        {
+          "default": "0",
+          "name": "position_x",
+          "nullable": false,
+          "ordinal": 9,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "position_y",
+          "nullable": false,
+          "ordinal": 10,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "position_z",
+          "nullable": false,
+          "ordinal": 11,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "orientation",
+          "nullable": false,
+          "ordinal": 12,
+          "type": "float"
+        },
+        {
+          "default": "120",
+          "name": "spawntimesecs",
+          "nullable": false,
+          "ordinal": 13,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "wander_distance",
+          "nullable": false,
+          "ordinal": 14,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "currentwaypoint",
+          "nullable": false,
+          "ordinal": 15,
+          "type": "int unsigned"
+        },
+        {
+          "default": "1",
+          "name": "curhealth",
+          "nullable": false,
+          "ordinal": 16,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "curmana",
+          "nullable": false,
+          "ordinal": 17,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "MovementType",
+          "nullable": false,
+          "ordinal": 18,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "npcflag",
+          "nullable": false,
+          "ordinal": 19,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "unit_flags",
+          "nullable": false,
+          "ordinal": 20,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "dynamicflags",
+          "nullable": false,
+          "ordinal": 21,
+          "type": "int unsigned"
+        },
+        {
+          "default": "",
+          "name": "ScriptName",
+          "nullable": true,
+          "ordinal": 22,
+          "type": "char(64)"
+        },
+        {
+          "default": null,
+          "name": "VerifiedBuild",
+          "nullable": true,
+          "ordinal": 23,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "CreateObject",
+          "nullable": false,
+          "ordinal": 24,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": null,
+          "name": "Comment",
+          "nullable": true,
+          "ordinal": 25,
+          "type": "text"
+        }
+      ],
+      "table": "creature"
+    },
+    "playercreateinfo": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "race",
+          "nullable": false,
+          "ordinal": 1,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "class",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "map",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "zone",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "position_x",
+          "nullable": false,
+          "ordinal": 5,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "position_y",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "position_z",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "orientation",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "float"
+        }
+      ],
+      "table": "playercreateinfo"
+    },
+    "playercreateinfo_action": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "race",
+          "nullable": false,
+          "ordinal": 1,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "class",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "button",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "action",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "type",
+          "nullable": false,
+          "ordinal": 5,
+          "type": "smallint unsigned"
+        }
+      ],
+      "table": "playercreateinfo_action"
+    },
+    "playercreateinfo_skills": {
+      "columns": [
+        {
+          "default": null,
+          "name": "raceMask",
+          "nullable": false,
+          "ordinal": 1,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "name": "classMask",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "name": "skill",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "rank",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "comment",
+          "nullable": true,
+          "ordinal": 5,
+          "type": "varchar(255)"
+        }
+      ],
+      "table": "playercreateinfo_skills"
+    },
+    "playercreateinfo_spell_custom": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "racemask",
+          "nullable": false,
+          "ordinal": 1,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "classmask",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Spell",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "name": "Note",
+          "nullable": true,
+          "ordinal": 4,
+          "type": "varchar(255)"
+        }
+      ],
+      "table": "playercreateinfo_spell_custom"
+    },
+    "skillraceclassinfo_dbc": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "ID",
+          "nullable": false,
+          "ordinal": 1,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "SkillID",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "RaceMask",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "ClassMask",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "Flags",
+          "nullable": false,
+          "ordinal": 5,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "MinLevel",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "SkillTierID",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "SkillCostIndex",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "int"
+        }
+      ],
+      "table": "skillraceclassinfo_dbc"
+    }
+  },
+  "source": "127.0.0.1;3306;acore;***;acore_world",
+  "version": "ACDB_335.17-dev-ffe68a1c",
+  "version_raw": "ACDB 335.17-dev"
+}

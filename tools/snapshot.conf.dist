@@ -1,0 +1,9 @@
+# mod-uac snapshot capture — copy to snapshot.conf and edit for your environment.
+# Override without editing this file:
+#   export MOD_UAC_WORLD_DATABASE_INFO='host;3306;user;password;acore_world'
+#   export MOD_UAC_SNAPSHOT_CONFIG='/path/to/snapshot.conf'
+#
+# Format matches AzerothCore WorldDatabaseInfo:
+#   host;port;username;password;database
+
+WorldDatabaseInfo = "127.0.0.1;3306;acore;acore;acore_world"
