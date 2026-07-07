@@ -32,6 +32,16 @@ SKILL_RACE_CLASS_INFO_FIELD_INDEX: dict[str, int] = {
 
 SKILL_OVERLAY_TABLE = "skillraceclassinfo_dbc"
 
+# Faction-wide starting languages from stock playercreateinfo_skills (1101 / 690).
+ALLIANCE_RACES: tuple[int, ...] = (1, 3, 4, 7, 11)
+HORDE_RACES: tuple[int, ...] = (2, 5, 6, 8, 10)
+
+# Stock v19 row IDs for flags=128 faction language templates.
+CLIENT_FACTION_LANGUAGE_TEMPLATE_IDS: dict[int, int] = {
+    98: 40,  # Common
+    109: 48,  # Orcish
+}
+
 
 @dataclass(frozen=True, slots=True)
 class SkillRaceClassInfoRow:
@@ -107,6 +117,56 @@ def append_skill_row(table: DbcTable, row: SkillRaceClassInfoRow) -> None:
     table.set_uint32(record_index, 5, row.min_level)
     table.set_uint32(record_index, 6, row.skill_tier_id)
     table.set_uint32(record_index, 7, row.skill_cost_index)
+
+
+def _row_by_record_id(
+    rows: list[SkillRaceClassInfoRow],
+    record_id: int,
+) -> SkillRaceClassInfoRow:
+    for row in rows:
+        if row.record_id == record_id:
+            return row
+    msg = f"SkillRaceClassInfo row ID {record_id} not found"
+    raise ValueError(msg)
+
+
+def _has_single_race_row(
+    rows: list[SkillRaceClassInfoRow],
+    skill_id: int,
+    race_id: int,
+    *,
+    flags: int,
+) -> bool:
+    bit = race_bit(race_id)
+    return any(
+        row.skill_id == skill_id
+        and row.race_mask == bit
+        and row.flags == flags
+        for row in rows
+    )
+
+
+def compute_client_language_overlay(table: DbcTable) -> tuple[SkillRaceClassInfoRow, ...]:
+    """Client-only rows: per-race faction languages for chat UI with expanded CharBaseInfo."""
+    rows = _baseline_rows(table)
+    next_id = max(row.record_id for row in rows) + 1
+    overlay: list[SkillRaceClassInfoRow] = []
+
+    common_template = _row_by_record_id(rows, CLIENT_FACTION_LANGUAGE_TEMPLATE_IDS[98])
+    for race_id in ALLIANCE_RACES:
+        if _has_single_race_row(rows, 98, race_id, flags=common_template.flags):
+            continue
+        overlay.append(common_template.with_race_mask(next_id, race_bit(race_id)))
+        next_id += 1
+
+    orcish_template = _row_by_record_id(rows, CLIENT_FACTION_LANGUAGE_TEMPLATE_IDS[109])
+    for race_id in HORDE_RACES:
+        if _has_single_race_row(rows, 109, race_id, flags=orcish_template.flags):
+            continue
+        overlay.append(orcish_template.with_race_mask(next_id, race_bit(race_id)))
+        next_id += 1
+
+    return tuple(overlay)
 
 
 def merge_skill_overlays(

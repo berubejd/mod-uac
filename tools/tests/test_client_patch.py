@@ -19,14 +19,24 @@ from aracgen.emit_client import (
     build_client_patch_bytes,
     build_skill_race_class_info_table,
 )
-from aracgen.emit_skill import compute_skill_overlay
+from aracgen.emit_skill import (
+    compute_client_language_overlay,
+    compute_skill_overlay,
+    merge_skill_overlays,
+)
 from aracgen.formats import CHAR_BASE_INFO, CHAR_START_OUTFIT, SKILL_RACE_CLASS_INFO
 from aracgen.hd_outfit_baseline import (
     HD_OUTFIT_STOCK_INDEX_PATH,
     HD_OUTFIT_TEMPLATES_PATH,
     load_hd_charstartoutfit_baseline,
 )
-from aracgen.matrix import PLAYABLE_CLASSES, PLAYABLE_RACES, ComboMatrix, mask_covers_race_class
+from aracgen.matrix import (
+    PLAYABLE_CLASSES,
+    PLAYABLE_RACES,
+    ComboMatrix,
+    mask_covers_race_class,
+    race_bit,
+)
 from aracgen.mpq import MpqFileEntry, build_mpq_v1, decrypt, encrypt, hash_string, read_mpq_file
 from aracgen.sources import ZipDbcSource
 
@@ -86,7 +96,12 @@ def test_unlock_only_patch_has_char_base_info_and_skill_overlay(
     skill_raw = read_mpq_file(payload, SKILL_RACE_CLASS_INFO_MPQ_PATH)
     patched_skill = DbcTable.read(skill_raw, SKILL_RACE_CLASS_INFO)
     overlay = compute_skill_overlay(stock_skill, ComboMatrix.stock())
-    assert patched_skill.record_count == stock_skill.record_count + len(overlay.rows)
+    language_overlay = compute_client_language_overlay(
+        merge_skill_overlays(stock_skill, overlay.rows)
+    )
+    assert patched_skill.record_count == (
+        stock_skill.record_count + len(overlay.rows) + len(language_overlay)
+    )
     for index in range(stock_skill.record_count):
         assert patched_skill.records[index] == stock_skill.records[index]
 
@@ -100,7 +115,7 @@ def test_all_patch_variants_include_skill_race_class_info(dbc_source: ZipDbcSour
             read_mpq_file(payload, SKILL_RACE_CLASS_INFO_MPQ_PATH),
             SKILL_RACE_CLASS_INFO,
         )
-        assert patched.record_count == 278
+        assert patched.record_count == 288
 
 
 def test_skill_overlay_covers_night_elf_shaman_mail_gate(dbc_source: ZipDbcSource) -> None:
@@ -121,6 +136,57 @@ def test_skill_overlay_covers_night_elf_shaman_mail_gate(dbc_source: ZipDbcSourc
     ]
     assert mail_rows
     assert all(min_level == 40 for _, min_level in mail_rows)
+
+
+def _language_rows(
+    table: DbcTable,
+    skill_id: int,
+    race_id: int,
+    *,
+    flags: int = 128,
+) -> list[int]:
+    bit = race_bit(race_id)
+    return [
+        table.get_uint32(index, 0)
+        for index in range(table.record_count)
+        if table.get_uint32(index, 1) == skill_id
+        and table.get_uint32(index, 2) == bit
+        and table.get_uint32(index, 4) == flags
+    ]
+
+
+def test_client_language_overlay_adds_per_race_faction_languages(
+    dbc_source: ZipDbcSource,
+) -> None:
+    stock_skill = dbc_source.load_skill_race_class_info()
+    equip_overlay = compute_skill_overlay(stock_skill, ComboMatrix.stock())
+    merged = build_skill_race_class_info_table(dbc_source)
+    language_overlay = compute_client_language_overlay(
+        merge_skill_overlays(stock_skill, equip_overlay.rows)
+    )
+    assert len(language_overlay) == 10
+    assert merged.record_count == stock_skill.record_count + len(equip_overlay.rows) + 10
+
+    for race_id in (1, 3, 4, 7, 11):
+        assert _language_rows(merged, 98, race_id)
+    for race_id in (2, 5, 6, 8, 10):
+        assert _language_rows(merged, 109, race_id)
+
+
+def test_new_combo_night_elf_hunter_has_chat_language_rows(dbc_source: ZipDbcSource) -> None:
+    table = build_skill_race_class_info_table(dbc_source)
+    assert _language_rows(table, 98, 4)
+    darnassian = next(
+        index
+        for index in range(table.record_count)
+        if table.get_uint32(index, 1) == 113 and table.get_uint32(index, 2) == race_bit(4)
+    )
+    assert mask_covers_race_class(
+        table.get_uint32(darnassian, 2),
+        table.get_uint32(darnassian, 3),
+        4,
+        3,
+    )
 
 
 def test_standard_patch_appends_char_start_outfit_overlays(dbc_source: ZipDbcSource) -> None:

@@ -103,9 +103,10 @@ All three files are named `patch-z.mpq`; only the source directory differs.
 
 The client loads `CharBaseInfo.dbc` so all race/class tiles appear on the creation screen.
 `SkillRaceClassInfo.dbc` mirrors the server `skillraceclassinfo_dbc` overlay so equip tooltips
-show correct armor/weapon restrictions for new combos (stock rows are preserved; 37 overlay rows
-are appended). The server does not read either file — `playercreateinfo` rows gate creation
-server-side.
+show correct armor/weapon restrictions for new combos (stock rows are preserved; 37 equip overlay
+rows are appended, plus 10 client-only per-race faction language rows so Common/Orcish and chat
+language selection work with the expanded `CharBaseInfo` matrix). The server does not read either
+file — `playercreateinfo` rows gate creation server-side.
 
 **Outfit patches (`standard/` and `enhanced/`):** append 74 `CharStartOutfit` overlay rows (37 new
 combos × 2 sexes) for dressing-room preview on **new** mod-uac combinations. Server starting gear
