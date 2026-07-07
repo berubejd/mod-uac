@@ -83,11 +83,15 @@ mod-uac/
 
 ## Commits
 
-Commits are made **manually by the maintainer** — do not run `git commit`
-yourself unless explicitly asked. At every commit boundary (a finished change,
-a phase boundary, or a session wrap), **provide a single-line commit message in
-[Conventional Commit](https://www.conventionalcommits.org) style** for the
-maintainer to copy.
+**Never run git on the maintainer's behalf.** Do not run `git add`, `git commit`,
+`git push`, or any other command that creates or publishes commits — even when
+the user says they "need a commit" or asks you to "commit this phase." Your job at
+boundaries is to **provide a single-line commit message** for the maintainer to
+copy and run themselves.
+
+Commits are made **manually by the maintainer**. At every commit boundary (a
+finished change, a phase boundary, or a session wrap), provide that message in
+[Conventional Commit](https://www.conventionalcommits.org) style.
 
 Examples from this repo:
 
@@ -165,8 +169,8 @@ Example boundary report for **this** codebase:
 > optional hunter pet SQL slice.
 > Next up: **1e** (client MPQ) unless you want to commit 1g first.
 
-Then wait. If the user says "continue", proceed. If they say "commit first",
-provide the one-line conventional message; do **not** commit unless asked.
+Then wait. If the user says "continue", proceed. If they say "commit first" (or
+similar), provide the one-line conventional message only — **do not** run git.
 
 This rule applies equally when work *grows* a phase boundary mid-session (e.g.
 §8.3 faction unlocks split out of 1g into their own commit). Name the split,
