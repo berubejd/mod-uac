@@ -60,6 +60,55 @@ def outfit_logical_values(record: OutfitRecord) -> dict[str, int]:
     return values
 
 
+def _write_field(
+    table: DbcTable,
+    record_index: int,
+    field_index: int,
+    value: int,
+) -> None:
+    spec = table._fields[field_index]  # noqa: SLF001
+    if spec.kind == FieldKind.UINT8:
+        table.set_uint8(record_index, field_index, value)
+        return
+    if spec.kind == FieldKind.PAD_BYTE:
+        table.records[record_index][spec.offset] = value & 0xFF
+        return
+    if spec.kind in {FieldKind.UINT32, FieldKind.PAD_UINT32}:
+        table.set_uint32(record_index, field_index, value)
+        return
+    msg = f"Unhandled outfit field kind {spec.kind} at index {field_index}"
+    raise TypeError(msg)
+
+
+def append_outfit_record(table: DbcTable, record: OutfitRecord) -> None:
+    """Append one CharStartOutfit row to an in-memory DBC table."""
+    record_index = table.append_record()
+    _write_field(table, record_index, 0, record.record_id)
+    _write_field(table, record_index, 1, record.race_id)
+    _write_field(table, record_index, 2, record.class_id)
+    _write_field(table, record_index, 3, record.sex_id)
+    _write_field(table, record_index, 4, record.outfit_id)
+    for offset, item_id in enumerate(record.item_ids):
+        _write_field(table, record_index, ITEM_ID_FIELD + offset, item_id)
+    for offset, display_id in enumerate(record.display_item_ids):
+        _write_field(table, record_index, DISPLAY_ID_FIELD + offset, display_id)
+    for offset, inventory_type in enumerate(record.inventory_types):
+        _write_field(table, record_index, INVENTORY_TYPE_FIELD + offset, inventory_type)
+
+
+def merge_outfit_overlays(
+    stock: DbcTable,
+    overlay_records: tuple[OutfitRecord, ...],
+) -> DbcTable:
+    """Return stock CharStartOutfit.dbc plus mod-uac overlay rows for client preview."""
+    from aracgen.formats import CHAR_START_OUTFIT
+
+    table = DbcTable.read(stock.write(), CHAR_START_OUTFIT)
+    for record in overlay_records:
+        append_outfit_record(table, record)
+    return table
+
+
 def _read_field(table: DbcTable, record_index: int, field_index: int) -> int:
     spec = table._fields[field_index]  # noqa: SLF001
     if spec.kind == FieldKind.UINT8:

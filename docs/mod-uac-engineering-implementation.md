@@ -167,10 +167,10 @@ stock outfit row (e.g. Dwarf Mage `(3,8)`) are skipped to avoid `sCharStartOutfi
 - **Server side: zero binary DBC edits.** Everything is SQL applied by the DB updater:
   `playercreateinfo`, `playercreateinfo_action`, `playercreateinfo_spell_custom`,
   `playercreateinfo_skills`, `charstartoutfit_dbc`, `skillraceclassinfo_dbc`, `player_totem_model`.
-- **Client side: one universal generated MPQ** containing `CharBaseInfo.dbc` (the full matrix).
-  Optionally also regenerated `SkillRaceClassInfo.dbc` / `CharStartOutfit.dbc` for preview correctness
-  (cosmetic, decided during 1e). The MPQ is **identical for every operator** because the combo matrix
-  does not depend on anyone's local DBCs — so it ships once from the canonical run.
+- **Client side: three generated MPQs** under `client-patch/` (all named `patch-z.mpq`):
+  **unlock-only** (`CharBaseInfo` only), **standard** (wowgaming v19 `CharStartOutfit` + 74 overlay
+  rows), **enhanced** (HD baseline from `data/client/hd_outfit_*.json` + overlay rows with HD
+  preview displays). Operators pick one directory; see README.
 
 ### 4.2 The generator: one core, two front-ends
 The only thing the two entry points differ by is the DBC source:
@@ -353,8 +353,10 @@ side reverts by removing the MPQ from `Data/`.
   emit the four `playercreateinfo*` tables; install + uninstall SQL; exclude DK.
 - **1d — `TotemEmitter` + quest investigation.** `player_totem_model` for off-race shamans;
   document why mod-arac's global `quest_template` UPDATE is not replicated.
-- **1e — `ClientPatchEmitter` (complete).** Pure-Python MPQ v1 writer; `CharBaseInfo.dbc` full matrix
-  only (no preview DBCs — server-authoritative skills/outfit via SQL). Output: `client-patch/patch-A.mpq`.
+- **1e — `ClientPatchEmitter` (complete).** Pure-Python MPQ v1 writer; emits unlock-only,
+  standard, and enhanced `client-patch/*/patch-z.mpq`. HD baseline is checked in as deduplicated JSON
+  (`data/client/hd_outfit_templates.json`, `hd_outfit_stock_index.json`); refresh from patch-k via
+  `tools/extract_hd_outfit_baseline.py`.
 - **1f — Module packaging + docs (complete).** `CMakeLists.txt` (data-only); SQL path verified against
   `UpdateFetcher.cpp` (`data/sql/db-world/` auto-applied; `db-uninstall/` manual); operator README.
 - **1g — Class quest emitters (complete).** Shipped:
@@ -474,8 +476,9 @@ install/uninstall pair for anti-gray rows.
    `world`). Source: `UpdateFetcher.cpp` (`ReceiveIncludedDirectories`, module branch).
 2. **`skillraceclassinfo_dbc` columns** — mapped from `SkillRaceClassInfofmt` in the emitter; re-verify
    if AC schema changes.
-3. **Client preview DBCs** — **resolved (1e).** `CharBaseInfo.dbc` alone is sufficient for creation-screen
-   combo tiles; skills/outfit preview is server-authoritative via SQL overlays.
+3. **Client preview DBCs** — **resolved (1e + follow-up).** Three checked-in MPQ variants; see
+   README. `CharStartOutfit` overlays are append-only (74 rows); enhanced uses HD baseline bytes
+   for stock rows and HD preview displays on overlay rows only.
 4. **`quest_template` edit** — resolved in 1g (§8.1–8.3).
 5. **Shaman Call of Earth at level 4** — faction quest patch + anti-gray shipped (§8.3); spell-grant
    fallback reserved for gameplay QA if travel proves insufficient.
@@ -513,7 +516,9 @@ mod-uac/
   tools/generate_local.py       # LocalDbcSource     -> operator SQL only
   tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + shared MPQ
   tools/requirements.txt
-  client-patch/patch-A.mpq      # universal client artifact
+  client-patch/unlock-only/patch-z.mpq
+  client-patch/standard/patch-z.mpq
+  client-patch/enhanced/patch-z.mpq
   CMakeLists.txt                # data-only module stub
   README.md
 ```

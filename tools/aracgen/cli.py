@@ -8,7 +8,11 @@ from pathlib import Path
 
 from aracgen.dbc import DbcTable
 from aracgen.emit_class_quest import ClassQuestEmitter
-from aracgen.emit_client import ClientPatchEmitter
+from aracgen.emit_client import (
+    DEFAULT_CLIENT_PATCH_NAME,
+    ClientPatchEmitter,
+    ClientPatchVariant,
+)
 from aracgen.emit_hunter_pet import HunterPetEmitter
 from aracgen.emit_player import PlayerCreateEmitter, build_resolver
 from aracgen.emit_skill import SkillOverlayEmitter
@@ -320,8 +324,20 @@ def write_hunter_pet_sql(
     print(f"Generated hunter pet data: {len(result.spell_rows)} spell grants (all hunters)")
 
 
-def write_client_patch(output_path: Path) -> None:
-    emitter = ClientPatchEmitter()
+def write_client_patch(
+    output_path: Path,
+    source: DbcSource,
+    *,
+    variant: ClientPatchVariant = ClientPatchVariant.UNLOCK_ONLY,
+) -> None:
+    emitter = ClientPatchEmitter(source, variant=variant)
     payload = emitter.compute()
     emitter.write(output_path)
-    print(f"Wrote {output_path} ({len(payload)} bytes)")
+    print(f"Wrote {output_path} ({len(payload)} bytes, {variant.value})")
+
+
+def write_client_patches(output_root: Path, source: DbcSource) -> None:
+    """Write unlock-only, standard, and enhanced ``patch-z.mpq`` artifacts."""
+    for variant in ClientPatchVariant:
+        output_path = output_root / variant.value / DEFAULT_CLIENT_PATCH_NAME
+        write_client_patch(output_path, source, variant=variant)

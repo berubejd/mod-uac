@@ -18,6 +18,7 @@ from aracgen.cli import (
     write_totem_sql,
     write_trainer_sql,
 )
+from aracgen.emit_client import DEFAULT_CLIENT_PATCH_NAME, ClientPatchVariant
 from aracgen.sources import LocalDbcSource
 
 OUTPUT_DIR = Path(__file__).resolve().parent / "output"
@@ -90,7 +91,11 @@ def main() -> None:
         dbc_source=args.dbc_dir / "Spell.dbc",
         snapshot=snapshot,
     )
-    write_client_patch(args.output_dir / "patch-A.mpq")
+    write_client_patch(
+        args.output_dir / DEFAULT_CLIENT_PATCH_NAME,
+        source,
+        variant=ClientPatchVariant.STANDARD,
+    )
 
     write_trainer_sql(
         args.output_dir / "mod_uac_starter_trainers.sql",

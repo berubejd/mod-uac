@@ -18,9 +18,9 @@ Deep architecture, combo matrix, and phasing: [docs/mod-uac-engineering-implemen
   under `data/sql/db-world/`, each file with a matching revert in `data/sql/db-uninstall/`.
 - **No server-side binary DBC edits.** Skill overlays use AzerothCore's `skillraceclassinfo_dbc`
   world-table merge (same mechanism as other `*_dbc` overlays) — not patched `.dbc` files on disk.
-- **One universal client artifact.** A generated `patch-A.mpq` (~4 KB) containing
-  `CharBaseInfo.dbc` so all race/class tiles appear on the creation screen. The server never reads
-  this file; `playercreateinfo` rows are the server-side gate.
+- **Three checked-in client patches.** All named `patch-z.mpq` under `client-patch/` — pick one
+  (unlock-only, standard, or enhanced). The server never reads these files; `playercreateinfo`
+  rows are the server-side gate.
 - **Reproducible generation.** Checked-in SQL and MPQ come from `tools/generate_canonical.py`
   (pinned [wowgaming/client-data](https://github.com/wowgaming/client-data) tag **v19**). Operators
   with custom DBC baselines can regenerate via `tools/generate_local.py`.
@@ -32,13 +32,19 @@ on the client, including Death Knight — already all-race in stock `playercreat
 the SQL emitters). Examples: Human Hunter, Orc Paladin, Tauren Mage, Night Elf Warlock, Blood Elf
 Warrior, Gnome Shaman.
 
+These combinations are **community expansions**, not Blizzard-shipped pairs. In-game they work like
+normal characters once created; some class quests still require **travel** to reference zones (see
+class quest summary below). Starter trainers are placed in each race's starting zone for the new
+combos.
+
 For each new combo the module provides:
 
 | Concern | Mechanism |
 |---------|-----------|
 | Creation allowed (server) | `playercreateinfo` + action/item/spell rows |
 | Armor & weapon skills | `skillraceclassinfo_dbc` overlay |
-| Creation screen tiles (client) | `CharBaseInfo.dbc` in `patch-A.mpq` |
+| Creation screen tiles (client) | `CharBaseInfo.dbc` in any `client-patch/*/patch-z.mpq` |
+| Dressing-room preview gear (client) | `standard/` or `enhanced/` patch (see below) |
 | Off-race shaman totems | `player_totem_model` |
 | Class-critical abilities | Tiered quest patches + narrow spell grants (see below) |
 | Starter-zone class trainers | `creature` spawns for new combos (see `mod_uac_starter_trainers.sql`) |
@@ -77,15 +83,56 @@ Updates.AllowedModules = "all"
 
 ### 2. Client patch
 
-Copy the checked-in MPQ into the WoW 3.3.5a client `Data/` folder:
+Choose **one** checked-in MPQ and copy it to your WoW 3.3.5 client `Data/` folder as
+`patch-z.mpq` (or rename to any free `patch-<letter>.mpq` slot):
+
+| Directory | What it changes | Best for |
+|-----------|-----------------|----------|
+| **`client-patch/unlock-only/`** | `CharBaseInfo.dbc` only — unlocks all tiles | Minimal install; creation previews use whatever your client already has |
+| **`client-patch/standard/`** | `CharBaseInfo` + `CharStartOutfit` (wowgaming v19 + mod-uac overlay rows) | Reference / stock 3.3.5 clients — new combos show **starter-gear** creation previews |
+| **`client-patch/enhanced/`** | `CharBaseInfo` + `CharStartOutfit` (HD patch-k baseline + overlay rows with HD showcase displays) | Official HD 3.3.5a client — preserves retail-style creation previews for stock combos |
+
+Example:
 
 ```text
-client-patch/patch-A.mpq  →  <WoW>/Data/patch-A.mpq
+client-patch/enhanced/patch-z.mpq  →  <WoW>/Data/patch-z.mpq
 ```
 
-The client loads `CharBaseInfo.dbc` from this archive so all race/class tiles appear on the creation screen. The server does not read this file — `playercreateinfo` rows gate creation server-side.
+All three files are named `patch-z.mpq`; only the source directory differs.
 
-Remove `patch-A.mpq` from `Data/` to revert the client to stock combo visibility.
+The client loads `CharBaseInfo.dbc` so all race/class tiles appear on the creation screen.
+The server does not read this file — `playercreateinfo` rows gate creation server-side.
+
+**Outfit patches (`standard/` and `enhanced/`):** append 74 `CharStartOutfit` overlay rows (37 new
+combos × 2 sexes) for dressing-room preview on **new** mod-uac combinations. Server starting gear
+still comes from `charstartoutfit_dbc` SQL (wowgaming item clones). Client `DisplayItemID` columns
+are preview-only.
+
+- **Standard** rebuilds `CharStartOutfit` from wowgaming v19 — matches starter-gear creation screens
+  on reference clients.
+- **Enhanced** keeps the deduplicated HD baseline (`data/client/hd_outfit_templates.json` +
+  `hd_outfit_stock_index.json`, extracted from official HD `patch-k`) for all 126 stock rows and
+  applies HD preview displays to the overlay rows only. Maintainers can refresh from a new
+  `patch-k.mpq` via `tools/extract_hd_outfit_baseline.py`.
+
+**Unlock-only** does not ship `CharStartOutfit` at all, so it never replaces your client's existing
+outfit file (including HD `patch-k`).
+
+Operators with a custom DBC baseline can still run `tools/generate_local.py` to produce a
+`standard`-style outfit patch from their own extracted `Data/dbc/`.
+
+**Patch file name:** use `patch-z.mpq` so the patch loads **late** in the MPQ chain (after HD
+`patch-k` and most stock patches). On the official HD client, **`z` was an open single-letter slot**
+at the time of testing.
+
+If `patch-z.mpq` is already taken in your `Data/` folder, **rename the mod-uac file** to any
+**free** `patch-<letter>.mpq` slot (e.g. `patch-y.mpq`). The client only loads names matching
+`patch-<single letter>.mpq` — custom names like `patch-uac.mpq` are **not** loaded on stock 3.3.5a.
+
+**Windows note:** the filesystem is case-insensitive. Do **not** use `patch-A.mpq` for this mod if
+you already have an HD or third-party `patch-a.mpq` — they collide and one will overwrite the other.
+
+Remove the mod-uac patch file from `Data/` to revert the client to stock combo visibility.
 
 ### 3. worldserver.conf
 
@@ -134,7 +181,7 @@ AzerothCore has no down-migrations. Revert manually by running the paired files 
 
 To revert **only** level-1 hunter pets while keeping other mod-uac data, run the two `mod_uac_hunter_pet_*_uninstall.sql` files.
 
-Remove `patch-A.mpq` from the client `Data/` folder.
+Remove the mod-uac `patch-*.mpq` file from the client `Data/` folder.
 
 ## Class quests (summary)
 
@@ -163,7 +210,7 @@ Run generators from the **mod-uac repo root** (paths below are relative to that 
 
 ### `generate_canonical.py`
 
-Writes checked-in SQL under `data/sql/`, the client MPQ under `client-patch/`, and
+Writes checked-in SQL under `data/sql/`, all three client MPQs under `client-patch/`, and
 `docs/trainer_worksheet.md`. Uses pinned [wowgaming/client-data](https://github.com/wowgaming/client-data)
 tag **v19** (cached under `data/cache/`), the baked world snapshot under `data/snapshot/`, and
 minimal outfit item metadata in `data/item_prototypes.json`.
@@ -264,7 +311,8 @@ Regenerate SQL after changes. Full emitter design: [docs/mod-uac-trainer-emitter
 
 - [ ] Apply install SQL on a stock AC world DB; worldserver starts cleanly
 - [ ] Remove client patch; off-race combos absent on creation screen
-- [ ] Install `client-patch/patch-A.mpq`; all race/class tiles selectable
+- [ ] Install one `client-patch/*/patch-z.mpq` (see table above); all race/class tiles selectable
+- [ ] Dressing-room preview shows starter gear on a new combo (e.g. Tauren Mage), not naked
 - [ ] Create off-race shaman; totems display with faction-appropriate models (not invisible)
 - [ ] Create Dwarf Warlock; complete imp quest chain in Dun Morogh (tier A)
 - [ ] Create Night Elf Warlock; has Summon Imp at creation (tier C spell grant)

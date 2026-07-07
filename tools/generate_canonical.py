@@ -11,7 +11,7 @@ from aracgen.cli import (
     add_trainer_cli_args,
     resolve_generation_snapshot,
     write_class_quest_sql,
-    write_client_patch,
+    write_client_patches,
     write_hunter_pet_sql,
     write_player_create_sql,
     write_skill_overlay_sql,
@@ -112,7 +112,10 @@ def main() -> None:
         dbc_source=hunter_dbc_source,
         snapshot=snapshot,
     )
-    write_client_patch(REPO_ROOT / "client-patch" / "patch-A.mpq")
+    write_client_patches(
+        REPO_ROOT / "client-patch",
+        source,
+    )
 
     write_trainer_sql(
         INSTALL_DIR / "mod_uac_starter_trainers.sql",

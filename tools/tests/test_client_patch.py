@@ -1,15 +1,34 @@
 from __future__ import annotations
 
+from pathlib import Path
+
+import pytest
+
+from aracgen.charstartoutfit_export import find_outfit_record, read_outfit_record
 from aracgen.dbc import DbcTable
 from aracgen.emit_client import (
     CHAR_BASE_INFO_MPQ_PATH,
+    CHAR_START_OUTFIT_MPQ_PATH,
+    CLIENT_PATCH_ENHANCED_DIR,
+    CLIENT_PATCH_STANDARD_DIR,
+    CLIENT_PATCH_UNLOCK_ONLY_DIR,
     LISTFILE_MPQ_PATH,
+    ClientPatchVariant,
     build_char_base_info_table,
     build_client_patch_bytes,
 )
-from aracgen.formats import CHAR_BASE_INFO
+from aracgen.formats import CHAR_BASE_INFO, CHAR_START_OUTFIT
+from aracgen.hd_outfit_baseline import (
+    HD_OUTFIT_STOCK_INDEX_PATH,
+    HD_OUTFIT_TEMPLATES_PATH,
+    load_hd_charstartoutfit_baseline,
+)
 from aracgen.matrix import PLAYABLE_CLASSES, PLAYABLE_RACES
 from aracgen.mpq import MpqFileEntry, build_mpq_v1, decrypt, encrypt, hash_string, read_mpq_file
+from aracgen.sources import ZipDbcSource
+
+DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "cache" / "client-data-v19.zip"
+ITEM_PROTOTYPES = Path(__file__).resolve().parents[2] / "data" / "item_prototypes.json"
 
 
 def test_encrypt_decrypt_round_trip() -> None:
@@ -31,11 +50,96 @@ def test_char_base_info_table_has_full_matrix() -> None:
     assert combos == expected
 
 
-def test_client_patch_mpq_contains_char_base_info() -> None:
-    payload = build_client_patch_bytes()
+def test_client_patch_variant_dirs() -> None:
+    assert ClientPatchVariant.UNLOCK_ONLY.value == CLIENT_PATCH_UNLOCK_ONLY_DIR
+    assert ClientPatchVariant.STANDARD.value == CLIENT_PATCH_STANDARD_DIR
+    assert ClientPatchVariant.ENHANCED.value == CLIENT_PATCH_ENHANCED_DIR
+
+
+@pytest.fixture(scope="session")
+def dbc_source() -> ZipDbcSource:
+    if not DATA_ZIP.is_file():
+        pytest.skip(f"Canonical data not found: {DATA_ZIP}")
+    if not ITEM_PROTOTYPES.is_file():
+        pytest.skip(f"Item prototypes not found: {ITEM_PROTOTYPES}")
+    return ZipDbcSource(DATA_ZIP)
+
+
+def test_unlock_only_patch_has_char_base_info_only(dbc_source: ZipDbcSource) -> None:
+    payload = build_client_patch_bytes(
+        dbc_source,
+        variant=ClientPatchVariant.UNLOCK_ONLY,
+    )
     raw = read_mpq_file(payload, CHAR_BASE_INFO_MPQ_PATH)
     table = DbcTable.read(raw, CHAR_BASE_INFO)
     assert table.record_count == 100
-    assert read_mpq_file(payload, LISTFILE_MPQ_PATH).decode("ascii") == (
-        f"{CHAR_BASE_INFO_MPQ_PATH}\r\n"
+    listfile = read_mpq_file(payload, LISTFILE_MPQ_PATH).decode("ascii")
+    assert CHAR_BASE_INFO_MPQ_PATH in listfile
+    assert CHAR_START_OUTFIT_MPQ_PATH not in listfile
+
+
+def test_standard_patch_appends_char_start_outfit_overlays(dbc_source: ZipDbcSource) -> None:
+    stock = dbc_source.load_char_start_outfit()
+    stock_count = stock.record_count
+    payload = build_client_patch_bytes(dbc_source, variant=ClientPatchVariant.STANDARD)
+    listfile = read_mpq_file(payload, LISTFILE_MPQ_PATH).decode("ascii")
+    assert CHAR_START_OUTFIT_MPQ_PATH in listfile
+    raw = read_mpq_file(payload, CHAR_START_OUTFIT_MPQ_PATH)
+    patched = DbcTable.read(raw, CHAR_START_OUTFIT)
+    assert patched.record_count > stock_count
+    assert (6, 8, 0) in {
+        (
+            patched.get_uint8(index, 1),
+            patched.get_uint8(index, 2),
+            patched.get_uint8(index, 3),
+        )
+        for index in range(patched.record_count)
+    }
+
+
+@pytest.fixture(scope="session")
+def hd_baseline() -> DbcTable:
+    if not HD_OUTFIT_TEMPLATES_PATH.is_file() or not HD_OUTFIT_STOCK_INDEX_PATH.is_file():
+        pytest.skip("HD outfit JSON catalog not found")
+    return load_hd_charstartoutfit_baseline()
+
+
+def test_enhanced_patch_preserves_hd_stock_rows(
+    dbc_source: ZipDbcSource,
+    hd_baseline: DbcTable,
+) -> None:
+    payload = build_client_patch_bytes(dbc_source, variant=ClientPatchVariant.ENHANCED)
+    raw = read_mpq_file(payload, CHAR_START_OUTFIT_MPQ_PATH)
+    patched = DbcTable.read(raw, CHAR_START_OUTFIT)
+    assert patched.record_count == hd_baseline.record_count + 74
+    for index in range(hd_baseline.record_count):
+        assert patched.records[index] == hd_baseline.records[index]
+
+
+def test_enhanced_overlay_uses_hd_preview_displays(
+    dbc_source: ZipDbcSource,
+    hd_baseline: DbcTable,
+) -> None:
+    standard = DbcTable.read(
+        read_mpq_file(
+            build_client_patch_bytes(dbc_source, variant=ClientPatchVariant.STANDARD),
+            CHAR_START_OUTFIT_MPQ_PATH,
+        ),
+        CHAR_START_OUTFIT,
     )
+    enhanced = DbcTable.read(
+        read_mpq_file(
+            build_client_patch_bytes(dbc_source, variant=ClientPatchVariant.ENHANCED),
+            CHAR_START_OUTFIT_MPQ_PATH,
+        ),
+        CHAR_START_OUTFIT,
+    )
+    std_idx = find_outfit_record(standard, 6, 8, 0)
+    enh_idx = find_outfit_record(enhanced, 6, 8, 0)
+    std_rec = read_outfit_record(standard, std_idx)
+    enh_rec = read_outfit_record(enhanced, enh_idx)
+    ref_idx = find_outfit_record(hd_baseline, 5, 8, 0)
+    ref_rec = read_outfit_record(hd_baseline, ref_idx)
+    assert std_rec.item_ids == enh_rec.item_ids
+    assert enh_rec.display_item_ids == ref_rec.display_item_ids
+    assert std_rec.display_item_ids != enh_rec.display_item_ids

@@ -1,0 +1,888 @@
+{
+  "source": "Official HD 3.3.5a client patch-k.mpq DBFilesClient\\CharStartOutfit.dbc (126 stock rows)",
+  "record_count": 126,
+  "stock": [
+    {
+      "record_id": 1,
+      "race_id": 1,
+      "class_id": 1,
+      "sex_id": 0,
+      "template_id": 0
+    },
+    {
+      "record_id": 14,
+      "race_id": 1,
+      "class_id": 1,
+      "sex_id": 1,
+      "template_id": 0
+    },
+    {
+      "record_id": 2,
+      "race_id": 2,
+      "class_id": 1,
+      "sex_id": 0,
+      "template_id": 1
+    },
+    {
+      "record_id": 41,
+      "race_id": 2,
+      "class_id": 1,
+      "sex_id": 1,
+      "template_id": 1
+    },
+    {
+      "record_id": 3,
+      "race_id": 3,
+      "class_id": 1,
+      "sex_id": 0,
+      "template_id": 2
+    },
+    {
+      "record_id": 47,
+      "race_id": 3,
+      "class_id": 1,
+      "sex_id": 1,
+      "template_id": 2
+    },
+    {
+      "record_id": 4,
+      "race_id": 4,
+      "class_id": 1,
+      "sex_id": 0,
+      "template_id": 3
+    },
+    {
+      "record_id": 53,
+      "race_id": 4,
+      "class_id": 1,
+      "sex_id": 1,
+      "template_id": 3
+    },
+    {
+      "record_id": 30,
+      "race_id": 5,
+      "class_id": 1,
+      "sex_id": 0,
+      "template_id": 4
+    },
+    {
+      "record_id": 58,
+      "race_id": 5,
+      "class_id": 1,
+      "sex_id": 1,
+      "template_id": 4
+    },
+    {
+      "record_id": 27,
+      "race_id": 6,
+      "class_id": 1,
+      "sex_id": 0,
+      "template_id": 5
+    },
+    {
+      "record_id": 63,
+      "race_id": 6,
+      "class_id": 1,
+      "sex_id": 1,
+      "template_id": 5
+    },
+    {
+      "record_id": 291,
+      "race_id": 7,
+      "class_id": 1,
+      "sex_id": 0,
+      "template_id": 6
+    },
+    {
+      "record_id": 314,
+      "race_id": 7,
+      "class_id": 1,
+      "sex_id": 1,
+      "template_id": 6
+    },
+    {
+      "record_id": 292,
+      "race_id": 8,
+      "class_id": 1,
+      "sex_id": 0,
+      "template_id": 7
+    },
+    {
+      "record_id": 316,
+      "race_id": 8,
+      "class_id": 1,
+      "sex_id": 1,
+      "template_id": 7
+    },
+    {
+      "record_id": 331,
+      "race_id": 11,
+      "class_id": 1,
+      "sex_id": 0,
+      "template_id": 8
+    },
+    {
+      "record_id": 332,
+      "race_id": 11,
+      "class_id": 1,
+      "sex_id": 1,
+      "template_id": 8
+    },
+    {
+      "record_id": 79,
+      "race_id": 1,
+      "class_id": 2,
+      "sex_id": 0,
+      "template_id": 9
+    },
+    {
+      "record_id": 36,
+      "race_id": 1,
+      "class_id": 2,
+      "sex_id": 1,
+      "template_id": 9
+    },
+    {
+      "record_id": 7,
+      "race_id": 3,
+      "class_id": 2,
+      "sex_id": 0,
+      "template_id": 10
+    },
+    {
+      "record_id": 48,
+      "race_id": 3,
+      "class_id": 2,
+      "sex_id": 1,
+      "template_id": 10
+    },
+    {
+      "record_id": 343,
+      "race_id": 10,
+      "class_id": 2,
+      "sex_id": 0,
+      "template_id": 11
+    },
+    {
+      "record_id": 344,
+      "race_id": 10,
+      "class_id": 2,
+      "sex_id": 1,
+      "template_id": 11
+    },
+    {
+      "record_id": 333,
+      "race_id": 11,
+      "class_id": 2,
+      "sex_id": 0,
+      "template_id": 12
+    },
+    {
+      "record_id": 334,
+      "race_id": 11,
+      "class_id": 2,
+      "sex_id": 1,
+      "template_id": 12
+    },
+    {
+      "record_id": 16,
+      "race_id": 2,
+      "class_id": 3,
+      "sex_id": 0,
+      "template_id": 13
+    },
+    {
+      "record_id": 42,
+      "race_id": 2,
+      "class_id": 3,
+      "sex_id": 1,
+      "template_id": 13
+    },
+    {
+      "record_id": 21,
+      "race_id": 3,
+      "class_id": 3,
+      "sex_id": 0,
+      "template_id": 14
+    },
+    {
+      "record_id": 49,
+      "race_id": 3,
+      "class_id": 3,
+      "sex_id": 1,
+      "template_id": 14
+    },
+    {
+      "record_id": 24,
+      "race_id": 4,
+      "class_id": 3,
+      "sex_id": 0,
+      "template_id": 15
+    },
+    {
+      "record_id": 54,
+      "race_id": 4,
+      "class_id": 3,
+      "sex_id": 1,
+      "template_id": 15
+    },
+    {
+      "record_id": 15,
+      "race_id": 6,
+      "class_id": 3,
+      "sex_id": 0,
+      "template_id": 16
+    },
+    {
+      "record_id": 64,
+      "race_id": 6,
+      "class_id": 3,
+      "sex_id": 1,
+      "template_id": 16
+    },
+    {
+      "record_id": 297,
+      "race_id": 8,
+      "class_id": 3,
+      "sex_id": 0,
+      "template_id": 17
+    },
+    {
+      "record_id": 310,
+      "race_id": 8,
+      "class_id": 3,
+      "sex_id": 1,
+      "template_id": 17
+    },
+    {
+      "record_id": 329,
+      "race_id": 10,
+      "class_id": 3,
+      "sex_id": 0,
+      "template_id": 18
+    },
+    {
+      "record_id": 330,
+      "race_id": 10,
+      "class_id": 3,
+      "sex_id": 1,
+      "template_id": 18
+    },
+    {
+      "record_id": 335,
+      "race_id": 11,
+      "class_id": 3,
+      "sex_id": 0,
+      "template_id": 19
+    },
+    {
+      "record_id": 336,
+      "race_id": 11,
+      "class_id": 3,
+      "sex_id": 1,
+      "template_id": 19
+    },
+    {
+      "record_id": 9,
+      "race_id": 1,
+      "class_id": 4,
+      "sex_id": 0,
+      "template_id": 20
+    },
+    {
+      "record_id": 37,
+      "race_id": 1,
+      "class_id": 4,
+      "sex_id": 1,
+      "template_id": 20
+    },
+    {
+      "record_id": 17,
+      "race_id": 2,
+      "class_id": 4,
+      "sex_id": 0,
+      "template_id": 21
+    },
+    {
+      "record_id": 43,
+      "race_id": 2,
+      "class_id": 4,
+      "sex_id": 1,
+      "template_id": 21
+    },
+    {
+      "record_id": 288,
+      "race_id": 3,
+      "class_id": 4,
+      "sex_id": 0,
+      "template_id": 22
+    },
+    {
+      "record_id": 289,
+      "race_id": 3,
+      "class_id": 4,
+      "sex_id": 1,
+      "template_id": 22
+    },
+    {
+      "record_id": 8,
+      "race_id": 4,
+      "class_id": 4,
+      "sex_id": 0,
+      "template_id": 23
+    },
+    {
+      "record_id": 55,
+      "race_id": 4,
+      "class_id": 4,
+      "sex_id": 1,
+      "template_id": 23
+    },
+    {
+      "record_id": 31,
+      "race_id": 5,
+      "class_id": 4,
+      "sex_id": 0,
+      "template_id": 24
+    },
+    {
+      "record_id": 59,
+      "race_id": 5,
+      "class_id": 4,
+      "sex_id": 1,
+      "template_id": 24
+    },
+    {
+      "record_id": 293,
+      "race_id": 7,
+      "class_id": 4,
+      "sex_id": 0,
+      "template_id": 25
+    },
+    {
+      "record_id": 304,
+      "race_id": 7,
+      "class_id": 4,
+      "sex_id": 1,
+      "template_id": 25
+    },
+    {
+      "record_id": 296,
+      "race_id": 8,
+      "class_id": 4,
+      "sex_id": 0,
+      "template_id": 26
+    },
+    {
+      "record_id": 309,
+      "race_id": 8,
+      "class_id": 4,
+      "sex_id": 1,
+      "template_id": 26
+    },
+    {
+      "record_id": 320,
+      "race_id": 10,
+      "class_id": 4,
+      "sex_id": 0,
+      "template_id": 27
+    },
+    {
+      "record_id": 325,
+      "race_id": 10,
+      "class_id": 4,
+      "sex_id": 1,
+      "template_id": 27
+    },
+    {
+      "record_id": 11,
+      "race_id": 1,
+      "class_id": 5,
+      "sex_id": 0,
+      "template_id": 28
+    },
+    {
+      "record_id": 38,
+      "race_id": 1,
+      "class_id": 5,
+      "sex_id": 1,
+      "template_id": 28
+    },
+    {
+      "record_id": 22,
+      "race_id": 3,
+      "class_id": 5,
+      "sex_id": 0,
+      "template_id": 29
+    },
+    {
+      "record_id": 50,
+      "race_id": 3,
+      "class_id": 5,
+      "sex_id": 1,
+      "template_id": 29
+    },
+    {
+      "record_id": 26,
+      "race_id": 4,
+      "class_id": 5,
+      "sex_id": 0,
+      "template_id": 30
+    },
+    {
+      "record_id": 56,
+      "race_id": 4,
+      "class_id": 5,
+      "sex_id": 1,
+      "template_id": 30
+    },
+    {
+      "record_id": 32,
+      "race_id": 5,
+      "class_id": 5,
+      "sex_id": 0,
+      "template_id": 31
+    },
+    {
+      "record_id": 60,
+      "race_id": 5,
+      "class_id": 5,
+      "sex_id": 1,
+      "template_id": 31
+    },
+    {
+      "record_id": 298,
+      "race_id": 8,
+      "class_id": 5,
+      "sex_id": 0,
+      "template_id": 32
+    },
+    {
+      "record_id": 311,
+      "race_id": 8,
+      "class_id": 5,
+      "sex_id": 1,
+      "template_id": 32
+    },
+    {
+      "record_id": 321,
+      "race_id": 10,
+      "class_id": 5,
+      "sex_id": 0,
+      "template_id": 33
+    },
+    {
+      "record_id": 326,
+      "race_id": 10,
+      "class_id": 5,
+      "sex_id": 1,
+      "template_id": 33
+    },
+    {
+      "record_id": 339,
+      "race_id": 11,
+      "class_id": 5,
+      "sex_id": 0,
+      "template_id": 34
+    },
+    {
+      "record_id": 340,
+      "race_id": 11,
+      "class_id": 5,
+      "sex_id": 1,
+      "template_id": 34
+    },
+    {
+      "record_id": 352,
+      "race_id": 1,
+      "class_id": 6,
+      "sex_id": 0,
+      "template_id": 35
+    },
+    {
+      "record_id": 353,
+      "race_id": 1,
+      "class_id": 6,
+      "sex_id": 1,
+      "template_id": 35
+    },
+    {
+      "record_id": 354,
+      "race_id": 2,
+      "class_id": 6,
+      "sex_id": 0,
+      "template_id": 36
+    },
+    {
+      "record_id": 355,
+      "race_id": 2,
+      "class_id": 6,
+      "sex_id": 1,
+      "template_id": 36
+    },
+    {
+      "record_id": 356,
+      "race_id": 3,
+      "class_id": 6,
+      "sex_id": 0,
+      "template_id": 36
+    },
+    {
+      "record_id": 357,
+      "race_id": 3,
+      "class_id": 6,
+      "sex_id": 1,
+      "template_id": 36
+    },
+    {
+      "record_id": 358,
+      "race_id": 4,
+      "class_id": 6,
+      "sex_id": 0,
+      "template_id": 36
+    },
+    {
+      "record_id": 359,
+      "race_id": 4,
+      "class_id": 6,
+      "sex_id": 1,
+      "template_id": 36
+    },
+    {
+      "record_id": 360,
+      "race_id": 5,
+      "class_id": 6,
+      "sex_id": 0,
+      "template_id": 36
+    },
+    {
+      "record_id": 361,
+      "race_id": 5,
+      "class_id": 6,
+      "sex_id": 1,
+      "template_id": 36
+    },
+    {
+      "record_id": 348,
+      "race_id": 6,
+      "class_id": 6,
+      "sex_id": 0,
+      "template_id": 36
+    },
+    {
+      "record_id": 349,
+      "race_id": 6,
+      "class_id": 6,
+      "sex_id": 1,
+      "template_id": 36
+    },
+    {
+      "record_id": 350,
+      "race_id": 7,
+      "class_id": 6,
+      "sex_id": 0,
+      "template_id": 36
+    },
+    {
+      "record_id": 351,
+      "race_id": 7,
+      "class_id": 6,
+      "sex_id": 1,
+      "template_id": 36
+    },
+    {
+      "record_id": 362,
+      "race_id": 8,
+      "class_id": 6,
+      "sex_id": 0,
+      "template_id": 36
+    },
+    {
+      "record_id": 363,
+      "race_id": 8,
+      "class_id": 6,
+      "sex_id": 1,
+      "template_id": 36
+    },
+    {
+      "record_id": 364,
+      "race_id": 10,
+      "class_id": 6,
+      "sex_id": 0,
+      "template_id": 36
+    },
+    {
+      "record_id": 365,
+      "race_id": 10,
+      "class_id": 6,
+      "sex_id": 1,
+      "template_id": 36
+    },
+    {
+      "record_id": 366,
+      "race_id": 11,
+      "class_id": 6,
+      "sex_id": 0,
+      "template_id": 36
+    },
+    {
+      "record_id": 367,
+      "race_id": 11,
+      "class_id": 6,
+      "sex_id": 1,
+      "template_id": 36
+    },
+    {
+      "record_id": 19,
+      "race_id": 2,
+      "class_id": 7,
+      "sex_id": 0,
+      "template_id": 37
+    },
+    {
+      "record_id": 45,
+      "race_id": 2,
+      "class_id": 7,
+      "sex_id": 1,
+      "template_id": 37
+    },
+    {
+      "record_id": 29,
+      "race_id": 6,
+      "class_id": 7,
+      "sex_id": 0,
+      "template_id": 38
+    },
+    {
+      "record_id": 66,
+      "race_id": 6,
+      "class_id": 7,
+      "sex_id": 1,
+      "template_id": 38
+    },
+    {
+      "record_id": 300,
+      "race_id": 8,
+      "class_id": 7,
+      "sex_id": 0,
+      "template_id": 39
+    },
+    {
+      "record_id": 312,
+      "race_id": 8,
+      "class_id": 7,
+      "sex_id": 1,
+      "template_id": 39
+    },
+    {
+      "record_id": 345,
+      "race_id": 11,
+      "class_id": 7,
+      "sex_id": 0,
+      "template_id": 40
+    },
+    {
+      "record_id": 346,
+      "race_id": 11,
+      "class_id": 7,
+      "sex_id": 1,
+      "template_id": 40
+    },
+    {
+      "record_id": 10,
+      "race_id": 1,
+      "class_id": 8,
+      "sex_id": 0,
+      "template_id": 41
+    },
+    {
+      "record_id": 39,
+      "race_id": 1,
+      "class_id": 8,
+      "sex_id": 1,
+      "template_id": 41
+    },
+    {
+      "record_id": 35,
+      "race_id": 3,
+      "class_id": 8,
+      "sex_id": 0,
+      "template_id": 42
+    },
+    {
+      "record_id": 52,
+      "race_id": 3,
+      "class_id": 8,
+      "sex_id": 1,
+      "template_id": 42
+    },
+    {
+      "record_id": 34,
+      "race_id": 5,
+      "class_id": 8,
+      "sex_id": 0,
+      "template_id": 43
+    },
+    {
+      "record_id": 61,
+      "race_id": 5,
+      "class_id": 8,
+      "sex_id": 1,
+      "template_id": 43
+    },
+    {
+      "record_id": 294,
+      "race_id": 7,
+      "class_id": 8,
+      "sex_id": 0,
+      "template_id": 44
+    },
+    {
+      "record_id": 306,
+      "race_id": 7,
+      "class_id": 8,
+      "sex_id": 1,
+      "template_id": 44
+    },
+    {
+      "record_id": 317,
+      "race_id": 8,
+      "class_id": 8,
+      "sex_id": 0,
+      "template_id": 45
+    },
+    {
+      "record_id": 318,
+      "race_id": 8,
+      "class_id": 8,
+      "sex_id": 1,
+      "template_id": 45
+    },
+    {
+      "record_id": 323,
+      "race_id": 10,
+      "class_id": 8,
+      "sex_id": 0,
+      "template_id": 46
+    },
+    {
+      "record_id": 327,
+      "race_id": 10,
+      "class_id": 8,
+      "sex_id": 1,
+      "template_id": 46
+    },
+    {
+      "record_id": 341,
+      "race_id": 11,
+      "class_id": 8,
+      "sex_id": 0,
+      "template_id": 47
+    },
+    {
+      "record_id": 342,
+      "race_id": 11,
+      "class_id": 8,
+      "sex_id": 1,
+      "template_id": 47
+    },
+    {
+      "record_id": 12,
+      "race_id": 1,
+      "class_id": 9,
+      "sex_id": 0,
+      "template_id": 42
+    },
+    {
+      "record_id": 40,
+      "race_id": 1,
+      "class_id": 9,
+      "sex_id": 1,
+      "template_id": 42
+    },
+    {
+      "record_id": 20,
+      "race_id": 2,
+      "class_id": 9,
+      "sex_id": 0,
+      "template_id": 48
+    },
+    {
+      "record_id": 46,
+      "race_id": 2,
+      "class_id": 9,
+      "sex_id": 1,
+      "template_id": 48
+    },
+    {
+      "record_id": 33,
+      "race_id": 5,
+      "class_id": 9,
+      "sex_id": 0,
+      "template_id": 49
+    },
+    {
+      "record_id": 62,
+      "race_id": 5,
+      "class_id": 9,
+      "sex_id": 1,
+      "template_id": 49
+    },
+    {
+      "record_id": 295,
+      "race_id": 7,
+      "class_id": 9,
+      "sex_id": 0,
+      "template_id": 50
+    },
+    {
+      "record_id": 308,
+      "race_id": 7,
+      "class_id": 9,
+      "sex_id": 1,
+      "template_id": 50
+    },
+    {
+      "record_id": 322,
+      "race_id": 10,
+      "class_id": 9,
+      "sex_id": 0,
+      "template_id": 51
+    },
+    {
+      "record_id": 328,
+      "race_id": 10,
+      "class_id": 9,
+      "sex_id": 1,
+      "template_id": 51
+    },
+    {
+      "record_id": 286,
+      "race_id": 4,
+      "class_id": 11,
+      "sex_id": 0,
+      "template_id": 52
+    },
+    {
+      "record_id": 287,
+      "race_id": 4,
+      "class_id": 11,
+      "sex_id": 1,
+      "template_id": 52
+    },
+    {
+      "record_id": 284,
+      "race_id": 6,
+      "class_id": 11,
+      "sex_id": 0,
+      "template_id": 53
+    },
+    {
+      "record_id": 285,
+      "race_id": 6,
+      "class_id": 11,
+      "sex_id": 1,
+      "template_id": 53
+    }
+  ]
+}

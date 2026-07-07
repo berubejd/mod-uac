@@ -21,7 +21,7 @@ server operators** running stock or lightly-customized AzerothCore installations
 - No hand-applied, irreversible SQL. Everything is applied by AzerothCore's DB updater and has a
   companion revert.
 - **Zero server-side binary DBC edits.** (See [engineering doc §3](docs/mod-uac-engineering-implementation.md#3-source-grounded-findings).)
-- Exactly one small, universal client artifact (a generated MPQ), producible in pure Python.
+- Exactly three small, universal client artifacts (generated MPQs under `client-patch/`), producible in pure Python.
 - Deterministic and reproducible: generation happens against a pinned canonical source, or against
   the operator's own installed DBCs.
 
@@ -52,7 +52,11 @@ mod-uac/
   data/item_prototypes.json     # minimal outfit item class/subclass lookup (from snapshot refresh)
   data/trainer_overrides.yaml   # optional trainer placement overrides
   tools/requirements.txt
-  client-patch/patch-A.mpq      # universal client artifact
+  client-patch/unlock-only/patch-z.mpq   # CharBaseInfo only
+  client-patch/standard/patch-z.mpq      # v19 CharStartOutfit + overlays
+  client-patch/enhanced/patch-z.mpq      # HD baseline CharStartOutfit + overlays
+  data/client/hd_outfit_templates.json   # deduplicated HD stock outfit templates (54)
+  data/client/hd_outfit_stock_index.json # 126 stock rows -> template_id
   CMakeLists.txt                # data-only module stub
   README.md
 ```
@@ -111,7 +115,7 @@ Conventions:
   this). Optional narrower scopes (`mpq`, `class-quest`) are fine if clearer.
 - Keep it to **one line**, imperative mood, no trailing period. Do not add a
   body unless the maintainer asks for one.
-- Regenerated SQL under `data/sql/` and `client-patch/patch-A.mpq` belong in
+- Regenerated SQL under `data/sql/` and all three `client-patch/*/patch-z.mpq` files belong in
   the same commit as the emitter change that produced them (same phase).
 
 ---
@@ -127,7 +131,7 @@ Work is tracked in [README.md](README.md) and
 | **1b** | `tools/aracgen/emit_skill.py`, `data/sql/db-world/mod_uac_skillraceclassinfo_dbc.sql` |
 | **1c** | `tools/aracgen/emit_player.py`, `mod_uac_playercreateinfo*.sql` |
 | **1d** | `tools/aracgen/emit_totem.py`, `mod_uac_player_totem_model.sql` |
-| **1e** | `tools/aracgen/mpq.py`, `emit_client.py`, `client-patch/patch-A.mpq` |
+| **1e** | `tools/aracgen/mpq.py`, `emit_client.py`, `client-patch/*/patch-z.mpq`, `data/client/hd_outfit_*.json` |
 | **1f** | `CMakeLists.txt`, `README.md`, docs |
 | **1g** | `emit_class_quest.py`, `class_quest_catalog.py`, `mod_uac_quest_template.sql`, optional `mod_uac_hunter_pet_*.sql` |
 | **2b** | `emit_trainers.py`, `snapshot.py`, `mod_uac_starter_trainers.sql`, `docs/trainer_worksheet.md` |
