@@ -394,6 +394,9 @@ def render_install_sql(
         f"-- dbc max ID: {result.dbc_max_id}; db max ID: {result.db_max_id}",
         f"-- overlay IDs: {id_list}",
         "",
+        "-- reapply-safe: clear mod-uac overlay IDs before insert",
+        f"DELETE FROM `{SKILL_OVERLAY_TABLE}` WHERE `ID` IN ({id_list});",
+        "",
     ]
     for row in result.rows:
         lines.append(render_insert(SKILL_OVERLAY_TABLE, schema, row.logical_values()))

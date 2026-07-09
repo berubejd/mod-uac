@@ -200,6 +200,9 @@ def render_install_sql(
         f"-- dbc max ID: {result.dbc_max_id}; db max ID: {result.db_max_id}",
         f"-- overlay IDs: {id_list}",
         "",
+        "-- reapply-safe: clear mod-uac overlay IDs before insert",
+        f"DELETE FROM `{RACIAL_ABILITY_TABLE}` WHERE `ID` IN ({id_list});",
+        "",
     ]
     for row, grant_list in zip(result.rows, result.row_grants, strict=True):
         combos = ", ".join(f"({grant.race_id}, {grant.class_id})" for grant in grant_list)

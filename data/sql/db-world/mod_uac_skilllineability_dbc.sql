@@ -4,6 +4,9 @@
 -- dbc max ID: 21980; db max ID: 0
 -- overlay IDs: 21981, 21982, 21983, 21984, 21985, 21986, 21987, 21988, 21989, 21990
 
+-- reapply-safe: clear mod-uac overlay IDs before insert
+DELETE FROM `skilllineability_dbc` WHERE `ID` IN (21981, 21982, 21983, 21984, 21985, 21986, 21987, 21988, 21989, 21990);
+
 -- Blood Fury (AP+SP) for (2, 2), (2, 11)
 INSERT INTO `skilllineability_dbc` (`ID`, `SkillLine`, `Spell`, `RaceMask`, `ClassMask`, `ExcludeRace`, `ExcludeClass`, `MinSkillLineRank`, `SupercededBySpell`, `AcquireMethod`, `TrivialSkillLineRankHigh`, `TrivialSkillLineRankLow`, `CharacterPoints_1`, `CharacterPoints_2`) VALUES (21981, 125, 33697, 2, 1026, 0, 0, 1, 0, 2, 0, 0, 0, 0);
 -- Blood Fury (spell power) for (2, 5), (2, 8)

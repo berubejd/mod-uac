@@ -54,7 +54,16 @@ def render_spell_custom_install(
         "-- Requires worldserver.conf: PlayerStart.CustomSpells = 1",
         "-- Pair with mod_uac_hunter_pet_spell_dbc.sql so Tame Beast is castable at level 1.",
         "",
+        "-- reapply-safe: clear mod-uac pet kit grants before insert",
     ]
+    for row in result.spell_rows:
+        lines.append(
+            f"DELETE FROM `{SPELL_CUSTOM_TABLE}` "
+            f"WHERE `racemask` = {ALL_RACES_MASK} "
+            f"AND `classmask` = {HUNTER_CLASS_MASK} "
+            f"AND `Spell` = {row.spell_id};"
+        )
+    lines.append("")
     for row in result.spell_rows:
         lines.append(
             render_insert(

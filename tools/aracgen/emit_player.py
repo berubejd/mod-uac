@@ -54,6 +54,10 @@ def render_playercreateinfo_install(
         "-- mod-uac: playercreateinfo rows for Unlock All Classes",
         f"-- combos: {_combo_keys(result)}",
         "",
+        "-- reapply-safe: clear mod-uac combos before insert",
+        f"DELETE FROM `{PLAYERCREATEINFO_TABLE}` "
+        f"WHERE (`race`, `class`) IN ({_combo_keys(result)});",
+        "",
     ]
     for kit in result.kits:
         spawn = kit.spawn
@@ -103,6 +107,10 @@ def render_playercreateinfo_action_install(
     schema = _resolve_snapshot(snapshot).schema(PLAYERCREATEINFO_ACTION_TABLE)
     lines = [
         "-- mod-uac: playercreateinfo_action rows for Unlock All Classes",
+        "",
+        "-- reapply-safe: clear mod-uac combos before insert",
+        f"DELETE FROM `{PLAYERCREATEINFO_ACTION_TABLE}` "
+        f"WHERE (`race`, `class`) IN ({_combo_keys(result)});",
         "",
     ]
     for kit in result.kits:
@@ -184,6 +192,10 @@ def render_playercreateinfo_skills_install(
     lines = [
         "-- mod-uac: playercreateinfo_skills for gear-required proficiencies on new combos",
         "-- Gear-derived with reference weapon-skill sanity check; skips stock-covered skills.",
+        "",
+        "-- reapply-safe: clear rows tagged with the mod-uac comment before insert",
+        f"DELETE FROM `{PLAYERCREATEINFO_SKILLS_TABLE}` "
+        "WHERE `comment` = 'mod-uac: starter gear skill';",
         "",
     ]
     for row in rows:

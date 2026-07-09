@@ -372,7 +372,16 @@ def render_spell_install(
     lines = [
         "-- mod-uac: creation spell grants for cross-continent class combos (Phase 1g tier C)",
         "",
+        "-- reapply-safe: clear mod-uac grants before insert",
     ]
+    for row in result.spell_grants:
+        lines.append(
+            f"DELETE FROM `{SPELL_CUSTOM_TABLE}` "
+            f"WHERE `racemask` = {race_bit(row.race_id)} "
+            f"AND `classmask` = {class_bit(row.class_id)} "
+            f"AND `Spell` = {row.spell_id};"
+        )
+    lines.append("")
     for row in result.spell_grants:
         lines.append(
             render_insert(

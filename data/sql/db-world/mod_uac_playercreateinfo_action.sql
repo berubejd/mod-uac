@@ -1,5 +1,8 @@
 -- mod-uac: playercreateinfo_action rows for Unlock All Classes
 
+-- reapply-safe: clear mod-uac combos before insert
+DELETE FROM `playercreateinfo_action` WHERE (`race`, `class`) IN ((1, 3), (1, 7), (1, 11), (2, 2), (2, 5), (2, 8), (2, 11), (3, 7), (3, 8), (3, 9), (3, 11), (4, 2), (4, 7), (4, 8), (4, 9), (5, 2), (5, 3), (5, 7), (5, 11), (6, 2), (6, 4), (6, 5), (6, 8), (6, 9), (7, 2), (7, 3), (7, 5), (7, 7), (7, 11), (8, 2), (8, 9), (8, 11), (10, 1), (10, 7), (10, 11), (11, 4), (11, 9), (11, 11));
+
 INSERT INTO `playercreateinfo_action` (`race`, `class`, `button`, `action`, `type`) VALUES (1, 3, 0, 6603, 0);
 INSERT INTO `playercreateinfo_action` (`race`, `class`, `button`, `action`, `type`) VALUES (1, 3, 1, 2973, 0);
 INSERT INTO `playercreateinfo_action` (`race`, `class`, `button`, `action`, `type`) VALUES (1, 3, 2, 75, 0);

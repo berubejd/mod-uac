@@ -182,6 +182,9 @@ def test_install_sql_shape(ability_table) -> None:
     assert "INSERT INTO `skilllineability_dbc`" in sql
     assert "`AcquireMethod`" in sql
     assert sql.count("INSERT INTO") == len(result.rows)
+    # Reapply-safe: the AC updater re-runs changed files against a populated table.
+    delete_stmt = sql.index("DELETE FROM `skilllineability_dbc`")
+    assert delete_stmt < sql.index("INSERT INTO")
 
 
 def test_uninstall_sql_deletes_exact_ids(ability_table) -> None:

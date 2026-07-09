@@ -98,6 +98,15 @@ def test_install_sql_includes_expected_tables(resolver: CanonicalKitResolver) ->
     assert "(6, 8," in install["playercreateinfo"]
 
 
+def test_install_sql_is_reapply_safe(resolver: CanonicalKitResolver) -> None:
+    """The AC updater re-runs changed files; a DELETE guard must precede inserts."""
+    emitter = PlayerCreateEmitter(resolver)
+    install = emitter.render_install_files(emitter.compute())
+    for table in ("playercreateinfo", "playercreateinfo_action", "playercreateinfo_skills"):
+        sql = install[table]
+        assert sql.index(f"DELETE FROM `{table}`") < sql.index("INSERT INTO"), table
+
+
 def test_human_hunter_excludes_dk_class_spells(resolver: CanonicalKitResolver) -> None:
     kit = resolver.resolve(1, 3)
     action_spells = {entry.action for entry in kit.actions}
