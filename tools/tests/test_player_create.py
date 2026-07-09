@@ -122,11 +122,11 @@ def test_dwarf_shaman_uses_stoneform_not_find_minerals(resolver: CanonicalKitRes
     assert 2481 not in by_button.values()
 
 
-def test_orc_mage_does_not_get_other_class_blood_fury(resolver: CanonicalKitResolver) -> None:
+def test_orc_mage_gets_spell_power_blood_fury(resolver: CanonicalKitResolver) -> None:
     kit = resolver.resolve(2, 8)
     by_button = {entry.button: entry.action for entry in kit.actions}
-    assert by_button[2] == 20572
-    assert 33702 not in by_button.values()
+    assert by_button[2] == 33702
+    assert 20572 not in by_button.values()
     assert 33697 not in by_button.values()
 
 

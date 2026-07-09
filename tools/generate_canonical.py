@@ -14,6 +14,7 @@ from aracgen.cli import (
     write_client_patches,
     write_hunter_pet_sql,
     write_player_create_sql,
+    write_racial_ability_sql,
     write_skill_overlay_sql,
     write_totem_sql,
     write_trainer_sql,
@@ -66,6 +67,12 @@ def main() -> None:
         default=0,
         help="MAX(ID) already in charstartoutfit_dbc (default: 0 for stock DB)",
     )
+    parser.add_argument(
+        "--ability-db-max-id",
+        type=int,
+        default=0,
+        help="MAX(ID) already in skilllineability_dbc (default: 0 for stock DB)",
+    )
     add_snapshot_cli_args(parser)
     add_trainer_cli_args(parser)
     args = parser.parse_args()
@@ -91,6 +98,13 @@ def main() -> None:
         INSTALL_DIR / "mod_uac_skillraceclassinfo_dbc.sql",
         UNINSTALL_DIR / "mod_uac_skillraceclassinfo_dbc_uninstall.sql",
         db_max_id=args.db_max_id,
+        snapshot=snapshot,
+    )
+    write_racial_ability_sql(
+        source,
+        INSTALL_DIR / "mod_uac_skilllineability_dbc.sql",
+        UNINSTALL_DIR / "mod_uac_skilllineability_dbc_uninstall.sql",
+        db_max_id=args.ability_db_max_id,
         snapshot=snapshot,
     )
     write_player_create_sql(

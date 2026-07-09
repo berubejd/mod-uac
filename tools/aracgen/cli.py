@@ -15,6 +15,7 @@ from aracgen.emit_client import (
 )
 from aracgen.emit_hunter_pet import HunterPetEmitter
 from aracgen.emit_player import PlayerCreateEmitter, build_resolver
+from aracgen.emit_racials import RacialAbilityEmitter
 from aracgen.emit_skill import SkillOverlayEmitter
 from aracgen.emit_totem import TotemEmitter
 from aracgen.emit_trainers import (
@@ -202,6 +203,30 @@ def write_skill_overlay_sql(
 
     print(
         f"Wrote {install_path} ({len(result.rows)} overlay rows, "
+        f"dbc max {result.dbc_max_id}, db max {result.db_max_id})"
+    )
+    print(f"Wrote {uninstall_path}")
+
+
+def write_racial_ability_sql(
+    source: DbcSource,
+    install_path: Path,
+    uninstall_path: Path,
+    *,
+    db_max_id: int = 0,
+    snapshot: Snapshot | None = None,
+) -> None:
+    table = source.load_skill_line_ability()
+    emitter = RacialAbilityEmitter(table, db_max_id=db_max_id, snapshot=snapshot)
+    result = emitter.compute()
+
+    install_path.parent.mkdir(parents=True, exist_ok=True)
+    uninstall_path.parent.mkdir(parents=True, exist_ok=True)
+    install_path.write_text(emitter.render_install(result), encoding="utf-8")
+    uninstall_path.write_text(emitter.render_uninstall(result), encoding="utf-8")
+
+    print(
+        f"Wrote {install_path} ({len(result.rows)} racial grant rows, "
         f"dbc max {result.dbc_max_id}, db max {result.db_max_id})"
     )
     print(f"Wrote {uninstall_path}")

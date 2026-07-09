@@ -17,7 +17,7 @@ from aracgen.sources import (
     validate_client_data_zip,
 )
 
-DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "Data.zip"
+DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "cache" / "client-data-v19.zip"
 
 
 def test_client_data_release_url() -> None:

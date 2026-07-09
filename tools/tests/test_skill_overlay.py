@@ -17,7 +17,7 @@ from aracgen.emit_skill import (
 from aracgen.matrix import ComboMatrix, mask_covers_race_class, race_bit
 from aracgen.sources import ZipDbcSource
 
-DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "Data.zip"
+DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "cache" / "client-data-v19.zip"
 CHECKED_IN_INSTALL = (
     Path(__file__).resolve().parents[2]
     / "data"

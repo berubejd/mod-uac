@@ -30,6 +30,7 @@ SCHEMA_TABLES: tuple[str, ...] = (
     "playercreateinfo_skills",
     "charstartoutfit_dbc",
     "skillraceclassinfo_dbc",
+    "skilllineability_dbc",
     "player_totem_model",
     "quest_template",
     "quest_template_addon",

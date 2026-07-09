@@ -2,7 +2,6 @@
 data/cache/*
 !data/cache/.gitkeep
 data/dbc/
-data/Data.zip
 data/**/*.zip
 
 # Python

@@ -9,7 +9,7 @@ import pytest
 from aracgen.dbc import DbcTable, FieldKind, parse_format, record_size_for_format
 from aracgen.formats import CHAR_BASE_INFO, CHAR_START_OUTFIT, SKILL_RACE_CLASS_INFO
 
-DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "Data.zip"
+DATA_ZIP = Path(__file__).resolve().parents[2] / "data" / "cache" / "client-data-v19.zip"
 
 DBC_CASES = [
     ("dbc/CharBaseInfo.dbc", CHAR_BASE_INFO),

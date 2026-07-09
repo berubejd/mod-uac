@@ -13,6 +13,7 @@ from aracgen.charstartoutfit_export import (
 from aracgen.dbc import DbcTable
 from aracgen.item_prototypes import ItemPrototypeStore
 from aracgen.matrix import ComboMatrix
+from aracgen.racial_catalog import RACIAL_BAR_SPELLS
 from aracgen.starter_skills import StarterSkillRow, compute_starter_skills
 from aracgen.stock_loader import ActionEntry, SpawnInfo, StockKitStore, spawn_for_race
 
@@ -235,6 +236,11 @@ def _is_ref_racial_entry(
 
 
 def _resolve_racial_spell(race_id: int, class_id: int, index: RacialIndex) -> int:
+    # Class-variant racials: match the skilllineability_dbc grant, not a stock
+    # sibling's variant the character can never learn (e.g. warrior Blood Fury
+    # on an orc mage's bar).
+    if (race_id, class_id) in RACIAL_BAR_SPELLS:
+        return RACIAL_BAR_SPELLS[(race_id, class_id)]
     if (race_id, class_id) in index.spell_by_race_class:
         return index.spell_by_race_class[(race_id, class_id)]
     frequencies = index.spell_frequency_by_race.get(race_id, {})

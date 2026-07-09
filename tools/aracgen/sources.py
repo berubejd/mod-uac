@@ -9,7 +9,12 @@ from pathlib import Path
 import requests
 
 from aracgen.dbc import DbcTable
-from aracgen.formats import CHAR_BASE_INFO, CHAR_START_OUTFIT, SKILL_RACE_CLASS_INFO
+from aracgen.formats import (
+    CHAR_BASE_INFO,
+    CHAR_START_OUTFIT,
+    SKILL_LINE_ABILITY,
+    SKILL_RACE_CLASS_INFO,
+)
 
 DEFAULT_CANONICAL_PIN = "v19"
 CLIENT_DATA_REPO = "wowgaming/client-data"
@@ -87,6 +92,10 @@ class DbcSource(ABC):
     def load_char_start_outfit(self) -> DbcTable:
         raise NotImplementedError
 
+    @abstractmethod
+    def load_skill_line_ability(self) -> DbcTable:
+        raise NotImplementedError
+
 
 class LocalDbcSource(DbcSource):
     """Read DBC files from a directory (operator WoW Data/dbc or extracted client data)."""
@@ -110,6 +119,9 @@ class LocalDbcSource(DbcSource):
     def load_char_start_outfit(self) -> DbcTable:
         return self._read("CharStartOutfit.dbc", CHAR_START_OUTFIT)
 
+    def load_skill_line_ability(self) -> DbcTable:
+        return self._read("SkillLineAbility.dbc", SKILL_LINE_ABILITY)
+
 
 class ZipDbcSource(DbcSource):
     """Read DBC files from a wowgaming-style Data.zip (dbc/ prefix)."""
@@ -129,6 +141,9 @@ class ZipDbcSource(DbcSource):
 
     def load_char_start_outfit(self) -> DbcTable:
         return self._read("CharStartOutfit.dbc", CHAR_START_OUTFIT)
+
+    def load_skill_line_ability(self) -> DbcTable:
+        return self._read("SkillLineAbility.dbc", SKILL_LINE_ABILITY)
 
 
 class CanonicalDbcSource(DbcSource):
@@ -166,3 +181,6 @@ class CanonicalDbcSource(DbcSource):
 
     def load_char_start_outfit(self) -> DbcTable:
         return self._zip_source().load_char_start_outfit()
+
+    def load_skill_line_ability(self) -> DbcTable:
+        return self._zip_source().load_skill_line_ability()
