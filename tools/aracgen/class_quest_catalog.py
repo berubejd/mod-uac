@@ -257,6 +257,97 @@ FACTION_UNLOCK_CHAINS: tuple[FactionQuestChain, ...] = (
             QuestRaceGate(9685, 3430, 512),
         ),
     ),
+    # DB-verified full audit of paladin-only class quests (AllowableClasses=2):
+    # every narrow-gated chain below blocks new combos (Alliance: NE/Gnome;
+    # Horde: Orc/Undead/Tauren/Troll). We open the whole chain body to the
+    # faction so new combos can *do* the quest, even where the reward (mount,
+    # Redemption spell) is also trainable in 3.3.5 — the opportunity is the
+    # point. Excluded: quest 9287 (Draenei "Paladin Training"), hard-blocked
+    # behind the Draenei-only non-class prereq 9280, so unlocking is futile.
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="alliance",
+        label="paladin Tome of Divinity (Stormwind/Human)",
+        quests=(
+            QuestRaceGate(3101, 12, 1),  # Consecrated Letter (Northshire)
+            QuestRaceGate(1641, 1519, 1),
+            QuestRaceGate(1790, 1519, 1),  # The Symbol of Life
+            QuestRaceGate(2998, 1519, 1),
+            QuestRaceGate(3681, 1519, 1),
+        ),
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="alliance",
+        label="paladin Tome of Divinity (Ironforge/Dwarf)",
+        quests=(
+            QuestRaceGate(3107, 1, 4),  # Consecrated Rune (Kharanos)
+            QuestRaceGate(1645, 1537, 4),
+            QuestRaceGate(1789, 1537, 4),  # The Symbol of Life
+            QuestRaceGate(2997, 1537, 4),
+            QuestRaceGate(2999, 1537, 4),
+            QuestRaceGate(3000, 1537, 4),
+        ),
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="alliance",
+        label="paladin Redemption root (Azuremyst/Draenei)",
+        quests=(QuestRaceGate(10366, 3524, 1024),),  # Jol -> 9598 (catalogued)
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="alliance",
+        label="paladin Charger epic mount (level 60)",
+        quests=(
+            QuestRaceGate(7637, 1519, 1029),
+            QuestRaceGate(7638, 1519, 1029),
+            QuestRaceGate(7639, 1519, 1029),
+            QuestRaceGate(7640, 1519, 1029),
+            QuestRaceGate(7641, 1519, 1029),
+            QuestRaceGate(7642, 1519, 1029),
+            QuestRaceGate(7643, 1519, 1029),
+            QuestRaceGate(7644, 1519, 1029),
+            QuestRaceGate(7645, 1519, 1029),
+            QuestRaceGate(7646, 1519, 1029),
+            QuestRaceGate(7647, 1519, 1029),
+            QuestRaceGate(7670, 1519, 1029),
+        ),
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="horde",
+        label="paladin Blood Knight trials + weapon (Silvermoon)",
+        quests=(
+            QuestRaceGate(10069, 3487, 512),  # Well Watcher Solanian
+            QuestRaceGate(9681, 3487, 512),  # A Study in Power (L12)
+            QuestRaceGate(9686, 3487, 512),  # The Second Trial (L20)
+            QuestRaceGate(9690, 3487, 512),
+            QuestRaceGate(9691, 3487, 512),
+            QuestRaceGate(9692, 3487, 512),
+            QuestRaceGate(9707, 3487, 512),
+            QuestRaceGate(9710, 3487, 512),  # The Blood-Tempered Ranseur
+        ),
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="horde",
+        label="paladin Thalassian Warhorse (level 40)",
+        quests=(QuestRaceGate(9712, 3487, 512),),
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="horde",
+        label="paladin Blood Knight charger (level 60)",
+        quests=(
+            QuestRaceGate(9721, 3487, 512),
+            QuestRaceGate(9722, 3487, 512),
+            QuestRaceGate(9723, 3487, 512),
+            QuestRaceGate(9735, 3487, 512),
+            QuestRaceGate(9736, 3487, 512),
+            QuestRaceGate(9737, 3487, 512),
+        ),
+    ),
 )
 
 CLASS_CHAINS_BY_ID: dict[int, tuple[ClassQuestChain, ...]] = {

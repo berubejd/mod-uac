@@ -110,9 +110,37 @@ def test_faction_unlock_druid_bear_chains() -> None:
 def test_faction_unlock_paladin_chains() -> None:
     result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
     paladin = _faction_patches_for_class(result, 2)
-    assert len(paladin) == 23
+    # 23 original Redemption entries + 39 from the full DB-verified audit.
+    assert len(paladin) == 62
     assert paladin[1642].new_allowable_races == ALLIANCE_FACTION_MASK
     assert paladin[9676].new_allowable_races == HORDE_FACTION_MASK
+
+
+def test_faction_unlock_paladin_full_audit_chains() -> None:
+    result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
+    paladin = _faction_patches_for_class(result, 2)
+
+    # Redemption roots/variants + Draenei "Jol" root (Alliance -> 1101).
+    redemption_alliance = {3101, 1641, 1790, 2998, 3681, 3107, 1645, 1789,
+                           2997, 2999, 3000, 10366}
+    # Level-60 Charger epic mount chain, stock mask 1029 (Hu+Dw+Dr).
+    charger_alliance = {7637, 7638, 7639, 7640, 7641, 7642, 7643, 7644,
+                        7645, 7646, 7647, 7670}
+    # Blood Knight trials/weapon + warhorse + charger (BE -> 690).
+    blood_knight_horde = {10069, 9681, 9686, 9690, 9691, 9692, 9707, 9710,
+                          9712, 9721, 9722, 9723, 9735, 9736, 9737}
+
+    for qid in redemption_alliance | charger_alliance:
+        assert paladin[qid].new_allowable_races == ALLIANCE_FACTION_MASK
+    for qid in blood_knight_horde:
+        assert paladin[qid].new_allowable_races == HORDE_FACTION_MASK
+
+    assert paladin[10366].original_allowable_races == 1024  # Draenei "Jol" root
+    assert paladin[7637].original_allowable_races == 1029  # Charger (Hu+Dw+Dr)
+
+    # 9287 ("Paladin Training", Draenei) is hard-blocked behind a Draenei-only
+    # non-class prereq (9280); unlocking it would be futile, so it is excluded.
+    assert 9287 not in paladin
 
 
 def test_stock_ac_needs_no_addon_anti_gray_patches() -> None:
