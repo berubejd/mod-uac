@@ -16,6 +16,7 @@ from aracgen.cli import (
     write_player_create_sql,
     write_racial_ability_sql,
     write_skill_overlay_sql,
+    write_totem_quest_sql,
     write_totem_sql,
     write_trainer_sql,
 )
@@ -120,6 +121,12 @@ def main() -> None:
         snapshot=snapshot,
     )
     write_class_quest_sql(INSTALL_DIR, UNINSTALL_DIR, snapshot=snapshot)
+    write_totem_quest_sql(
+        INSTALL_DIR / "mod_uac_shaman_totem_quests.sql",
+        UNINSTALL_DIR / "mod_uac_shaman_totem_quests_uninstall.sql",
+        snapshot=snapshot,
+        overrides_path=args.trainer_overrides,
+    )
     write_hunter_pet_sql(
         INSTALL_DIR,
         UNINSTALL_DIR,

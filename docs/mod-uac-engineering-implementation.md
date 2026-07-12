@@ -463,9 +463,9 @@ uninstall restores stock addon rows when emitted.
 | Class | Stock gate | Reference chains (stock masks) | Notes |
 |-------|------------|----------------------------------|-------|
 | **Warrior** | Defensive Stance ~10 | Horde: Path of Defense etc. (`690` already). Alliance: Dwarf IF `1678–1679` (`68` → `1101`); NE line already `1101` | Only **1 new combo** (BE warrior). Tier B/C → quest patch, not spell grant. |
-| **Shaman** | Earth **4**, Fire **10**, Water **20**, Air **30** | Earth: Orc `1516–1518` (`130`→`690`), Tauren `1519–1521` (`32`→`690`), Draenei `9449–9451` already `1101`. Fire: Horde `690` / Alliance `1101` already. **Water & Air Alliance chains are Draenei-only** (`1024`→`1101`): Water `9500/9501/9503/9504/9508/9509/10490`, Air `9547/9551/9552/9553/9554/10491`. Horde Water/Air already `690`. | Faction-wide unlock. DB-verified: the open Water entry `9502` (`0`) dead-ends into `9501` (`1024`), so the whole chain body must be patched, not just entries. |
-| **Druid** | Bear form **10** | NE `5921→6001` (`8` → `1101`), Tauren `5922→6002` (`32` → `690`); Moonglade + Body and Heart | Eight new druid combos travel to the appropriate reference chain. |
-| **Paladin** | Redemption **12** | Human SW `1642→1788` (`1` → `1101`), Dwarf IF `1646→1785` (`4` → `1101`), Draenei `9598→9600` (`1024` → `1101`), BE `9676→9685` (`512` → `690`) | Horde paladins reach Eversong; gnome paladin uses IF chain (tier **A**). |
+| **Shaman** | Earth **4**, Fire **10**, Water **20**, Air **30** | **Earth (4): NOT faction-widened** — handled by `emit_totem_quest.py` (synthetic quests + re-narrow), see below. Fire: Horde `690` / Alliance `1101` already. **Water & Air Alliance chains are Draenei-only** (`1024`→`1101`): Water `9500/9501/9503/9504/9508/9509/10490`, Air `9547/9551/9552/9553/9554/10491`. Horde Water/Air already `690`. | Water/Air faction-wide unlock; the open Water entry `9502` (`0`) dead-ends into `9501` (`1024`), so the whole chain body is patched. Earth needs a different mechanism (starter-zone-locked). |
+| **Druid** | Bear form **10**, Aquatic Form **16** | Bear: NE `5921→6001` (`8`→`1101`), Tauren `5922→6002` (`32`→`690`). Aquatic (spell `1446`): NE `5923/5924/5925/26/29/272/5061` (`8`→`1101`), Tauren `5926/5927/5928/27/28/30/31` (`32`→`690`) | New druid combos travel to the Moonglade trainers (same route as bear form). |
+| **Paladin** | Redemption **12**, weapon **20**, mounts **40/60** | Redemption L12 (Human SW `1642→1788`→`1101`, Dwarf IF `1646→1785`→`1101`, Draenei `9598→9600`→`1101`, BE `9676→9685`→`690`) **plus** full audit: Tome of Divinity roots/variants + Draenei "Jol" root `10366`, BE Second Trial weapon chain `9686–9710`, Charger `7637–7670` (`1029`→`1101`), BE warhorse `9712` + charger `9721–9737` (`512`→`690`) | 62 faction patches. Excludes `9287` (hard-blocked behind Draenei-only prereq `9280`). |
 
 **Tier C spell-grant exceptions (keep rare):**
 
@@ -486,6 +486,55 @@ Water/Air chain bodies `1024`→`1101`; Fire and all Horde chains need no patch.
 emissaries (Farseer Umbrua/Stormwind, Farseer Javad) already offer entries, so the only real gate is
 `AllowableRaces`.
 
+**Shaman Call of Earth (level 4) — synthetic quests (DB-verified, shipped).** Unlike Water/Air, the
+Earth chains are **starter-zone-locked**: intermediate NPCs (Spirit of the Vale in Ammen Vale, Minor
+Manifestation of Earth in Valley of Trials / Camp Narache) spawn only in their native zone, so
+widening `AllowableRaces` leaves displaced shamans unable to *complete* the chain and never receiving
+item `5175` (Earth Totem, `TotemCategory 2`). `emit_totem_quest.py` instead emits two zero-objective
+"Call of Earth" quests (reserved IDs `6000000`/`6000001`) attached to the shaman trainer entries
+mod-uac already places (derived from the trainer emitter and validated as QUESTGIVERs): Alliance
+`17089` (mask `77` = Human/Dwarf/NElf/Gnome), Horde `3062` (mask `528` = Undead/BElf). The vanilla
+chains are authoritatively reset to their stock native masks — Orc/Troll `1516–1518` (`130`), Tauren
+`1519–1521` (`32`), Draenei `9449–9451` (`1024`, Draenei-only in stock AC; the reset also corrects
+live DBs that carry a contaminated `1101` here) — while being removed from `FACTION_UNLOCK_CHAINS`. The
+five paths partition all ten races exactly (`77 + 528 + 130 + 32 + 1024 = 1791`, no overlap), which
+also removes a duplicate-totem risk (`5175` is `NO_USER_DESTROY`). New schemas (`quest_offer_reward`,
+`creature_queststarter`, `creature_questender`) and `creature_template.npcflag` were added to the
+snapshot for schema-driven INSERTs and questgiver validation. **QA:** confirm the zero-objective quest
+auto-completes at the trainer in 3.3.5; if not, flip `EARTH_QUEST_TYPE` to `0`
+(`QUEST_TYPE_AUTOCOMPLETE`).
+
+**Paladin class quests — full audit (DB-verified, shipped).** A complete pass over all
+`AllowableClasses = 2` quests found **40** narrow-gated chains beyond the original Redemption L12
+entries; **39** are unlocked to their faction (Alliance→`1101`, BE→`690`): the Tome of Divinity
+roots/alternate versions the catalog previously missed, the Draenei "Jol" root (`10366`→`9598`), the
+level-20 Blood Elf weapon chain (`9686–9710`), and the level-40/60 mount chains (Alliance Charger
+`7637–7670` at stock `1029`; BE warhorse `9712` + charger `9721–9737`). Per the maintainer's design
+rule we open every quest a new combo can *reach and complete* — even where the reward (Redemption,
+mounts) is also trainable in 3.3.5 — reserving spell grants only for the truly unattainable (imp,
+hunter pet). **Excluded:** `9287` ("Paladin Training", Draenei), hard-blocked behind the
+Draenei-only non-class prereq `9280`, so unlocking is futile. Cross-race Redemption is safe: all four
+chains reward the same spell (`7329`) with `ExclusiveGroup = 0`, so re-completion by a paladin who
+already knows Redemption is a harmless no-op.
+
+**All-class class-quest audit (DB-verified).** A full pass over every `AllowableClasses = <single
+class>` quest found 465 narrow-gated quests, but only **145** are same-faction *reachable* gaps
+(cross-faction variants sit behind hostile NPCs, and dual-faction classes already have faction-wide
+parallel chains). Because Shaman and Paladin were the only *single-faction* classes in vanilla, they
+held the bulk of the real gaps (handled above). The remaining reachable gaps were triaged:
+- **Druid Aquatic Form (spell `1446`)** — shipped, mirrors bear form (see druid row).
+- **Hunter pet taming** (~45 quests) — already solved by the `HunterPetEmitter` spell-grant kit
+  (§8.2): the taming abilities are granted directly since the L10 quests can't be done at creation,
+  matching the design that a class's primary skill shouldn't be race-blocked (Blizzard reverted that
+  gating in a later expansion). No quest unlock needed.
+- **Level-1/2 class intros + "X Training" + racial ability quests** (priest Desperate Prayer, Touch/
+  Hex of Weakness, Elune's Grace, etc.) — **not pursued**: unreachable behind racial-start prereqs in
+  race-specific zones, and/or vestigial in 3.3.5 (abilities removed or made baseline/trainer-taught),
+  so widening `AllowableRaces` would add revert rows that grant nothing.
+- **Misc single-race chain steps** (mage `1861` "Mirror Lake", warrior `2383/3065`) — no action:
+  `1861` has a faction-wide alternative (`1880`) in the same exclusive group, and the warrior intros
+  sit behind an Orc/Troll racial-start prereq unreachable to a Blood Elf warrior.
+
 ### Phase 2 — gameplay QA + polish
 
 - **Playerbots (resolved).** With mod-uac `playercreateinfo` data applied, `mod-playerbots` on
@@ -496,13 +545,15 @@ emissaries (Farseer Umbrua/Stormwind, Farseer Javad) already offer entries, so t
   `6000000–6000025`), placement worksheet, YAML overrides. Wired into `generate_canonical.py` /
   `generate_local.py`. Spec: [mod-uac-trainer-emitter-spec.md](mod-uac-trainer-emitter-spec.md).
 - **2e — Schema contract retrofit (complete).** All world-table emitters
-  (`emit_skill`, `emit_player`, `emit_totem`, `emit_class_quest`, `emit_hunter_pet`,
-  `emit_trainers`) render SQL from snapshot `TableSchema` via `schema_emit.py`;
+  (`emit_skill`, `emit_player`, `emit_totem`, `emit_class_quest`, `emit_totem_quest`,
+  `emit_hunter_pet`, `emit_trainers`) render SQL from snapshot `TableSchema` via `schema_emit.py`;
   generator front-ends pass one resolved snapshot through all emitters
   (`--refresh-snapshot` captures live column layouts; maintain versioned JSON for
   older servers). `spell_dbc_export` no longer parses AC base `spell_dbc.sql` for
   column order — it uses the snapshot schema like the other emitters.
-- **Remaining gameplay QA.** Shaman Call of Earth spell-grant fallback if quest patching fails QA;
+- **Remaining gameplay QA.** Confirm the synthetic Call of Earth quests auto-complete at the trainer
+  (else flip `EARTH_QUEST_TYPE` to `0`); spot-check that displaced shamans obtain the Water/Air totem
+  items `5177/5178` (Fire/Water/Air chains assumed completable, only Earth was starter-zone-locked);
   druid form spot-checks; trainer coordinate nudges via `trainer_overrides.yaml`.
 
 ---
@@ -519,8 +570,11 @@ emissaries (Farseer Umbrua/Stormwind, Farseer Javad) already offer entries, so t
    overlays are append-only (74 rows) in standard/enhanced only; enhanced uses HD baseline bytes
    for stock rows and HD preview displays on overlay rows only.
 4. **`quest_template` edit** — resolved in 1g (§8.1–8.3).
-5. **Shaman Call of Earth at level 4** — faction quest patch + anti-gray shipped (§8.3); spell-grant
-   fallback reserved for gameplay QA if travel proves insufficient.
+5. **Shaman Call of Earth at level 4** — **resolved.** The faction-wide patch was ineffective (chains
+   are starter-zone-locked, and it created a duplicate-totem risk). Replaced by `emit_totem_quest.py`:
+   two synthetic quests granting item `5175` from the mod-uac shaman trainers + a re-narrow of the
+   vanilla chains to native races (§8, "Shaman Call of Earth"). Remaining: in-game `QuestType`
+   auto-complete check.
 6. **`mod-playerbots` combo enumeration** — **resolved.** New combos work once `playercreateinfo`
    rows are applied; verified on Playerbot-branch AzerothCore.
 7. **Catalog stock-mask drift guard** — **open.** The class-quest chains in `class_quest_catalog.py`

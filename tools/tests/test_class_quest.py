@@ -75,13 +75,14 @@ def test_faction_unlock_warrior_ironforge_chain() -> None:
     assert warrior[1678].new_allowable_races == ALLIANCE_FACTION_MASK
 
 
-def test_faction_unlock_shaman_horde_earth_chains() -> None:
+def test_call_of_earth_not_faction_unlocked() -> None:
+    # Call of Earth is handled by emit_totem_quest (synthetic quests + re-narrow),
+    # not by faction-wide AllowableRaces widening; the vanilla chains must stay
+    # untouched by the class-quest emitter.
     result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
     shaman = _faction_patches_for_class(result, 7)
-    horde = {qid for qid, p in shaman.items() if p.new_allowable_races == HORDE_FACTION_MASK}
-    assert horde == {1516, 1517, 1518, 1519, 1520, 1521}
-    assert shaman[1516].new_allowable_races == HORDE_FACTION_MASK
-    assert shaman[1519].new_allowable_races == HORDE_FACTION_MASK
+    earth_chain = {1516, 1517, 1518, 1519, 1520, 1521, 9449, 9450, 9451}
+    assert earth_chain.isdisjoint(shaman)
 
 
 def test_faction_unlock_shaman_alliance_water_air_chains() -> None:
@@ -102,17 +103,62 @@ def test_faction_unlock_shaman_alliance_water_air_chains() -> None:
 def test_faction_unlock_druid_bear_chains() -> None:
     result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
     druid = _faction_patches_for_class(result, 11)
-    assert set(druid) == {5921, 5922, 5929, 5930, 5931, 5932, 6001, 6002}
+    bear = {5921, 5922, 5929, 5930, 5931, 5932, 6001, 6002}
+    assert bear <= set(druid)
     assert druid[5921].new_allowable_races == ALLIANCE_FACTION_MASK
     assert druid[5922].new_allowable_races == HORDE_FACTION_MASK
+
+
+def test_faction_unlock_druid_aquatic_form_chains() -> None:
+    result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
+    druid = _faction_patches_for_class(result, 11)
+    # Aquatic Form (spell 1446) mirrors bear form: NE (8) / Tauren (32) only.
+    alliance = {5923, 5924, 5925, 26, 29, 272, 5061}
+    horde = {5926, 5927, 5928, 27, 28, 30, 31}
+    for qid in alliance:
+        assert druid[qid].new_allowable_races == ALLIANCE_FACTION_MASK
+    for qid in horde:
+        assert druid[qid].new_allowable_races == HORDE_FACTION_MASK
+    assert druid[5061].original_allowable_races == 8  # NE Aquatic Form
+    assert druid[31].original_allowable_races == 32  # Tauren Aquatic Form
+    # Bear (8) + Aquatic (14) = 22 druid faction patches total.
+    assert len(druid) == 22
 
 
 def test_faction_unlock_paladin_chains() -> None:
     result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
     paladin = _faction_patches_for_class(result, 2)
-    assert len(paladin) == 23
+    # 23 original Redemption entries + 39 from the full DB-verified audit.
+    assert len(paladin) == 62
     assert paladin[1642].new_allowable_races == ALLIANCE_FACTION_MASK
     assert paladin[9676].new_allowable_races == HORDE_FACTION_MASK
+
+
+def test_faction_unlock_paladin_full_audit_chains() -> None:
+    result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
+    paladin = _faction_patches_for_class(result, 2)
+
+    # Redemption roots/variants + Draenei "Jol" root (Alliance -> 1101).
+    redemption_alliance = {3101, 1641, 1790, 2998, 3681, 3107, 1645, 1789,
+                           2997, 2999, 3000, 10366}
+    # Level-60 Charger epic mount chain, stock mask 1029 (Hu+Dw+Dr).
+    charger_alliance = {7637, 7638, 7639, 7640, 7641, 7642, 7643, 7644,
+                        7645, 7646, 7647, 7670}
+    # Blood Knight trials/weapon + warhorse + charger (BE -> 690).
+    blood_knight_horde = {10069, 9681, 9686, 9690, 9691, 9692, 9707, 9710,
+                          9712, 9721, 9722, 9723, 9735, 9736, 9737}
+
+    for qid in redemption_alliance | charger_alliance:
+        assert paladin[qid].new_allowable_races == ALLIANCE_FACTION_MASK
+    for qid in blood_knight_horde:
+        assert paladin[qid].new_allowable_races == HORDE_FACTION_MASK
+
+    assert paladin[10366].original_allowable_races == 1024  # Draenei "Jol" root
+    assert paladin[7637].original_allowable_races == 1029  # Charger (Hu+Dw+Dr)
+
+    # 9287 ("Paladin Training", Draenei) is hard-blocked behind a Draenei-only
+    # non-class prereq (9280); unlocking it would be futile, so it is excluded.
+    assert 9287 not in paladin
 
 
 def test_stock_ac_needs_no_addon_anti_gray_patches() -> None:

@@ -43,8 +43,8 @@ mod-uac/
   tools/aracgen/                # generator package
       dbc.py  sources.py  matrix.py  kits.py
       emit_skill.py  emit_player.py  emit_totem.py  emit_class_quest.py
-      emit_hunter_pet.py  emit_trainers.py  emit_client.py  mpq.py
-      snapshot.py  trainer_catalog.py  schema_emit.py
+      emit_totem_quest.py  emit_hunter_pet.py  emit_trainers.py  emit_client.py  mpq.py
+      snapshot.py  trainer_catalog.py  class_quest_catalog.py  totem_quest_catalog.py  schema_emit.py
   tools/capture_snapshot.py     # world DB snapshot capture (PyMySQL)
   tools/generate_local.py       # LocalDbcSource     -> operator SQL + standard MPQ
   tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + client MPQs

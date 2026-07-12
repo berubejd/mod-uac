@@ -20,6 +20,11 @@ COLUMN_ALIASES: dict[str, dict[str, list[str]]] = {
 MOD_UAC_CREATURE_GUID_MIN = 6_000_000
 MOD_UAC_CREATURE_GUID_MAX = 6_009_999
 
+# Reserved mod-uac quest_template ID band (synthetic totem-access quests).
+# Distinct namespace from creature.guid; stock quest IDs top out well below this.
+MOD_UAC_QUEST_ID_MIN = 6_000_000
+MOD_UAC_QUEST_ID_MAX = 6_009_999
+
 LATEST_POINTER_FILE = "world.latest.json"
 
 SCHEMA_TABLES: tuple[str, ...] = (
@@ -34,6 +39,9 @@ SCHEMA_TABLES: tuple[str, ...] = (
     "player_totem_model",
     "quest_template",
     "quest_template_addon",
+    "quest_offer_reward",
+    "creature_queststarter",
+    "creature_questender",
     "spell_dbc",
 )
 

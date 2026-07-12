@@ -130,26 +130,6 @@ FACTION_UNLOCK_CHAINS: tuple[FactionQuestChain, ...] = (
             QuestRaceGate(1679, 1, 68),
         ),
     ),
-    FactionQuestChain(
-        class_id=SHAMAN_CLASS_ID,
-        faction="horde",
-        label="shaman Call of Earth (Durotar)",
-        quests=(
-            QuestRaceGate(1516, 14, 130),
-            QuestRaceGate(1517, 14, 130),
-            QuestRaceGate(1518, 14, 130),
-        ),
-    ),
-    FactionQuestChain(
-        class_id=SHAMAN_CLASS_ID,
-        faction="horde",
-        label="shaman Call of Earth (Mulgore)",
-        quests=(
-            QuestRaceGate(1519, 215, 32),
-            QuestRaceGate(1520, 215, 32),
-            QuestRaceGate(1521, 215, 32),
-        ),
-    ),
     # Call of Water (level 20) and Call of Air (level 30) exist only as the
     # Draenei chain on the Alliance side (mask 1024) — there is no Eastern
     # Kingdoms equivalent. Stock Call of Fire is already 1101, so it needs no
@@ -206,6 +186,39 @@ FACTION_UNLOCK_CHAINS: tuple[FactionQuestChain, ...] = (
             QuestRaceGate(6002, 215, 32),
         ),
     ),
+    # Aquatic Form (spell 1446) mirrors the bear-form chain above: gated to the
+    # single stock druid race per faction (Night Elf / Tauren), routed through
+    # the same Moonglade trainers, so new druid combos have no reachable version.
+    # "Heeding the Call" is the level-10 breadcrumb into Moonglade (feeds the bear
+    # chain root 5921/5922); the trials 26/27 -> ... -> 5061/31 reward Aquatic Form.
+    FactionQuestChain(
+        class_id=DRUID_CLASS_ID,
+        faction="alliance",
+        label="druid Aquatic Form (Moonglade)",
+        quests=(
+            QuestRaceGate(5923, 141, 8),  # Heeding the Call (-> 5921)
+            QuestRaceGate(5924, 141, 8),
+            QuestRaceGate(5925, 141, 8),
+            QuestRaceGate(26, 493, 8),  # A Lesson to Learn
+            QuestRaceGate(29, 493, 8),  # Trial of the Lake
+            QuestRaceGate(272, 493, 8),  # Trial of the Sea Lion
+            QuestRaceGate(5061, 493, 8),  # Aquatic Form
+        ),
+    ),
+    FactionQuestChain(
+        class_id=DRUID_CLASS_ID,
+        faction="horde",
+        label="druid Aquatic Form (Moonglade)",
+        quests=(
+            QuestRaceGate(5926, 215, 32),  # Heeding the Call (-> 5922)
+            QuestRaceGate(5927, 215, 32),
+            QuestRaceGate(5928, 215, 32),
+            QuestRaceGate(27, 493, 32),  # A Lesson to Learn
+            QuestRaceGate(28, 493, 32),  # Trial of the Lake
+            QuestRaceGate(30, 493, 32),  # Trial of the Sea Lion
+            QuestRaceGate(31, 493, 32),  # Aquatic Form
+        ),
+    ),
     FactionQuestChain(
         class_id=PALADIN_CLASS_ID,
         faction="alliance",
@@ -255,6 +268,97 @@ FACTION_UNLOCK_CHAINS: tuple[FactionQuestChain, ...] = (
             QuestRaceGate(9678, 3430, 512),
             QuestRaceGate(9684, 3430, 512),
             QuestRaceGate(9685, 3430, 512),
+        ),
+    ),
+    # DB-verified full audit of paladin-only class quests (AllowableClasses=2):
+    # every narrow-gated chain below blocks new combos (Alliance: NE/Gnome;
+    # Horde: Orc/Undead/Tauren/Troll). We open the whole chain body to the
+    # faction so new combos can *do* the quest, even where the reward (mount,
+    # Redemption spell) is also trainable in 3.3.5 — the opportunity is the
+    # point. Excluded: quest 9287 (Draenei "Paladin Training"), hard-blocked
+    # behind the Draenei-only non-class prereq 9280, so unlocking is futile.
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="alliance",
+        label="paladin Tome of Divinity (Stormwind/Human)",
+        quests=(
+            QuestRaceGate(3101, 12, 1),  # Consecrated Letter (Northshire)
+            QuestRaceGate(1641, 1519, 1),
+            QuestRaceGate(1790, 1519, 1),  # The Symbol of Life
+            QuestRaceGate(2998, 1519, 1),
+            QuestRaceGate(3681, 1519, 1),
+        ),
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="alliance",
+        label="paladin Tome of Divinity (Ironforge/Dwarf)",
+        quests=(
+            QuestRaceGate(3107, 1, 4),  # Consecrated Rune (Kharanos)
+            QuestRaceGate(1645, 1537, 4),
+            QuestRaceGate(1789, 1537, 4),  # The Symbol of Life
+            QuestRaceGate(2997, 1537, 4),
+            QuestRaceGate(2999, 1537, 4),
+            QuestRaceGate(3000, 1537, 4),
+        ),
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="alliance",
+        label="paladin Redemption root (Azuremyst/Draenei)",
+        quests=(QuestRaceGate(10366, 3524, 1024),),  # Jol -> 9598 (catalogued)
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="alliance",
+        label="paladin Charger epic mount (level 60)",
+        quests=(
+            QuestRaceGate(7637, 1519, 1029),
+            QuestRaceGate(7638, 1519, 1029),
+            QuestRaceGate(7639, 1519, 1029),
+            QuestRaceGate(7640, 1519, 1029),
+            QuestRaceGate(7641, 1519, 1029),
+            QuestRaceGate(7642, 1519, 1029),
+            QuestRaceGate(7643, 1519, 1029),
+            QuestRaceGate(7644, 1519, 1029),
+            QuestRaceGate(7645, 1519, 1029),
+            QuestRaceGate(7646, 1519, 1029),
+            QuestRaceGate(7647, 1519, 1029),
+            QuestRaceGate(7670, 1519, 1029),
+        ),
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="horde",
+        label="paladin Blood Knight trials + weapon (Silvermoon)",
+        quests=(
+            QuestRaceGate(10069, 3487, 512),  # Well Watcher Solanian
+            QuestRaceGate(9681, 3487, 512),  # A Study in Power (L12)
+            QuestRaceGate(9686, 3487, 512),  # The Second Trial (L20)
+            QuestRaceGate(9690, 3487, 512),
+            QuestRaceGate(9691, 3487, 512),
+            QuestRaceGate(9692, 3487, 512),
+            QuestRaceGate(9707, 3487, 512),
+            QuestRaceGate(9710, 3487, 512),  # The Blood-Tempered Ranseur
+        ),
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="horde",
+        label="paladin Thalassian Warhorse (level 40)",
+        quests=(QuestRaceGate(9712, 3487, 512),),
+    ),
+    FactionQuestChain(
+        class_id=PALADIN_CLASS_ID,
+        faction="horde",
+        label="paladin Blood Knight charger (level 60)",
+        quests=(
+            QuestRaceGate(9721, 3487, 512),
+            QuestRaceGate(9722, 3487, 512),
+            QuestRaceGate(9723, 3487, 512),
+            QuestRaceGate(9735, 3487, 512),
+            QuestRaceGate(9736, 3487, 512),
+            QuestRaceGate(9737, 3487, 512),
         ),
     ),
 )
