@@ -101,6 +101,39 @@ UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 6001;
 -- quest 6002: tier faction (§8.3) (stock 32 -> 690)
 --   mod-uac: druid bear form (Mulgore) faction unlock
 UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 6002;
+-- quest 9500: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Water (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9500;
+-- quest 9501: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Water (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9501;
+-- quest 9503: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Water (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9503;
+-- quest 9504: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Water (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9504;
+-- quest 9508: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Water (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9508;
+-- quest 9509: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Water (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9509;
+-- quest 9547: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Air (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9547;
+-- quest 9551: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Air (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9551;
+-- quest 9552: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Air (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9552;
+-- quest 9553: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Air (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9553;
+-- quest 9554: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Air (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9554;
 -- quest 9598: tier faction (§8.3) (stock 1024 -> 1101)
 --   mod-uac: paladin Redemption (Azuremyst) faction unlock
 UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 9598;
@@ -122,3 +155,9 @@ UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 9684;
 -- quest 9685: tier faction (§8.3) (stock 512 -> 690)
 --   mod-uac: paladin Redemption (Eversong) faction unlock
 UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 9685;
+-- quest 10490: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Water (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 10490;
+-- quest 10491: tier faction (§8.3) (stock 1024 -> 1101)
+--   mod-uac: shaman Call of Air (Azuremyst) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 10491;
