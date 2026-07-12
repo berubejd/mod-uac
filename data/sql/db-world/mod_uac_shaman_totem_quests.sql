@@ -17,7 +17,7 @@ My own people crossed the Great Dark to arrive here, and still the stone of this
 
 Set down your weapon. Put your hands flat upon the ground and stop speaking. The earth has no use for petition. It wishes only to be acknowledged.', NULL, 'The earth has answered.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `quest_template_addon` (`ID`, `MaxLevel`, `AllowableClasses`, `SourceSpellID`, `PrevQuestID`, `NextQuestID`, `ExclusiveGroup`, `BreadcrumbForQuestId`, `RewardMailTemplateID`, `RewardMailDelay`, `RequiredSkillID`, `RequiredSkillPoints`, `RequiredMinRepFaction`, `RequiredMaxRepFaction`, `RequiredMinRepValue`, `RequiredMaxRepValue`, `ProvidedItemCount`, `SpecialFlags`) VALUES (6000000, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `Emote2`, `Emote3`, `Emote4`, `EmoteDelay1`, `EmoteDelay2`, `EmoteDelay3`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES (6000000, 0, 0, 0, 0, 0, 0, 0, 0, 'It heard you. I saw the moment it did -- you did not, but I did.
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `Emote2`, `Emote3`, `Emote4`, `EmoteDelay1`, `EmoteDelay2`, `EmoteDelay3`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES (6000000, 0, 0, 0, 0, 0, 0, 0, 0, 'It heard you. I saw the moment it did... you did not, but I did.
 
 Carry this. It is not a weapon and it is not a charm. It is a place for the earth to stand when you call it, and it will not answer without one.', NULL);
 INSERT INTO `creature_queststarter` (`id`, `quest`) VALUES (17089, 6000000);
@@ -32,7 +32,7 @@ Kneel. Lay your hand against the ground. Ask it for nothing. Only let it know th
 INSERT INTO `quest_template_addon` (`ID`, `MaxLevel`, `AllowableClasses`, `SourceSpellID`, `PrevQuestID`, `NextQuestID`, `ExclusiveGroup`, `BreadcrumbForQuestId`, `RewardMailTemplateID`, `RewardMailDelay`, `RequiredSkillID`, `RequiredSkillPoints`, `RequiredMinRepFaction`, `RequiredMaxRepFaction`, `RequiredMinRepValue`, `RequiredMaxRepValue`, `ProvidedItemCount`, `SpecialFlags`) VALUES (6000001, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `Emote2`, `Emote3`, `Emote4`, `EmoteDelay1`, `EmoteDelay2`, `EmoteDelay3`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES (6000001, 0, 0, 0, 0, 0, 0, 0, 0, 'There. You felt that, and you did not expect to.
 
-Take this totem. It is not the source of your power -- you are. It is only the ground the earth needs beneath it before it will rise for you.', NULL);
+Take this totem. It is not the source of your power... you are. It is only the ground the earth needs beneath it before it will rise for you.', NULL);
 INSERT INTO `creature_queststarter` (`id`, `quest`) VALUES (3062, 6000001);
 INSERT INTO `creature_questender` (`id`, `quest`) VALUES (3062, 6000001);
 
