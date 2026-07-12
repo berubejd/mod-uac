@@ -463,7 +463,7 @@ uninstall restores stock addon rows when emitted.
 | Class | Stock gate | Reference chains (stock masks) | Notes |
 |-------|------------|----------------------------------|-------|
 | **Warrior** | Defensive Stance ~10 | Horde: Path of Defense etc. (`690` already). Alliance: Dwarf IF `1678–1679` (`68` → `1101`); NE line already `1101` | Only **1 new combo** (BE warrior). Tier B/C → quest patch, not spell grant. |
-| **Shaman** | Earth totem **4**, Fire **10**, Water **20** | Orc `1516–1518` (`130` → `690`), Tauren `1519–1521` (`32` → `690`); Draenei `9449–9451` already `1101`; Fire/Water already faction-wide in stock | Faction-wide unlock + anti-gray is the default. |
+| **Shaman** | Earth **4**, Fire **10**, Water **20**, Air **30** | Earth: Orc `1516–1518` (`130`→`690`), Tauren `1519–1521` (`32`→`690`), Draenei `9449–9451` already `1101`. Fire: Horde `690` / Alliance `1101` already. **Water & Air Alliance chains are Draenei-only** (`1024`→`1101`): Water `9500/9501/9503/9504/9508/9509/10490`, Air `9547/9551/9552/9553/9554/10491`. Horde Water/Air already `690`. | Faction-wide unlock. DB-verified: the open Water entry `9502` (`0`) dead-ends into `9501` (`1024`), so the whole chain body must be patched, not just entries. |
 | **Druid** | Bear form **10** | NE `5921→6001` (`8` → `1101`), Tauren `5922→6002` (`32` → `690`); Moonglade + Body and Heart | Eight new druid combos travel to the appropriate reference chain. |
 | **Paladin** | Redemption **12** | Human SW `1642→1788` (`1` → `1101`), Dwarf IF `1646→1785` (`4` → `1101`), Draenei `9598→9600` (`1024` → `1101`), BE `9676→9685` (`512` → `690`) | Horde paladins reach Eversong; gnome paladin uses IF chain (tier **A**). |
 
@@ -476,6 +476,15 @@ uninstall restores stock addon rows when emitted.
 **Emitter:** `FACTION_UNLOCK_CHAINS` in `class_quest_catalog.py`; `compute_faction_quest_patches()`
 in `emit_class_quest.py` merges with warlock per-combo patches; optional `quest_template_addon`
 install/uninstall pair for anti-gray rows.
+
+**Shaman totem chains (DB-verified, shipped).** Live `acore_world` inspection confirmed the level
+10/20/30 totem chains are faction-gated, not race-gated, *except* the Alliance Call of Water (20)
+and Call of Air (30) chains, which exist only as the Draenei chain (mask `1024`) on Azuremyst.
+Follow-up steps are gated identically to their entries, and the one open Water entry (`9502`,
+mask `0`) dead-ends into the Draenei-only `9501`. `FACTION_UNLOCK_CHAINS` therefore widens the full
+Water/Air chain bodies `1024`→`1101`; Fire and all Horde chains need no patch. Mainland Earthen Ring
+emissaries (Farseer Umbrua/Stormwind, Farseer Javad) already offer entries, so the only real gate is
+`AllowableRaces`.
 
 ### Phase 2 — gameplay QA + polish
 
@@ -514,6 +523,14 @@ install/uninstall pair for anti-gray rows.
    fallback reserved for gameplay QA if travel proves insufficient.
 6. **`mod-playerbots` combo enumeration** — **resolved.** New combos work once `playercreateinfo`
    rows are applied; verified on Playerbot-branch AzerothCore.
+7. **Catalog stock-mask drift guard** — **open.** The class-quest chains in `class_quest_catalog.py`
+   (`WARLOCK_CHAINS`, `HUNTER_CHAINS`, `FACTION_UNLOCK_CHAINS`) are hand-curated constants: quest IDs
+   and `stock_allowable_races` / `stock_max_level` are authored, not read from the DB. The snapshot
+   contributes only the `quest_template` *schema* (column layout), so nothing verifies the hardcoded
+   stock masks still match a given operator's live `quest_template.AllowableRaces`. On a customized
+   world DB, uninstall could "revert" a quest to a value that was never its stock mask. Proposed fix:
+   a `--verify-catalog` mode (or test) that cross-checks each catalogued `stock_allowable_races`
+   against a captured snapshot and flags mismatches. Manual DB verification is the interim safeguard.
 
 ---
 

@@ -78,9 +78,25 @@ def test_faction_unlock_warrior_ironforge_chain() -> None:
 def test_faction_unlock_shaman_horde_earth_chains() -> None:
     result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
     shaman = _faction_patches_for_class(result, 7)
-    assert set(shaman) == {1516, 1517, 1518, 1519, 1520, 1521}
+    horde = {qid for qid, p in shaman.items() if p.new_allowable_races == HORDE_FACTION_MASK}
+    assert horde == {1516, 1517, 1518, 1519, 1520, 1521}
     assert shaman[1516].new_allowable_races == HORDE_FACTION_MASK
     assert shaman[1519].new_allowable_races == HORDE_FACTION_MASK
+
+
+def test_faction_unlock_shaman_alliance_water_air_chains() -> None:
+    result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
+    shaman = _faction_patches_for_class(result, 7)
+    alliance = {qid for qid, p in shaman.items() if p.new_allowable_races == ALLIANCE_FACTION_MASK}
+    # Call of Water (20) + Call of Air (30) exist only as the Draenei chain on
+    # the Alliance side; stock Call of Fire (10) is already faction-wide (1101).
+    assert alliance == {
+        9500, 9501, 9503, 9504, 9508, 9509, 10490,  # Call of Water
+        9547, 9551, 9552, 9553, 9554, 10491,  # Call of Air
+    }
+    # Each widens stock Draenei-only (1024) to the full Alliance mask.
+    assert all(shaman[qid].original_allowable_races == 1024 for qid in alliance)
+    assert all(shaman[qid].new_allowable_races == ALLIANCE_FACTION_MASK for qid in alliance)
 
 
 def test_faction_unlock_druid_bear_chains() -> None:

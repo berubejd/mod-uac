@@ -150,6 +150,40 @@ FACTION_UNLOCK_CHAINS: tuple[FactionQuestChain, ...] = (
             QuestRaceGate(1521, 215, 32),
         ),
     ),
+    # Call of Water (level 20) and Call of Air (level 30) exist only as the
+    # Draenei chain on the Alliance side (mask 1024) — there is no Eastern
+    # Kingdoms equivalent. Stock Call of Fire is already 1101, so it needs no
+    # patch. The open entry 9502 (mask 0) is a dead end because step 9501 and
+    # every follow-up are Draenei-gated, so the whole chain body is unlocked.
+    # Mainland Earthen Ring emissaries (Farseer Umbrua in Stormwind, Farseer
+    # Javad) offer 10490/10491/9547; body + turn-ins are on Azuremyst (3524).
+    FactionQuestChain(
+        class_id=SHAMAN_CLASS_ID,
+        faction="alliance",
+        label="shaman Call of Water (Azuremyst)",
+        quests=(
+            QuestRaceGate(9500, 3524, 1024),
+            QuestRaceGate(9501, 3524, 1024),
+            QuestRaceGate(9503, 3524, 1024),
+            QuestRaceGate(9504, 3524, 1024),
+            QuestRaceGate(9508, 3524, 1024),
+            QuestRaceGate(9509, 3524, 1024),
+            QuestRaceGate(10490, 1519, 1024),
+        ),
+    ),
+    FactionQuestChain(
+        class_id=SHAMAN_CLASS_ID,
+        faction="alliance",
+        label="shaman Call of Air (Azuremyst)",
+        quests=(
+            QuestRaceGate(9547, 3524, 1024),
+            QuestRaceGate(9551, 3524, 1024),
+            QuestRaceGate(9552, 3524, 1024),
+            QuestRaceGate(9553, 3524, 1024),
+            QuestRaceGate(9554, 3524, 1024),
+            QuestRaceGate(10491, 1519, 1024),
+        ),
+    ),
     FactionQuestChain(
         class_id=DRUID_CLASS_ID,
         faction="alliance",
