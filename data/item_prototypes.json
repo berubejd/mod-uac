@@ -1,7 +1,7 @@
 {
-  "captured_at": "2026-07-07T04:36:17.276448+00:00",
-  "source": "azerothcore-wotlk base item_template.sql bootstrap",
-  "version": "bootstrap",
+  "captured_at": "2026-07-12T17:58:19.192898+00:00",
+  "source": "127.0.0.1;3306;root;***;acore_world",
+  "version": "ACDB 335.17-dev",
   "items": {
     "35": [
       2,

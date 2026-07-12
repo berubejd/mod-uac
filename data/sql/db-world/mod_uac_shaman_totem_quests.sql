@@ -1,0 +1,48 @@
+-- mod-uac: level-4 Earth Totem access for displaced shaman races (Call of Earth).
+-- Two zero-objective quests reward item 5175 (Earth Totem) from the mod-uac shaman
+-- starter trainers; the Draenei vanilla chain is re-narrowed so every race has exactly
+-- one Earth-Totem path (mask partition: 77 + 528 + 130 + 32 + 1024 = 1791).
+
+-- Idempotent: clear the reserved quest band before re-inserting.
+DELETE FROM `creature_queststarter` WHERE `quest` BETWEEN 6000000 AND 6009999;
+DELETE FROM `creature_questender` WHERE `quest` BETWEEN 6000000 AND 6009999;
+DELETE FROM `quest_offer_reward` WHERE `ID` BETWEEN 6000000 AND 6009999;
+DELETE FROM `quest_template_addon` WHERE `ID` BETWEEN 6000000 AND 6009999;
+DELETE FROM `quest_template` WHERE `ID` BETWEEN 6000000 AND 6009999;
+
+-- alliance: quest 6000000, AllowableRaces 77, trainer entry 17089
+INSERT INTO `quest_template` (`ID`, `QuestType`, `QuestLevel`, `MinLevel`, `QuestSortID`, `QuestInfoID`, `SuggestedGroupNum`, `RequiredFactionId1`, `RequiredFactionId2`, `RequiredFactionValue1`, `RequiredFactionValue2`, `RewardNextQuest`, `RewardXPDifficulty`, `RewardMoney`, `RewardMoneyDifficulty`, `RewardDisplaySpell`, `RewardSpell`, `RewardHonor`, `RewardKillHonor`, `StartItem`, `Flags`, `RequiredPlayerKills`, `RewardItem1`, `RewardAmount1`, `RewardItem2`, `RewardAmount2`, `RewardItem3`, `RewardAmount3`, `RewardItem4`, `RewardAmount4`, `ItemDrop1`, `ItemDropQuantity1`, `ItemDrop2`, `ItemDropQuantity2`, `ItemDrop3`, `ItemDropQuantity3`, `ItemDrop4`, `ItemDropQuantity4`, `RewardChoiceItemID1`, `RewardChoiceItemQuantity1`, `RewardChoiceItemID2`, `RewardChoiceItemQuantity2`, `RewardChoiceItemID3`, `RewardChoiceItemQuantity3`, `RewardChoiceItemID4`, `RewardChoiceItemQuantity4`, `RewardChoiceItemID5`, `RewardChoiceItemQuantity5`, `RewardChoiceItemID6`, `RewardChoiceItemQuantity6`, `POIContinent`, `POIx`, `POIy`, `POIPriority`, `RewardTitle`, `RewardTalents`, `RewardArenaPoints`, `RewardFactionID1`, `RewardFactionValue1`, `RewardFactionOverride1`, `RewardFactionID2`, `RewardFactionValue2`, `RewardFactionOverride2`, `RewardFactionID3`, `RewardFactionValue3`, `RewardFactionOverride3`, `RewardFactionID4`, `RewardFactionValue4`, `RewardFactionOverride4`, `RewardFactionID5`, `RewardFactionValue5`, `RewardFactionOverride5`, `TimeAllowed`, `AllowableRaces`, `LogTitle`, `LogDescription`, `QuestDescription`, `AreaDescription`, `QuestCompletionLog`, `RequiredNpcOrGo1`, `RequiredNpcOrGo2`, `RequiredNpcOrGo3`, `RequiredNpcOrGo4`, `RequiredNpcOrGoCount1`, `RequiredNpcOrGoCount2`, `RequiredNpcOrGoCount3`, `RequiredNpcOrGoCount4`, `RequiredItemId1`, `RequiredItemId2`, `RequiredItemId3`, `RequiredItemId4`, `RequiredItemId5`, `RequiredItemId6`, `RequiredItemCount1`, `RequiredItemCount2`, `RequiredItemCount3`, `RequiredItemCount4`, `RequiredItemCount5`, `RequiredItemCount6`, `Unknown0`, `ObjectiveText1`, `ObjectiveText2`, `ObjectiveText3`, `ObjectiveText4`, `VerifiedBuild`) VALUES (6000000, 2, 4, 4, -82, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 5175, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 77, 'Call of Earth', 'Commune with the earth at Firmanvaar''s side.', 'You were not born to this, and so you believe the earth is a stranger to you. It is not. It has simply been waiting to be addressed.
+
+My own people crossed the Great Dark to arrive here, and still the stone of this world knew us. Do you imagine it will refuse you, who were born of it?
+
+Set down your weapon. Put your hands flat upon the ground and stop speaking. The earth has no use for petition. It wishes only to be acknowledged.', NULL, 'The earth has answered.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `quest_template_addon` (`ID`, `MaxLevel`, `AllowableClasses`, `SourceSpellID`, `PrevQuestID`, `NextQuestID`, `ExclusiveGroup`, `BreadcrumbForQuestId`, `RewardMailTemplateID`, `RewardMailDelay`, `RequiredSkillID`, `RequiredSkillPoints`, `RequiredMinRepFaction`, `RequiredMaxRepFaction`, `RequiredMinRepValue`, `RequiredMaxRepValue`, `ProvidedItemCount`, `SpecialFlags`) VALUES (6000000, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `Emote2`, `Emote3`, `Emote4`, `EmoteDelay1`, `EmoteDelay2`, `EmoteDelay3`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES (6000000, 0, 0, 0, 0, 0, 0, 0, 0, 'It heard you. I saw the moment it did -- you did not, but I did.
+
+Carry this. It is not a weapon and it is not a charm. It is a place for the earth to stand when you call it, and it will not answer without one.', NULL);
+INSERT INTO `creature_queststarter` (`id`, `quest`) VALUES (17089, 6000000);
+INSERT INTO `creature_questender` (`id`, `quest`) VALUES (17089, 6000000);
+
+-- horde: quest 6000001, AllowableRaces 528, trainer entry 3062
+INSERT INTO `quest_template` (`ID`, `QuestType`, `QuestLevel`, `MinLevel`, `QuestSortID`, `QuestInfoID`, `SuggestedGroupNum`, `RequiredFactionId1`, `RequiredFactionId2`, `RequiredFactionValue1`, `RequiredFactionValue2`, `RewardNextQuest`, `RewardXPDifficulty`, `RewardMoney`, `RewardMoneyDifficulty`, `RewardDisplaySpell`, `RewardSpell`, `RewardHonor`, `RewardKillHonor`, `StartItem`, `Flags`, `RequiredPlayerKills`, `RewardItem1`, `RewardAmount1`, `RewardItem2`, `RewardAmount2`, `RewardItem3`, `RewardAmount3`, `RewardItem4`, `RewardAmount4`, `ItemDrop1`, `ItemDropQuantity1`, `ItemDrop2`, `ItemDropQuantity2`, `ItemDrop3`, `ItemDropQuantity3`, `ItemDrop4`, `ItemDropQuantity4`, `RewardChoiceItemID1`, `RewardChoiceItemQuantity1`, `RewardChoiceItemID2`, `RewardChoiceItemQuantity2`, `RewardChoiceItemID3`, `RewardChoiceItemQuantity3`, `RewardChoiceItemID4`, `RewardChoiceItemQuantity4`, `RewardChoiceItemID5`, `RewardChoiceItemQuantity5`, `RewardChoiceItemID6`, `RewardChoiceItemQuantity6`, `POIContinent`, `POIx`, `POIy`, `POIPriority`, `RewardTitle`, `RewardTalents`, `RewardArenaPoints`, `RewardFactionID1`, `RewardFactionValue1`, `RewardFactionOverride1`, `RewardFactionID2`, `RewardFactionValue2`, `RewardFactionOverride2`, `RewardFactionID3`, `RewardFactionValue3`, `RewardFactionOverride3`, `RewardFactionID4`, `RewardFactionValue4`, `RewardFactionOverride4`, `RewardFactionID5`, `RewardFactionValue5`, `RewardFactionOverride5`, `TimeAllowed`, `AllowableRaces`, `LogTitle`, `LogDescription`, `QuestDescription`, `AreaDescription`, `QuestCompletionLog`, `RequiredNpcOrGo1`, `RequiredNpcOrGo2`, `RequiredNpcOrGo3`, `RequiredNpcOrGo4`, `RequiredNpcOrGoCount1`, `RequiredNpcOrGoCount2`, `RequiredNpcOrGoCount3`, `RequiredNpcOrGoCount4`, `RequiredItemId1`, `RequiredItemId2`, `RequiredItemId3`, `RequiredItemId4`, `RequiredItemId5`, `RequiredItemId6`, `RequiredItemCount1`, `RequiredItemCount2`, `RequiredItemCount3`, `RequiredItemCount4`, `RequiredItemCount5`, `RequiredItemCount6`, `Unknown0`, `ObjectiveText1`, `ObjectiveText2`, `ObjectiveText3`, `ObjectiveText4`, `VerifiedBuild`) VALUES (6000001, 2, 4, 4, -82, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 5175, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 528, 'Call of Earth', 'Commune with the earth at Meela Dawnstrider''s side.', 'I have walked a long way from Mulgore to stand in this place, $N, and I will tell you what I told myself on the road: the earth does not keep the borders that we do.
+
+When I was taught, my elders sent me into the hills to search out the earth''s voice. You will not walk so far. The stone beneath us is older than every grievance buried in it, and it is already listening.
+
+Kneel. Lay your hand against the ground. Ask it for nothing. Only let it know that you have come.', NULL, 'The earth has answered.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `quest_template_addon` (`ID`, `MaxLevel`, `AllowableClasses`, `SourceSpellID`, `PrevQuestID`, `NextQuestID`, `ExclusiveGroup`, `BreadcrumbForQuestId`, `RewardMailTemplateID`, `RewardMailDelay`, `RequiredSkillID`, `RequiredSkillPoints`, `RequiredMinRepFaction`, `RequiredMaxRepFaction`, `RequiredMinRepValue`, `RequiredMaxRepValue`, `ProvidedItemCount`, `SpecialFlags`) VALUES (6000001, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `Emote2`, `Emote3`, `Emote4`, `EmoteDelay1`, `EmoteDelay2`, `EmoteDelay3`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES (6000001, 0, 0, 0, 0, 0, 0, 0, 0, 'There. You felt that, and you did not expect to.
+
+Take this totem. It is not the source of your power -- you are. It is only the ground the earth needs beneath it before it will rise for you.', NULL);
+INSERT INTO `creature_queststarter` (`id`, `quest`) VALUES (3062, 6000001);
+INSERT INTO `creature_questender` (`id`, `quest`) VALUES (3062, 6000001);
+
+-- Reset the vanilla Call of Earth chains to native races (authoritative).
+UPDATE `quest_template` SET `AllowableRaces` = 130 WHERE `ID` = 1516;
+UPDATE `quest_template` SET `AllowableRaces` = 130 WHERE `ID` = 1517;
+UPDATE `quest_template` SET `AllowableRaces` = 130 WHERE `ID` = 1518;
+UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 1519;
+UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 1520;
+UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 1521;
+UPDATE `quest_template` SET `AllowableRaces` = 1024 WHERE `ID` = 9449;
+UPDATE `quest_template` SET `AllowableRaces` = 1024 WHERE `ID` = 9450;
+UPDATE `quest_template` SET `AllowableRaces` = 1024 WHERE `ID` = 9451;

@@ -75,13 +75,14 @@ def test_faction_unlock_warrior_ironforge_chain() -> None:
     assert warrior[1678].new_allowable_races == ALLIANCE_FACTION_MASK
 
 
-def test_faction_unlock_shaman_horde_earth_chains() -> None:
+def test_call_of_earth_not_faction_unlocked() -> None:
+    # Call of Earth is handled by emit_totem_quest (synthetic quests + re-narrow),
+    # not by faction-wide AllowableRaces widening; the vanilla chains must stay
+    # untouched by the class-quest emitter.
     result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
     shaman = _faction_patches_for_class(result, 7)
-    horde = {qid for qid, p in shaman.items() if p.new_allowable_races == HORDE_FACTION_MASK}
-    assert horde == {1516, 1517, 1518, 1519, 1520, 1521}
-    assert shaman[1516].new_allowable_races == HORDE_FACTION_MASK
-    assert shaman[1519].new_allowable_races == HORDE_FACTION_MASK
+    earth_chain = {1516, 1517, 1518, 1519, 1520, 1521, 9449, 9450, 9451}
+    assert earth_chain.isdisjoint(shaman)
 
 
 def test_faction_unlock_shaman_alliance_water_air_chains() -> None:

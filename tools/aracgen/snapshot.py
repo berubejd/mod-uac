@@ -465,7 +465,7 @@ def capture_trainer_data(connection, creature_schema: TableSchema) -> dict[str, 
         }
 
         cursor.execute(
-            f"SELECT entry, name, subname, faction FROM creature_template "
+            f"SELECT entry, name, subname, faction, npcflag FROM creature_template "
             f"WHERE entry IN ({entry_placeholders})",
             entry_list,
         )
@@ -474,6 +474,7 @@ def capture_trainer_data(connection, creature_schema: TableSchema) -> dict[str, 
                 "name": row["name"],
                 "subname": row["subname"],
                 "faction": int(row["faction"]),
+                "npcflag": int(row["npcflag"]),
             }
             for row in cursor.fetchall()
         }

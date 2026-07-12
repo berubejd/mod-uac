@@ -130,26 +130,6 @@ FACTION_UNLOCK_CHAINS: tuple[FactionQuestChain, ...] = (
             QuestRaceGate(1679, 1, 68),
         ),
     ),
-    FactionQuestChain(
-        class_id=SHAMAN_CLASS_ID,
-        faction="horde",
-        label="shaman Call of Earth (Durotar)",
-        quests=(
-            QuestRaceGate(1516, 14, 130),
-            QuestRaceGate(1517, 14, 130),
-            QuestRaceGate(1518, 14, 130),
-        ),
-    ),
-    FactionQuestChain(
-        class_id=SHAMAN_CLASS_ID,
-        faction="horde",
-        label="shaman Call of Earth (Mulgore)",
-        quests=(
-            QuestRaceGate(1519, 215, 32),
-            QuestRaceGate(1520, 215, 32),
-            QuestRaceGate(1521, 215, 32),
-        ),
-    ),
     # Call of Water (level 20) and Call of Air (level 30) exist only as the
     # Draenei chain on the Alliance side (mask 1024) — there is no Eastern
     # Kingdoms equivalent. Stock Call of Fire is already 1101, so it needs no

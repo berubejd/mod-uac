@@ -22,24 +22,6 @@ UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 31;
 -- quest 272: tier faction (§8.3) (stock 8 -> 1101)
 --   mod-uac: druid Aquatic Form (Moonglade) faction unlock
 UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 272;
--- quest 1516: tier faction (§8.3) (stock 130 -> 690)
---   mod-uac: shaman Call of Earth (Durotar) faction unlock
-UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 1516;
--- quest 1517: tier faction (§8.3) (stock 130 -> 690)
---   mod-uac: shaman Call of Earth (Durotar) faction unlock
-UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 1517;
--- quest 1518: tier faction (§8.3) (stock 130 -> 690)
---   mod-uac: shaman Call of Earth (Durotar) faction unlock
-UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 1518;
--- quest 1519: tier faction (§8.3) (stock 32 -> 690)
---   mod-uac: shaman Call of Earth (Mulgore) faction unlock
-UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 1519;
--- quest 1520: tier faction (§8.3) (stock 32 -> 690)
---   mod-uac: shaman Call of Earth (Mulgore) faction unlock
-UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 1520;
--- quest 1521: tier faction (§8.3) (stock 32 -> 690)
---   mod-uac: shaman Call of Earth (Mulgore) faction unlock
-UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 1521;
 -- quest 1599: tier A (stock 64 -> 68)
 UPDATE `quest_template` SET `AllowableRaces` = 68 WHERE `ID` = 1599;
 -- quest 1641: tier faction (§8.3) (stock 1 -> 1101)

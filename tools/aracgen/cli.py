@@ -18,6 +18,7 @@ from aracgen.emit_player import PlayerCreateEmitter, build_resolver
 from aracgen.emit_racials import RacialAbilityEmitter
 from aracgen.emit_skill import SkillOverlayEmitter
 from aracgen.emit_totem import TotemEmitter
+from aracgen.emit_totem_quest import TotemQuestEmitter
 from aracgen.emit_trainers import (
     DEFAULT_TRAINER_OVERRIDES_PATH,
     TrainerEmitter,
@@ -285,6 +286,29 @@ def write_totem_sql(
 
     race_ids = sorted({row.race_id for row in result.rows})
     print(f"Wrote {install_path} ({len(result.rows)} totem rows, races {race_ids})")
+    print(f"Wrote {uninstall_path}")
+
+
+def write_totem_quest_sql(
+    install_path: Path,
+    uninstall_path: Path,
+    *,
+    snapshot: Snapshot | None = None,
+    overrides_path: Path | None = None,
+) -> None:
+    emitter = TotemQuestEmitter(snapshot=snapshot, overrides_path=overrides_path)
+    result = emitter.compute()
+
+    install_path.parent.mkdir(parents=True, exist_ok=True)
+    uninstall_path.parent.mkdir(parents=True, exist_ok=True)
+    install_path.write_text(emitter.render_install(result), encoding="utf-8")
+    uninstall_path.write_text(emitter.render_uninstall(result), encoding="utf-8")
+
+    entries = ", ".join(
+        f"{faction}->q{result.quest_ids[faction]}@{result.trainer_entries[faction]}"
+        for faction in result.quest_ids
+    )
+    print(f"Wrote {install_path} (synthetic Call of Earth quests: {entries})")
     print(f"Wrote {uninstall_path}")
 
 
