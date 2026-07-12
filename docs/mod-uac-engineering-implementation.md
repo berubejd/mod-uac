@@ -494,10 +494,11 @@ item `5175` (Earth Totem, `TotemCategory 2`). `emit_totem_quest.py` instead emit
 "Call of Earth" quests (reserved IDs `6000000`/`6000001`) attached to the shaman trainer entries
 mod-uac already places (derived from the trainer emitter and validated as QUESTGIVERs): Alliance
 `17089` (mask `77` = Human/Dwarf/NElf/Gnome), Horde `3062` (mask `528` = Undead/BElf). The vanilla
-chains re-narrow to native races — Orc/Troll `1516–1518` (`130`) and Tauren `1519–1521` (`32`) revert
-to stock by leaving `FACTION_UNLOCK_CHAINS`; Draenei `9449–9451` narrows `1101`→`1024`. The five paths
-partition all ten races exactly (`77 + 528 + 130 + 32 + 1024 = 1791`, no overlap), which also removes
-a duplicate-totem risk (`5175` is `NO_USER_DESTROY`). New schemas (`quest_offer_reward`,
+chains are authoritatively reset to their stock native masks — Orc/Troll `1516–1518` (`130`), Tauren
+`1519–1521` (`32`), Draenei `9449–9451` (`1024`, Draenei-only in stock AC; the reset also corrects
+live DBs that carry a contaminated `1101` here) — while being removed from `FACTION_UNLOCK_CHAINS`. The
+five paths partition all ten races exactly (`77 + 528 + 130 + 32 + 1024 = 1791`, no overlap), which
+also removes a duplicate-totem risk (`5175` is `NO_USER_DESTROY`). New schemas (`quest_offer_reward`,
 `creature_queststarter`, `creature_questender`) and `creature_template.npcflag` were added to the
 snapshot for schema-driven INSERTs and questgiver validation. **QA:** confirm the zero-objective quest
 auto-completes at the trainer in 3.3.5; if not, flip `EARTH_QUEST_TYPE` to `0`

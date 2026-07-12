@@ -105,10 +105,8 @@ EARTH_ACCESS_QUESTS: tuple[SyntheticTotemQuest, ...] = (
 
 # Vanilla Call of Earth chains reset to native races so displaced shamans use
 # the synthetic quests above instead of dead-ending here, and so the ten races
-# partition cleanly (no duplicate NO_USER_DESTROY totem). The Orc/Troll (130)
-# and Tauren (32) resets equal stock -- they are emitted authoritatively anyway
-# so an install over a prior faction-wide (690) mod-uac state self-corrects.
-# The Draenei chain is a genuine narrow (stock 1101 -> 1024).
+# partition cleanly (no duplicate NO_USER_DESTROY totem). All three chains are
+# Draenei/Orc-Troll/Tauren-only in stock AC.
 #   (quest_id, stock_allowable_races, native_allowable_races)
 EARTH_CHAIN_RENARROW: tuple[tuple[int, int, int], ...] = (
     (1516, 130, 130),  # Orc + Troll (Valley of Trials)
@@ -117,7 +115,7 @@ EARTH_CHAIN_RENARROW: tuple[tuple[int, int, int], ...] = (
     (1519, 32, 32),  # Tauren (Camp Narache)
     (1520, 32, 32),
     (1521, 32, 32),
-    (9449, 1101, 1024),  # Draenei (Ammen Vale) -- genuine narrow
-    (9450, 1101, 1024),
-    (9451, 1101, 1024),
+    (9449, 1024, 1024),  # Draenei (Ammen Vale) -- Draenei-only in stock AC
+    (9450, 1024, 1024),
+    (9451, 1024, 1024),
 )

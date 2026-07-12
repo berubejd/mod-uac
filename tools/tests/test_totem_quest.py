@@ -4,7 +4,6 @@ import copy
 from pathlib import Path
 
 import pytest
-
 from aracgen.emit_totem_quest import (
     TotemQuestEmitter,
     compute_totem_quests,
@@ -57,7 +56,9 @@ def test_questgiver_validation_rejects_non_questgiver(trainer_rows, snapshot):
 def test_earth_totem_paths_partition_all_races() -> None:
     # Every race reachable by exactly one Earth Totem path: masks disjoint, union 1791.
     synthetic = [quest.allowable_races for quest in EARTH_ACCESS_QUESTS]  # 77, 528
-    vanilla = {native for _qid, _stock, native in EARTH_CHAIN_RENARROW}  # {130, 32, 1024}
+    vanilla = {
+        native for _qid, _stock, native in EARTH_CHAIN_RENARROW
+    }  # {130, 32, 1024}
     masks = [*synthetic, *vanilla]
 
     union = 0
@@ -77,8 +78,14 @@ def test_install_rewards_earth_totem_and_renarrows(snapshot, trainer_rows):
 
     assert "`RewardItem1`" in install
     assert str(EARTH_TOTEM_ITEM_ID) in install
-    assert "INSERT INTO `creature_queststarter` (`id`, `quest`) VALUES (17089, 6000000)" in install
-    assert "INSERT INTO `creature_questender` (`id`, `quest`) VALUES (3062, 6000001)" in install
+    assert (
+        "INSERT INTO `creature_queststarter` (`id`, `quest`) VALUES (17089, 6000000)"
+        in install
+    )
+    assert (
+        "INSERT INTO `creature_questender` (`id`, `quest`) VALUES (3062, 6000001)"
+        in install
+    )
     for quest_id in (9449, 9450, 9451):
         assert f"SET `AllowableRaces` = 1024 WHERE `ID` = {quest_id}" in install
 
@@ -86,9 +93,13 @@ def test_install_rewards_earth_totem_and_renarrows(snapshot, trainer_rows):
 def test_uninstall_restores_stock_and_clears_band(snapshot):
     emitter = TotemQuestEmitter(snapshot=snapshot)
     uninstall = emitter.render_uninstall()
-    assert "DELETE FROM `quest_template` WHERE `ID` BETWEEN 6000000 AND 6009999" in uninstall
+    assert (
+        "DELETE FROM `quest_template` WHERE `ID` BETWEEN 6000000 AND 6009999"
+        in uninstall
+    )
+    # 9449-9451 are Draenei-only (1024) in stock AC, so uninstall restores 1024.
     for quest_id in (9449, 9450, 9451):
-        assert f"SET `AllowableRaces` = 1101 WHERE `ID` = {quest_id}" in uninstall
+        assert f"SET `AllowableRaces` = 1024 WHERE `ID` = {quest_id}" in uninstall
 
 
 def test_install_sql_matches_checked_in_artifact(snapshot) -> None:
