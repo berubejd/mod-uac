@@ -464,7 +464,7 @@ uninstall restores stock addon rows when emitted.
 |-------|------------|----------------------------------|-------|
 | **Warrior** | Defensive Stance ~10 | Horde: Path of Defense etc. (`690` already). Alliance: Dwarf IF `1678–1679` (`68` → `1101`); NE line already `1101` | Only **1 new combo** (BE warrior). Tier B/C → quest patch, not spell grant. |
 | **Shaman** | Earth **4**, Fire **10**, Water **20**, Air **30** | Earth: Orc `1516–1518` (`130`→`690`), Tauren `1519–1521` (`32`→`690`), Draenei `9449–9451` already `1101`. Fire: Horde `690` / Alliance `1101` already. **Water & Air Alliance chains are Draenei-only** (`1024`→`1101`): Water `9500/9501/9503/9504/9508/9509/10490`, Air `9547/9551/9552/9553/9554/10491`. Horde Water/Air already `690`. | Faction-wide unlock. DB-verified: the open Water entry `9502` (`0`) dead-ends into `9501` (`1024`), so the whole chain body must be patched, not just entries. |
-| **Druid** | Bear form **10** | NE `5921→6001` (`8` → `1101`), Tauren `5922→6002` (`32` → `690`); Moonglade + Body and Heart | Eight new druid combos travel to the appropriate reference chain. |
+| **Druid** | Bear form **10**, Aquatic Form **16** | Bear: NE `5921→6001` (`8`→`1101`), Tauren `5922→6002` (`32`→`690`). Aquatic (spell `1446`): NE `5923/5924/5925/26/29/272/5061` (`8`→`1101`), Tauren `5926/5927/5928/27/28/30/31` (`32`→`690`) | New druid combos travel to the Moonglade trainers (same route as bear form). |
 | **Paladin** | Redemption **12**, weapon **20**, mounts **40/60** | Redemption L12 (Human SW `1642→1788`→`1101`, Dwarf IF `1646→1785`→`1101`, Draenei `9598→9600`→`1101`, BE `9676→9685`→`690`) **plus** full audit: Tome of Divinity roots/variants + Draenei "Jol" root `10366`, BE Second Trial weapon chain `9686–9710`, Charger `7637–7670` (`1029`→`1101`), BE warhorse `9712` + charger `9721–9737` (`512`→`690`) | 62 faction patches. Excludes `9287` (hard-blocked behind Draenei-only prereq `9280`). |
 
 **Tier C spell-grant exceptions (keep rare):**
@@ -498,6 +498,24 @@ hunter pet). **Excluded:** `9287` ("Paladin Training", Draenei), hard-blocked be
 Draenei-only non-class prereq `9280`, so unlocking is futile. Cross-race Redemption is safe: all four
 chains reward the same spell (`7329`) with `ExclusiveGroup = 0`, so re-completion by a paladin who
 already knows Redemption is a harmless no-op.
+
+**All-class class-quest audit (DB-verified).** A full pass over every `AllowableClasses = <single
+class>` quest found 465 narrow-gated quests, but only **145** are same-faction *reachable* gaps
+(cross-faction variants sit behind hostile NPCs, and dual-faction classes already have faction-wide
+parallel chains). Because Shaman and Paladin were the only *single-faction* classes in vanilla, they
+held the bulk of the real gaps (handled above). The remaining reachable gaps were triaged:
+- **Druid Aquatic Form (spell `1446`)** — shipped, mirrors bear form (see druid row).
+- **Hunter pet taming** (~45 quests) — already solved by the `HunterPetEmitter` spell-grant kit
+  (§8.2): the taming abilities are granted directly since the L10 quests can't be done at creation,
+  matching the design that a class's primary skill shouldn't be race-blocked (Blizzard reverted that
+  gating in a later expansion). No quest unlock needed.
+- **Level-1/2 class intros + "X Training" + racial ability quests** (priest Desperate Prayer, Touch/
+  Hex of Weakness, Elune's Grace, etc.) — **not pursued**: unreachable behind racial-start prereqs in
+  race-specific zones, and/or vestigial in 3.3.5 (abilities removed or made baseline/trainer-taught),
+  so widening `AllowableRaces` would add revert rows that grant nothing.
+- **Misc single-race chain steps** (mage `1861` "Mirror Lake", warrior `2383/3065`) — no action:
+  `1861` has a faction-wide alternative (`1880`) in the same exclusive group, and the warrior intros
+  sit behind an Orc/Troll racial-start prereq unreachable to a Blood Elf warrior.
 
 ### Phase 2 — gameplay QA + polish
 

@@ -1,6 +1,27 @@
 -- mod-uac: quest_template AllowableRaces patches (Phase 1g)
 -- warlock tier A/B per-combo; §8.3 faction-wide unlock for travel-gated classes
 
+-- quest 26: tier faction (§8.3) (stock 8 -> 1101)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 26;
+-- quest 27: tier faction (§8.3) (stock 32 -> 690)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 27;
+-- quest 28: tier faction (§8.3) (stock 32 -> 690)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 28;
+-- quest 29: tier faction (§8.3) (stock 8 -> 1101)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 29;
+-- quest 30: tier faction (§8.3) (stock 32 -> 690)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 30;
+-- quest 31: tier faction (§8.3) (stock 32 -> 690)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 31;
+-- quest 272: tier faction (§8.3) (stock 8 -> 1101)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 272;
 -- quest 1516: tier faction (§8.3) (stock 130 -> 690)
 --   mod-uac: shaman Call of Earth (Durotar) faction unlock
 UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 1516;
@@ -110,12 +131,33 @@ UPDATE `quest_template` SET `AllowableRaces` = 68 WHERE `ID` = 3115;
 -- quest 3681: tier faction (§8.3) (stock 1 -> 1101)
 --   mod-uac: paladin Tome of Divinity (Stormwind/Human) faction unlock
 UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 3681;
+-- quest 5061: tier faction (§8.3) (stock 8 -> 1101)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 5061;
 -- quest 5921: tier faction (§8.3) (stock 8 -> 1101)
 --   mod-uac: druid bear form (Teldrassil) faction unlock
 UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 5921;
 -- quest 5922: tier faction (§8.3) (stock 32 -> 690)
 --   mod-uac: druid bear form (Mulgore) faction unlock
 UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 5922;
+-- quest 5923: tier faction (§8.3) (stock 8 -> 1101)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 5923;
+-- quest 5924: tier faction (§8.3) (stock 8 -> 1101)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 5924;
+-- quest 5925: tier faction (§8.3) (stock 8 -> 1101)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 5925;
+-- quest 5926: tier faction (§8.3) (stock 32 -> 690)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 5926;
+-- quest 5927: tier faction (§8.3) (stock 32 -> 690)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 5927;
+-- quest 5928: tier faction (§8.3) (stock 32 -> 690)
+--   mod-uac: druid Aquatic Form (Moonglade) faction unlock
+UPDATE `quest_template` SET `AllowableRaces` = 690 WHERE `ID` = 5928;
 -- quest 5929: tier faction (§8.3) (stock 8 -> 1101)
 --   mod-uac: druid bear form (Teldrassil) faction unlock
 UPDATE `quest_template` SET `AllowableRaces` = 1101 WHERE `ID` = 5929;

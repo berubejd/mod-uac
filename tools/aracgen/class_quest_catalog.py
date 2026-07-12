@@ -206,6 +206,39 @@ FACTION_UNLOCK_CHAINS: tuple[FactionQuestChain, ...] = (
             QuestRaceGate(6002, 215, 32),
         ),
     ),
+    # Aquatic Form (spell 1446) mirrors the bear-form chain above: gated to the
+    # single stock druid race per faction (Night Elf / Tauren), routed through
+    # the same Moonglade trainers, so new druid combos have no reachable version.
+    # "Heeding the Call" is the level-10 breadcrumb into Moonglade (feeds the bear
+    # chain root 5921/5922); the trials 26/27 -> ... -> 5061/31 reward Aquatic Form.
+    FactionQuestChain(
+        class_id=DRUID_CLASS_ID,
+        faction="alliance",
+        label="druid Aquatic Form (Moonglade)",
+        quests=(
+            QuestRaceGate(5923, 141, 8),  # Heeding the Call (-> 5921)
+            QuestRaceGate(5924, 141, 8),
+            QuestRaceGate(5925, 141, 8),
+            QuestRaceGate(26, 493, 8),  # A Lesson to Learn
+            QuestRaceGate(29, 493, 8),  # Trial of the Lake
+            QuestRaceGate(272, 493, 8),  # Trial of the Sea Lion
+            QuestRaceGate(5061, 493, 8),  # Aquatic Form
+        ),
+    ),
+    FactionQuestChain(
+        class_id=DRUID_CLASS_ID,
+        faction="horde",
+        label="druid Aquatic Form (Moonglade)",
+        quests=(
+            QuestRaceGate(5926, 215, 32),  # Heeding the Call (-> 5922)
+            QuestRaceGate(5927, 215, 32),
+            QuestRaceGate(5928, 215, 32),
+            QuestRaceGate(27, 493, 32),  # A Lesson to Learn
+            QuestRaceGate(28, 493, 32),  # Trial of the Lake
+            QuestRaceGate(30, 493, 32),  # Trial of the Sea Lion
+            QuestRaceGate(31, 493, 32),  # Aquatic Form
+        ),
+    ),
     FactionQuestChain(
         class_id=PALADIN_CLASS_ID,
         faction="alliance",

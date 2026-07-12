@@ -102,9 +102,26 @@ def test_faction_unlock_shaman_alliance_water_air_chains() -> None:
 def test_faction_unlock_druid_bear_chains() -> None:
     result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
     druid = _faction_patches_for_class(result, 11)
-    assert set(druid) == {5921, 5922, 5929, 5930, 5931, 5932, 6001, 6002}
+    bear = {5921, 5922, 5929, 5930, 5931, 5932, 6001, 6002}
+    assert bear <= set(druid)
     assert druid[5921].new_allowable_races == ALLIANCE_FACTION_MASK
     assert druid[5922].new_allowable_races == HORDE_FACTION_MASK
+
+
+def test_faction_unlock_druid_aquatic_form_chains() -> None:
+    result = compute_class_quests(ComboMatrix.stock(), StockKitStore.load())
+    druid = _faction_patches_for_class(result, 11)
+    # Aquatic Form (spell 1446) mirrors bear form: NE (8) / Tauren (32) only.
+    alliance = {5923, 5924, 5925, 26, 29, 272, 5061}
+    horde = {5926, 5927, 5928, 27, 28, 30, 31}
+    for qid in alliance:
+        assert druid[qid].new_allowable_races == ALLIANCE_FACTION_MASK
+    for qid in horde:
+        assert druid[qid].new_allowable_races == HORDE_FACTION_MASK
+    assert druid[5061].original_allowable_races == 8  # NE Aquatic Form
+    assert druid[31].original_allowable_races == 32  # Tauren Aquatic Form
+    # Bear (8) + Aquatic (14) = 22 druid faction patches total.
+    assert len(druid) == 22
 
 
 def test_faction_unlock_paladin_chains() -> None:

@@ -1,5 +1,12 @@
 -- mod-uac: revert quest_template AllowableRaces patches
 
+UPDATE `quest_template` SET `AllowableRaces` = 8 WHERE `ID` = 26;
+UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 27;
+UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 28;
+UPDATE `quest_template` SET `AllowableRaces` = 8 WHERE `ID` = 29;
+UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 30;
+UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 31;
+UPDATE `quest_template` SET `AllowableRaces` = 8 WHERE `ID` = 272;
 UPDATE `quest_template` SET `AllowableRaces` = 130 WHERE `ID` = 1516;
 UPDATE `quest_template` SET `AllowableRaces` = 130 WHERE `ID` = 1517;
 UPDATE `quest_template` SET `AllowableRaces` = 130 WHERE `ID` = 1518;
@@ -37,8 +44,15 @@ UPDATE `quest_template` SET `AllowableRaces` = 1 WHERE `ID` = 3101;
 UPDATE `quest_template` SET `AllowableRaces` = 4 WHERE `ID` = 3107;
 UPDATE `quest_template` SET `AllowableRaces` = 64 WHERE `ID` = 3115;
 UPDATE `quest_template` SET `AllowableRaces` = 1 WHERE `ID` = 3681;
+UPDATE `quest_template` SET `AllowableRaces` = 8 WHERE `ID` = 5061;
 UPDATE `quest_template` SET `AllowableRaces` = 8 WHERE `ID` = 5921;
 UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 5922;
+UPDATE `quest_template` SET `AllowableRaces` = 8 WHERE `ID` = 5923;
+UPDATE `quest_template` SET `AllowableRaces` = 8 WHERE `ID` = 5924;
+UPDATE `quest_template` SET `AllowableRaces` = 8 WHERE `ID` = 5925;
+UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 5926;
+UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 5927;
+UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 5928;
 UPDATE `quest_template` SET `AllowableRaces` = 8 WHERE `ID` = 5929;
 UPDATE `quest_template` SET `AllowableRaces` = 32 WHERE `ID` = 5930;
 UPDATE `quest_template` SET `AllowableRaces` = 8 WHERE `ID` = 5931;
