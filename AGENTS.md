@@ -44,7 +44,8 @@ mod-uac/
       dbc.py  sources.py  matrix.py  kits.py
       emit_skill.py  emit_player.py  emit_totem.py  emit_class_quest.py
       emit_totem_quest.py  emit_hunter_pet.py  emit_trainers.py  emit_client.py  mpq.py
-      snapshot.py  trainer_catalog.py  class_quest_catalog.py  totem_quest_catalog.py  schema_emit.py
+      snapshot.py  trainer_catalog.py  capital_trainer_catalog.py  schema_emit.py
+      class_quest_catalog.py  totem_quest_catalog.py
   tools/capture_snapshot.py     # world DB snapshot capture (PyMySQL)
   tools/generate_local.py       # LocalDbcSource     -> operator SQL + standard MPQ
   tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + client MPQs
@@ -82,6 +83,22 @@ mod-uac/
   INSERT/REPLACE/UPDATE rows from the baked snapshot's `TableSchema` via
   `schema_emit.py` — column lists and defaults come from the operator's world DB
   capture (or AC base DDL bootstrap), not hardcoded in emitters.
+- **Source world facts from the snapshot, don't hardcode them.** Anything the
+  emitter needs to *know about the game world* — which NPCs exist and where they
+  spawn, what a trainer teaches, a quest's stock `AllowableRaces`/level, item
+  categories, coverage of a zone — must come from the captured snapshot
+  (`tools/capture_snapshot.py` → `data/snapshot/`), the same way starter and
+  capital trainers are placed by *reading* captured trainers rather than a table
+  of entries/coordinates. If you find yourself writing a literal NPC entry,
+  spawn coordinate, or "this city already has class X" list into an emitter or
+  catalog, stop: capture it instead (extend `capture_trainer_data` /
+  `SCHEMA_TABLES` and refresh the snapshot). The **only** things that may be
+  hardcoded are facts with *no data source* — e.g. capital geography
+  (`capital_trainer_catalog.py`: map/center/radius/faction/home-races, the analog
+  of the starter zones' `playercreateinfo` anchors) and the reference quest
+  chains in `class_quest_catalog.py` / `totem_quest_catalog.py`. Keep those
+  minimal, comment *why* they can't be captured, and cross-check them against the
+  live DB (see the §9.7 `--verify-catalog` drift-guard idea).
 
 ---
 

@@ -1,6 +1,6 @@
 -- mod-uac: curated starter-list class trainers for new race/class combos.
 -- One faction-matched starter trainer per uncovered class per starter zone.
-DELETE FROM `creature` WHERE `guid` BETWEEN 6000000 AND 6009999;
+DELETE FROM `creature` WHERE `guid` BETWEEN 6000000 AND 6004999;
 
 INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnMask`, `phaseMask`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `wander_distance`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`, `ScriptName`, `VerifiedBuild`, `CreateObject`, `Comment`) VALUES
 (6000000, 895, 0, 0, 0, 1, 1, 1, -8865.383, -210.32, 80.755, 4.4157, 180, 0, 0, 102, 0, 0, 0, 0, 0, '', 0, 0, 'mod-uac Northshire Hunter trainer'),

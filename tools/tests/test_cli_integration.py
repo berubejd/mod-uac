@@ -14,7 +14,11 @@ from aracgen.cli import (
 )
 from aracgen.emit_trainers import regenerate_checked_in_trainer_sql
 from aracgen.snapshot import load_snapshot, resolve_baked_snapshot_path
-from aracgen.snapshot_model import MOD_UAC_CREATURE_GUID_MAX
+from aracgen.snapshot_model import (
+    MOD_UAC_CAPITAL_GUID_MIN,
+    MOD_UAC_CREATURE_GUID_MAX,
+    MOD_UAC_STARTER_GUID_MAX,
+)
 from aracgen.trainer_catalog import TRAINER_GUID_BASE
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -101,5 +105,14 @@ def test_checked_in_trainer_sql_matches_regeneration() -> None:
 
 
 def test_validate_trainer_guid_base_rejects_outside_band() -> None:
-    with pytest.raises(ValueError, match="reserved creature band"):
+    with pytest.raises(ValueError, match="starter GUID sub-band"):
         validate_trainer_guid_base(MOD_UAC_CREATURE_GUID_MAX + 1)
+
+
+def test_validate_trainer_guid_base_rejects_capital_subband() -> None:
+    # Starter trainers must stay in the starter sub-band; the capital sub-band is
+    # reserved for the capital pass, so a base there must be rejected.
+    with pytest.raises(ValueError, match="starter GUID sub-band"):
+        validate_trainer_guid_base(MOD_UAC_CAPITAL_GUID_MIN)
+    # The starter sub-band ceiling is still accepted.
+    validate_trainer_guid_base(MOD_UAC_STARTER_GUID_MAX)

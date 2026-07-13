@@ -479,6 +479,8 @@ def capture_trainer_data(connection, creature_schema: TableSchema) -> dict[str, 
             for row in cursor.fetchall()
         }
 
+        capital_trainers = _capture_capital_trainers(cursor, entry_col)
+
     return {
         "playercreateinfo": playercreateinfo,
         "starter_zones": _starter_zones_payload(zone_boxes),
@@ -495,7 +497,62 @@ def capture_trainer_data(connection, creature_schema: TableSchema) -> dict[str, 
         "creature_template": {
             str(entry): meta for entry, meta in creature_template.items()
         },
+        "capital_trainers": capital_trainers,
     }
+
+
+CLASS_TRAINER_SUBNAME_REGEXP = (
+    "(Warrior|Paladin|Hunter|Rogue|Priest|Shaman|Mage|Warlock|Druid) Trainer"
+)
+
+
+def _capture_capital_trainers(cursor, entry_col: str) -> list[dict[str, Any]]:
+    """Capture active class-trainer spawns in each capital box for the capital pass.
+
+    Excludes mod-uac's own spawns (Comment / reserved GUID band) so re-capturing a
+    world that already has mod-uac applied still reads the clean AC-base trainers.
+    Only class trainers (subname ``<Class> Trainer``) are kept, to stay lean.
+    """
+    from aracgen.capital_trainer_catalog import CAPITAL_ZONES, capital_zone_sql_clause
+
+    clause, params = capital_zone_sql_clause(CAPITAL_ZONES)
+    cursor.execute(
+        f"""
+        SELECT c.{entry_col} AS entry, ct.name, ct.subname, c.map,
+               c.position_x AS x, c.position_y AS y, c.position_z AS z, c.orientation AS o,
+               COALESCE(ts.spells, 0) AS spells
+        FROM creature c
+        JOIN creature_template ct ON ct.entry = c.{entry_col}
+        JOIN creature_default_trainer cdt ON cdt.CreatureId = c.{entry_col}
+        LEFT JOIN game_event_creature gec ON gec.guid = c.guid
+        LEFT JOIN (
+            SELECT TrainerId, COUNT(*) AS spells FROM trainer_spell GROUP BY TrainerId
+        ) ts ON ts.TrainerId = cdt.TrainerId
+        WHERE gec.guid IS NULL
+          AND (c.Comment IS NULL OR c.Comment NOT LIKE 'mod-uac%%')
+          AND c.guid NOT BETWEEN %s AND %s
+          AND (ct.npcflag & 16) AND (c.spawnMask & 1)
+          AND ct.subname REGEXP %s
+          AND ({clause})
+        ORDER BY c.{entry_col}, c.guid
+        """,
+        (MOD_UAC_CREATURE_GUID_MIN, MOD_UAC_CREATURE_GUID_MAX,
+         CLASS_TRAINER_SUBNAME_REGEXP, *params),
+    )
+    return [
+        {
+            "entry": int(row["entry"]),
+            "name": row["name"],
+            "subname": row["subname"],
+            "map": int(row["map"]),
+            "x": float(row["x"]),
+            "y": float(row["y"]),
+            "z": float(row["z"]),
+            "o": float(row["o"]),
+            "spells": int(row["spells"]),
+        }
+        for row in cursor.fetchall()
+    ]
 
 
 def capture_snapshot(dsn: DatabaseDsn) -> Snapshot:

@@ -4,6 +4,7 @@ import copy
 from pathlib import Path
 
 import pytest
+
 from aracgen.emit_totem_quest import (
     TotemQuestEmitter,
     compute_totem_quests,

@@ -544,6 +544,27 @@ held the bulk of the real gaps (handled above). The remaining reachable gaps wer
   `data/snapshot/`) + `TrainerEmitter` → `mod_uac_starter_trainers.sql` (26 spawns, GUIDs
   `6000000–6000025`), placement worksheet, YAML overrides. Wired into `generate_canonical.py` /
   `generate_local.py`. Spec: [mod-uac-trainer-emitter-spec.md](mod-uac-trainer-emitter-spec.md).
+- **2c — Capital trainer coverage (complete, snapshot-driven).** Starter trainers only cover levels
+  ~1–10; a new combo then hits a wall at its **home capital** if that capital never trained the class
+  in stock. Handled the same **data-driven** way as starter trainers: `capture_trainer_data` records
+  every active class-trainer spawn in the 8 capitals as `capital_trainers` in the snapshot (mod-uac's
+  own spawns excluded by Comment + reserved GUID band, so re-capturing a modded world still reads the
+  clean AC-base trainers). The capital pass in `TrainerEmitter` derives, per capital, the classes
+  already present (**coverage**), the gap = *new-combo classes of that capital's home races* − present,
+  the reused **fullest** full class-trainer entry for the gap class in that faction, and the **anchor**
+  (a real captured capital trainer, placed via the same `select_anchor`/`plan_anchor_placement`
+  machinery as starter trainers). Emitted to their **own** file `mod_uac_capital_trainers.sql`
+  (+ uninstall + `capital_trainer_worksheet.md`) in a dedicated GUID sub-band `6005000–6009999` with a
+  scoped `DELETE` — starter trainers keep `6000000–6004999`, so the two files never clobber each other
+  regardless of apply order. Spawns inherit npcflag/equipment/health from the template (0 columns) and
+  are `trainer_overrides.yaml`-adjustable, keyed by `(capital, class)`. The only
+  curated input is `capital_trainer_catalog.py` — pure **geography** (each capital's map/center/radius/
+  faction/home-races), the capital analog of the starter zones' `playercreateinfo`-derived boxes.
+  Result: **14 trainers** (16 combo gaps; Ironforge/Orgrimmar druid each serve two races) — Darnassus
+  shaman+warlock, Undercity shaman+hunter+druid, Silvermoon shaman+warrior, Thunder Bluff
+  paladin+rogue+warlock, Ironforge druid, Orgrimmar druid, Exodar rogue+warlock — clustering on the
+  vanilla single-faction/-race classes (shaman, paladin, druid). A test asserts the emitter reproduces
+  exactly this DB-audited gap set.
 - **2e — Schema contract retrofit (complete).** All world-table emitters
   (`emit_skill`, `emit_player`, `emit_totem`, `emit_class_quest`, `emit_totem_quest`,
   `emit_hunter_pet`, `emit_trainers`) render SQL from snapshot `TableSchema` via `schema_emit.py`;
