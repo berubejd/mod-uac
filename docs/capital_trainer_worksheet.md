@@ -5,7 +5,9 @@ show the computed placement before override.
 
 ## Ironforge (map 0, zone 0)
 
-- **Druid** guid `6005000`: entry `4217` (Mathrengyl Bearwalker) — anchor Shaman (Farseer Javad) @ (-4721.417, -1148.439, 502.448, o=3.7584)
+- **Druid** guid `6005000`: entry `4217` (Mathrengyl Bearwalker) — anchor Shaman (Farseer Javad)
+  - emitted: (-4715.826, -1152.5818, 502.44772, o=2.899206)
+  - computed: (-4721.417, -1148.439, 502.448, o=3.7584) → overridden
 ## Darnassus (map 1, zone 0)
 
 - **Shaman** guid `6005001`: entry `17204` (Farseer Nobundo) — anchor Druid (Fylerian Nightwing) @ (10177.521, 2584.374, 1326.05, o=4.3633)
@@ -16,7 +18,9 @@ show the computed placement before override.
 - **Warlock** guid `6005004`: entry `461` (Demisette Cloyce) — anchor Mage (Bati) @ (-4056.482, -11558.132, -138.468, o=0.2618)
 ## Orgrimmar (map 1, zone 0)
 
-- **Druid** guid `6005005`: entry `3033` (Turak Runetotem) — anchor Shaman (Sagorne Creststrider) @ (1936.636, -4221.243, 42.422, o=3.7874)
+- **Druid** guid `6005005`: entry `3033` (Turak Runetotem) — anchor Shaman (Sagorne Creststrider)
+  - emitted: (1935.4427, -4221.2383, 43.32204, o=4.8034873)
+  - computed: (1936.636, -4221.243, 42.422, o=3.7874) → overridden
 ## Undercity (map 0, zone 0)
 
 - **Hunter** guid `6005006`: entry `3038` (Kary Thunderhorn) — anchor Rogue (Gregory Charles) @ (1408.177, 57.056, -62.195, o=0.4538)
@@ -30,6 +34,8 @@ show the computed placement before override.
 ## Silvermoon (map 530, zone 0)
 
 - **Warrior** guid `6005012`: entry `3041` (Torm Ragetotem) — anchor Paladin (Champion Bachi) @ (9852.97, -7517.68, 19.814, o=1.5708)
-- **Shaman** guid `6005013`: entry `3030` (Siln Skychaser) — anchor Druid (Harene Plainwalker) @ (9707.681, -7263.316, 16.617, o=0.5951)
+- **Shaman** guid `6005013`: entry `3030` (Siln Skychaser) — anchor Druid (Harene Plainwalker)
+  - emitted: (9709.931, -7266.4043, 16.908289, o=3.5745356)
+  - computed: (9707.681, -7263.316, 16.617, o=0.5951) → overridden
 
 Total: 14 trainers (guids 6005000-6005013)
