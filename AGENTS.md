@@ -51,7 +51,7 @@ mod-uac/
   tools/generate_canonical.py   # CanonicalDbcSource(v19) -> checked-in SQL + client MPQs
   data/snapshot/                # baked world snapshot (schemas + trainer extracts)
   data/item_prototypes.json     # minimal outfit item class/subclass lookup (from snapshot refresh)
-  data/trainer_overrides.yaml   # optional trainer placement overrides
+  data/trainer_overrides.yaml   # optional trainer placement overrides (starter + capital)
   tools/requirements.txt
   client-patch/unlock-only/patch-z.mpq   # CharBaseInfo + SkillRaceClassInfo (equip + UI normalization)
   client-patch/standard/patch-z.mpq      # above + v19 CharStartOutfit + overlays

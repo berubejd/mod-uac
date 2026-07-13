@@ -4,6 +4,168 @@
   "core_version": "AzerothCore rev. 52f58186a533+ 2026-07-10 08:24:30 -0700 (Playerbot branch) (Unix, RelWithDebInfo, Static)",
   "data": {
     "trainers": {
+      "capital_class_menus": [
+        {
+          "capital": "Ironforge",
+          "class_menu_ids": [
+            2144
+          ],
+          "menus": [
+            {
+              "max_option_id": 7,
+              "menu_id": 2144,
+              "present_classes": [
+                "Hunter",
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Shaman",
+                "Warlock",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "Darnassus",
+          "class_menu_ids": [
+            2343
+          ],
+          "menus": [
+            {
+              "max_option_id": 6,
+              "menu_id": 2343,
+              "present_classes": [
+                "Druid",
+                "Hunter",
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "Exodar",
+          "class_menu_ids": [
+            7787
+          ],
+          "menus": [
+            {
+              "max_option_id": 6,
+              "menu_id": 7787,
+              "present_classes": [
+                "Druid",
+                "Hunter",
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Shaman",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "Orgrimmar",
+          "class_menu_ids": [
+            1949
+          ],
+          "menus": [
+            {
+              "max_option_id": 7,
+              "menu_id": 1949,
+              "present_classes": [
+                "Hunter",
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Shaman",
+                "Warlock",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "Undercity",
+          "class_menu_ids": [
+            2848,
+            10768
+          ],
+          "menus": [
+            {
+              "max_option_id": 5,
+              "menu_id": 2848,
+              "present_classes": [
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Warlock",
+                "Warrior"
+              ]
+            },
+            {
+              "max_option_id": 5,
+              "menu_id": 10768,
+              "present_classes": [
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Warlock",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "ThunderBluff",
+          "class_menu_ids": [
+            740
+          ],
+          "menus": [
+            {
+              "max_option_id": 5,
+              "menu_id": 740,
+              "present_classes": [
+                "Druid",
+                "Hunter",
+                "Mage",
+                "Priest",
+                "Shaman",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "Silvermoon",
+          "class_menu_ids": [
+            7649
+          ],
+          "menus": [
+            {
+              "max_option_id": 6,
+              "menu_id": 7649,
+              "present_classes": [
+                "Druid",
+                "Hunter",
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Warlock"
+              ]
+            }
+          ]
+        }
+      ],
       "capital_trainers": [
         {
           "entry": 328,
@@ -4981,6 +5143,763 @@
       ],
       "table": "creature_queststarter"
     },
+    "gossip_menu": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "MenuID",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "TextID",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "int unsigned"
+        }
+      ],
+      "table": "gossip_menu"
+    },
+    "gossip_menu_option": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "MenuID",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "OptionID",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "OptionIcon",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "name": "OptionText",
+          "nullable": true,
+          "ordinal": 5,
+          "type": "text"
+        },
+        {
+          "default": "0",
+          "name": "OptionBroadcastTextID",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "OptionType",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "OptionNpcFlag",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "ActionMenuID",
+          "nullable": false,
+          "ordinal": 9,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "ActionPoiID",
+          "nullable": false,
+          "ordinal": 10,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "BoxCoded",
+          "nullable": false,
+          "ordinal": 11,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "BoxMoney",
+          "nullable": false,
+          "ordinal": 12,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "name": "BoxText",
+          "nullable": true,
+          "ordinal": 13,
+          "type": "text"
+        },
+        {
+          "default": "0",
+          "name": "BoxBroadcastTextID",
+          "nullable": false,
+          "ordinal": 14,
+          "type": "int"
+        },
+        {
+          "default": null,
+          "name": "VerifiedBuild",
+          "nullable": true,
+          "ordinal": 15,
+          "type": "int"
+        }
+      ],
+      "table": "gossip_menu_option"
+    },
+    "npc_text": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "ID",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "name": "text0_0",
+          "nullable": true,
+          "ordinal": 3,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text0_1",
+          "nullable": true,
+          "ordinal": 4,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID0",
+          "nullable": false,
+          "ordinal": 5,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang0",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability0",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em0_0",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em0_1",
+          "nullable": false,
+          "ordinal": 9,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em0_2",
+          "nullable": false,
+          "ordinal": 10,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em0_3",
+          "nullable": false,
+          "ordinal": 11,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em0_4",
+          "nullable": false,
+          "ordinal": 12,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em0_5",
+          "nullable": false,
+          "ordinal": 13,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text1_0",
+          "nullable": true,
+          "ordinal": 14,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text1_1",
+          "nullable": true,
+          "ordinal": 15,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID1",
+          "nullable": false,
+          "ordinal": 16,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang1",
+          "nullable": false,
+          "ordinal": 17,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability1",
+          "nullable": false,
+          "ordinal": 18,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em1_0",
+          "nullable": false,
+          "ordinal": 19,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em1_1",
+          "nullable": false,
+          "ordinal": 20,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em1_2",
+          "nullable": false,
+          "ordinal": 21,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em1_3",
+          "nullable": false,
+          "ordinal": 22,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em1_4",
+          "nullable": false,
+          "ordinal": 23,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em1_5",
+          "nullable": false,
+          "ordinal": 24,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text2_0",
+          "nullable": true,
+          "ordinal": 25,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text2_1",
+          "nullable": true,
+          "ordinal": 26,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID2",
+          "nullable": false,
+          "ordinal": 27,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang2",
+          "nullable": false,
+          "ordinal": 28,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability2",
+          "nullable": false,
+          "ordinal": 29,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em2_0",
+          "nullable": false,
+          "ordinal": 30,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em2_1",
+          "nullable": false,
+          "ordinal": 31,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em2_2",
+          "nullable": false,
+          "ordinal": 32,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em2_3",
+          "nullable": false,
+          "ordinal": 33,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em2_4",
+          "nullable": false,
+          "ordinal": 34,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em2_5",
+          "nullable": false,
+          "ordinal": 35,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text3_0",
+          "nullable": true,
+          "ordinal": 36,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text3_1",
+          "nullable": true,
+          "ordinal": 37,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID3",
+          "nullable": false,
+          "ordinal": 38,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang3",
+          "nullable": false,
+          "ordinal": 39,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability3",
+          "nullable": false,
+          "ordinal": 40,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em3_0",
+          "nullable": false,
+          "ordinal": 41,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em3_1",
+          "nullable": false,
+          "ordinal": 42,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em3_2",
+          "nullable": false,
+          "ordinal": 43,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em3_3",
+          "nullable": false,
+          "ordinal": 44,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em3_4",
+          "nullable": false,
+          "ordinal": 45,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em3_5",
+          "nullable": false,
+          "ordinal": 46,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text4_0",
+          "nullable": true,
+          "ordinal": 47,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text4_1",
+          "nullable": true,
+          "ordinal": 48,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID4",
+          "nullable": false,
+          "ordinal": 49,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang4",
+          "nullable": false,
+          "ordinal": 50,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability4",
+          "nullable": false,
+          "ordinal": 51,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em4_0",
+          "nullable": false,
+          "ordinal": 52,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em4_1",
+          "nullable": false,
+          "ordinal": 53,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em4_2",
+          "nullable": false,
+          "ordinal": 54,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em4_3",
+          "nullable": false,
+          "ordinal": 55,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em4_4",
+          "nullable": false,
+          "ordinal": 56,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em4_5",
+          "nullable": false,
+          "ordinal": 57,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text5_0",
+          "nullable": true,
+          "ordinal": 58,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text5_1",
+          "nullable": true,
+          "ordinal": 59,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID5",
+          "nullable": false,
+          "ordinal": 60,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang5",
+          "nullable": false,
+          "ordinal": 61,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability5",
+          "nullable": false,
+          "ordinal": 62,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em5_0",
+          "nullable": false,
+          "ordinal": 63,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em5_1",
+          "nullable": false,
+          "ordinal": 64,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em5_2",
+          "nullable": false,
+          "ordinal": 65,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em5_3",
+          "nullable": false,
+          "ordinal": 66,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em5_4",
+          "nullable": false,
+          "ordinal": 67,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em5_5",
+          "nullable": false,
+          "ordinal": 68,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text6_0",
+          "nullable": true,
+          "ordinal": 69,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text6_1",
+          "nullable": true,
+          "ordinal": 70,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID6",
+          "nullable": false,
+          "ordinal": 71,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang6",
+          "nullable": false,
+          "ordinal": 72,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability6",
+          "nullable": false,
+          "ordinal": 73,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em6_0",
+          "nullable": false,
+          "ordinal": 74,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em6_1",
+          "nullable": false,
+          "ordinal": 75,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em6_2",
+          "nullable": false,
+          "ordinal": 76,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em6_3",
+          "nullable": false,
+          "ordinal": 77,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em6_4",
+          "nullable": false,
+          "ordinal": 78,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em6_5",
+          "nullable": false,
+          "ordinal": 79,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text7_0",
+          "nullable": true,
+          "ordinal": 80,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text7_1",
+          "nullable": true,
+          "ordinal": 81,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID7",
+          "nullable": false,
+          "ordinal": 82,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang7",
+          "nullable": false,
+          "ordinal": 83,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability7",
+          "nullable": false,
+          "ordinal": 84,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em7_0",
+          "nullable": false,
+          "ordinal": 85,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em7_1",
+          "nullable": false,
+          "ordinal": 86,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em7_2",
+          "nullable": false,
+          "ordinal": 87,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em7_3",
+          "nullable": false,
+          "ordinal": 88,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em7_4",
+          "nullable": false,
+          "ordinal": 89,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em7_5",
+          "nullable": false,
+          "ordinal": 90,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "VerifiedBuild",
+          "nullable": true,
+          "ordinal": 91,
+          "type": "int"
+        }
+      ],
+      "table": "npc_text"
+    },
     "player_totem_model": {
       "columns": [
         {
@@ -5180,6 +6099,60 @@
         }
       ],
       "table": "playercreateinfo_spell_custom"
+    },
+    "points_of_interest": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "ID",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "PositionX",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "PositionY",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "Icon",
+          "nullable": false,
+          "ordinal": 5,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Flags",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Importance",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "name": "Name",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "text"
+        }
+      ],
+      "table": "points_of_interest"
     },
     "quest_offer_reward": {
       "columns": [

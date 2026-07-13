@@ -565,6 +565,15 @@ held the bulk of the real gaps (handled above). The remaining reachable gaps wer
   paladin+rogue+warlock, Ironforge druid, Orgrimmar druid, Exodar rogue+warlock — clustering on the
   vanilla single-faction/-race classes (shaman, paladin, druid). A test asserts the emitter reproduces
   exactly this DB-audited gap set.
+- **2d — Capital guard POI + gossip (complete).** Capital trainers are useless if guards cannot
+  direct players to them. Snapshot capture records each capital's class-trainer gossip submenu(s)
+  (`capital_class_menus` in the baked snapshot). `GuardDirectionsEmitter` consumes the same
+  `compute_capital_trainer_result()` rows: one `points_of_interest` pin per trainer at emitted
+  `(x, y)`, generated generic `npc_text` confirm (trainer entry name + capital, no anchor landmarks),
+  and `gossip_menu_option` rows on every captured class submenu (Undercity's two guard menus both
+  patched). Reserved bands: POI `6010000–6010099`, npc_text `6010100–6010199`, confirm menus
+  `6010200–6010299`. Emitted to `mod_uac_capital_guard_poi.sql` (+ uninstall); wired into
+  `generate_canonical.py` / `generate_local.py` beside the capital trainer pass.
 - **2e — Schema contract retrofit (complete).** All world-table emitters
   (`emit_skill`, `emit_player`, `emit_totem`, `emit_class_quest`, `emit_totem_quest`,
   `emit_hunter_pet`, `emit_trainers`) render SQL from snapshot `TableSchema` via `schema_emit.py`;

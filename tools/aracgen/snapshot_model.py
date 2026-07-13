@@ -31,6 +31,14 @@ MOD_UAC_CAPITAL_GUID_MAX = 6_009_999
 MOD_UAC_QUEST_ID_MIN = 6_000_000
 MOD_UAC_QUEST_ID_MAX = 6_009_999
 
+# Reserved bands for capital guard POI / confirm gossip (Phase 2d).
+MOD_UAC_GUARD_POI_MIN = 6_010_000
+MOD_UAC_GUARD_POI_MAX = 6_010_099
+MOD_UAC_GUARD_NPC_TEXT_MIN = 6_010_100
+MOD_UAC_GUARD_NPC_TEXT_MAX = 6_010_199
+MOD_UAC_GUARD_MENU_MIN = 6_010_200
+MOD_UAC_GUARD_MENU_MAX = 6_010_299
+
 LATEST_POINTER_FILE = "world.latest.json"
 
 SCHEMA_TABLES: tuple[str, ...] = (
@@ -48,6 +56,10 @@ SCHEMA_TABLES: tuple[str, ...] = (
     "quest_offer_reward",
     "creature_queststarter",
     "creature_questender",
+    "gossip_menu",
+    "gossip_menu_option",
+    "npc_text",
+    "points_of_interest",
     "spell_dbc",
 )
 

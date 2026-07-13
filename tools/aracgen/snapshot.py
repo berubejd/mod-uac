@@ -498,12 +498,133 @@ def capture_trainer_data(connection, creature_schema: TableSchema) -> dict[str, 
             str(entry): meta for entry, meta in creature_template.items()
         },
         "capital_trainers": capital_trainers,
+        "capital_class_menus": _capture_capital_class_menus(cursor),
     }
 
 
 CLASS_TRAINER_SUBNAME_REGEXP = (
     "(Warrior|Paladin|Hunter|Rogue|Priest|Shaman|Mage|Warlock|Druid) Trainer"
 )
+
+
+def _classify_poi_capital(x: float, y: float) -> str | None:
+    from aracgen.capital_trainer_catalog import CAPITAL_ZONES, classify_capital
+
+    matches = [
+        zone.label
+        for zone in CAPITAL_ZONES
+        if classify_capital(zone.map_id, x, y) is not None
+    ]
+    if len(matches) == 1:
+        return matches[0]
+    return None
+
+
+def _capture_capital_class_menus(cursor) -> list[dict[str, Any]]:
+    """Capture each capital's class-trainer gossip submenu(s) from stock guard menus.
+
+    Walks guard root options (``Class Trainer`` / ``A class trainer``) to their class
+    submenus, classifies each submenu to a capital via POI coordinates, and records
+    which classes are already listed so the guard-directions emitter only patches gaps.
+    """
+    from aracgen.guard_directions_catalog import CLASS_TRAINER_ROOT_TEXTS, PLAYABLE_CLASS_NAMES
+
+    placeholders = ", ".join(["%s"] * len(CLASS_TRAINER_ROOT_TEXTS))
+    cursor.execute(
+        f"""
+        SELECT DISTINCT ActionMenuID AS menu_id
+        FROM gossip_menu_option
+        WHERE OptionText IN ({placeholders}) AND ActionMenuID > 0
+        """,
+        CLASS_TRAINER_ROOT_TEXTS,
+    )
+    class_menu_ids = [int(row["menu_id"]) for row in cursor.fetchall()]
+    if not class_menu_ids:
+        return []
+
+    menu_placeholders = ", ".join(["%s"] * len(class_menu_ids))
+    cursor.execute(
+        f"""
+        SELECT MenuID, OptionID, OptionText, ActionPoiID, OptionBroadcastTextID
+        FROM gossip_menu_option
+        WHERE MenuID IN ({menu_placeholders})
+        ORDER BY MenuID, OptionID
+        """,
+        class_menu_ids,
+    )
+    options_by_menu: dict[int, list[dict[str, Any]]] = {}
+    poi_ids: set[int] = set()
+    for row in cursor.fetchall():
+        menu_id = int(row["MenuID"])
+        option_text = str(row["OptionText"] or "")
+        if option_text not in PLAYABLE_CLASS_NAMES:
+            continue
+        action_poi_id = int(row["ActionPoiID"] or 0)
+        if action_poi_id:
+            poi_ids.add(action_poi_id)
+        options_by_menu.setdefault(menu_id, []).append(
+            {
+                "option_id": int(row["OptionID"]),
+                "class_name": option_text,
+                "action_poi_id": action_poi_id,
+                "option_broadcast_text_id": int(row["OptionBroadcastTextID"] or 0),
+            }
+        )
+
+    poi_coords: dict[int, tuple[float, float]] = {}
+    if poi_ids:
+        poi_placeholders = ", ".join(["%s"] * len(poi_ids))
+        cursor.execute(
+            f"""
+            SELECT ID, PositionX, PositionY
+            FROM points_of_interest
+            WHERE ID IN ({poi_placeholders})
+            """,
+            sorted(poi_ids),
+        )
+        for row in cursor.fetchall():
+            poi_coords[int(row["ID"])] = (float(row["PositionX"]), float(row["PositionY"]))
+
+    menu_capital: dict[int, str] = {}
+    for menu_id, options in options_by_menu.items():
+        capital: str | None = None
+        for option in options:
+            poi_id = option["action_poi_id"]
+            if not poi_id or poi_id not in poi_coords:
+                continue
+            x, y = poi_coords[poi_id]
+            capital = _classify_poi_capital(x, y)
+            if capital:
+                break
+        if capital:
+            menu_capital[menu_id] = capital
+
+    by_capital: dict[str, list[dict[str, Any]]] = {}
+    for menu_id, capital in menu_capital.items():
+        options = options_by_menu.get(menu_id, [])
+        if not options:
+            continue
+        present = sorted({opt["class_name"] for opt in options})
+        max_option_id = max(opt["option_id"] for opt in options)
+        by_capital.setdefault(capital, []).append(
+            {
+                "menu_id": menu_id,
+                "max_option_id": max_option_id,
+                "present_classes": present,
+            }
+        )
+
+    from aracgen.capital_trainer_catalog import CAPITAL_ZONES
+
+    order = {zone.label: index for index, zone in enumerate(CAPITAL_ZONES)}
+    return [
+        {
+            "capital": capital,
+            "class_menu_ids": sorted(menu["menu_id"] for menu in menus),
+            "menus": sorted(menus, key=lambda item: item["menu_id"]),
+        }
+        for capital, menus in sorted(by_capital.items(), key=lambda item: order.get(item[0], 999))
+    ]
 
 
 def _capture_capital_trainers(cursor, entry_col: str) -> list[dict[str, Any]]:

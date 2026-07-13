@@ -13,6 +13,7 @@ from aracgen.emit_client import (
     ClientPatchEmitter,
     ClientPatchVariant,
 )
+from aracgen.emit_guard_directions import GuardDirectionsEmitter
 from aracgen.emit_hunter_pet import HunterPetEmitter
 from aracgen.emit_player import PlayerCreateEmitter, build_resolver
 from aracgen.emit_racials import RacialAbilityEmitter
@@ -313,6 +314,29 @@ def write_totem_sql(
 
     race_ids = sorted({row.race_id for row in result.rows})
     print(f"Wrote {install_path} ({len(result.rows)} totem rows, races {race_ids})")
+    print(f"Wrote {uninstall_path}")
+
+
+def write_capital_guard_sql(
+    install_path: Path,
+    uninstall_path: Path,
+    *,
+    snapshot: Snapshot,
+    overrides_path: Path | None = None,
+) -> None:
+    overrides = load_trainer_overrides(overrides_path)
+    emitter = GuardDirectionsEmitter(snapshot=snapshot, overrides=overrides)
+    result = emitter.compute()
+
+    install_path.parent.mkdir(parents=True, exist_ok=True)
+    uninstall_path.parent.mkdir(parents=True, exist_ok=True)
+    install_path.write_text(emitter.render_install(result), encoding="utf-8")
+    uninstall_path.write_text(emitter.render_uninstall(result), encoding="utf-8")
+
+    print(
+        f"Wrote {install_path} ({len(result.artifacts)} POI(s), "
+        f"{len(result.options)} guard option(s))"
+    )
     print(f"Wrote {uninstall_path}")
 
 

@@ -335,7 +335,7 @@ def test_select_anchor_skips_gap_kin() -> None:
 
 def test_load_trainer_overrides_from_checked_in_file() -> None:
     overrides = load_trainer_overrides(OVERRIDES_PATH)
-    assert len(overrides) == 3
+    assert len(overrides) == 6
     by_key = {(item.zone, item.class_name): item for item in overrides}
     warlock = by_key[("CampNarache", "Warlock")]
     assert warlock.x == pytest.approx(-2950.7625)

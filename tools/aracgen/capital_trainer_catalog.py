@@ -33,6 +33,17 @@ class CapitalZone:
 # Troll 8, Blood Elf 10, Draenei 11. Radii are tuned to enclose each city's
 # trainer district without bleeding into adjacent zones (validated by the
 # capital-gap test, which asserts the emitter reproduces the audited gap set).
+# Player-facing city names for generated guard confirm text (zone labels stay canonical).
+CAPITAL_DISPLAY_NAMES: dict[str, str] = {
+    "ThunderBluff": "Thunder Bluff",
+    "Silvermoon": "Silvermoon City",
+}
+
+
+def capital_display_name(label: str) -> str:
+    return CAPITAL_DISPLAY_NAMES.get(label, label)
+
+
 CAPITAL_ZONES: tuple[CapitalZone, ...] = (
     CapitalZone("Stormwind", 0, -8850.0, 600.0, 700.0, "A", (1,)),
     CapitalZone("Ironforge", 0, -4830.0, -1090.0, 600.0, "A", (3, 7)),
