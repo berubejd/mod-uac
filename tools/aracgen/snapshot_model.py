@@ -16,14 +16,28 @@ COLUMN_ALIASES: dict[str, dict[str, list[str]]] = {
     "creature": {"entry": ["id", "id1"]},
 }
 
-# Reserved mod-uac creature GUID band (trainer emitter default base).
+# Reserved mod-uac creature GUID band (trainer emitters), split into sub-bands so
+# the starter and capital trainer SQL files each scope their own DELETE and never
+# clobber each other regardless of apply order.
 MOD_UAC_CREATURE_GUID_MIN = 6_000_000
 MOD_UAC_CREATURE_GUID_MAX = 6_009_999
+MOD_UAC_STARTER_GUID_MIN = 6_000_000
+MOD_UAC_STARTER_GUID_MAX = 6_004_999
+MOD_UAC_CAPITAL_GUID_MIN = 6_005_000
+MOD_UAC_CAPITAL_GUID_MAX = 6_009_999
 
 # Reserved mod-uac quest_template ID band (synthetic totem-access quests).
 # Distinct namespace from creature.guid; stock quest IDs top out well below this.
 MOD_UAC_QUEST_ID_MIN = 6_000_000
 MOD_UAC_QUEST_ID_MAX = 6_009_999
+
+# Reserved bands for capital guard POI / confirm gossip (Phase 2d).
+MOD_UAC_GUARD_POI_MIN = 6_010_000
+MOD_UAC_GUARD_POI_MAX = 6_010_099
+MOD_UAC_GUARD_NPC_TEXT_MIN = 6_010_100
+MOD_UAC_GUARD_NPC_TEXT_MAX = 6_010_199
+MOD_UAC_GUARD_MENU_MIN = 6_010_200
+MOD_UAC_GUARD_MENU_MAX = 6_010_299
 
 LATEST_POINTER_FILE = "world.latest.json"
 
@@ -42,6 +56,10 @@ SCHEMA_TABLES: tuple[str, ...] = (
     "quest_offer_reward",
     "creature_queststarter",
     "creature_questender",
+    "gossip_menu",
+    "gossip_menu_option",
+    "npc_text",
+    "points_of_interest",
     "spell_dbc",
 )
 

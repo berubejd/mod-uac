@@ -27,3 +27,21 @@ overrides:
     y: 1567.0908
     z: 94.31241
     o: 2.5329106
+  - zone: Ironforge
+    class: Druid
+    x: -4715.826
+    y: -1152.5818
+    z: 502.44772
+    o: 2.899206
+  - zone: Orgrimmar
+    class: Druid
+    x: 1935.4427
+    y: -4221.2383
+    z: 43.32204
+    o: 4.8034873
+  - zone: Silvermoon
+    class: Shaman
+    x: 9709.931
+    y: -7266.4043
+    z: 16.908289
+    o: 3.5745356

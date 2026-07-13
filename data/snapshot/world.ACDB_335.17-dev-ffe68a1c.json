@@ -1,9 +1,2065 @@
 {
-  "captured_at": "2026-07-12T17:58:18.916445+00:00",
-  "core_revision": "62a991e783b3+",
-  "core_version": "AzerothCore rev. 62a991e783b3+ 2026-06-26 11:50:23 -0700 (Playerbot branch) (Unix, RelWithDebInfo, Static)",
+  "captured_at": "2026-07-13T02:25:38.850217+00:00",
+  "core_revision": "52f58186a533+",
+  "core_version": "AzerothCore rev. 52f58186a533+ 2026-07-10 08:24:30 -0700 (Playerbot branch) (Unix, RelWithDebInfo, Static)",
   "data": {
     "trainers": {
+      "capital_class_menus": [
+        {
+          "capital": "Ironforge",
+          "class_menu_ids": [
+            2144
+          ],
+          "menus": [
+            {
+              "max_option_id": 7,
+              "menu_id": 2144,
+              "present_classes": [
+                "Hunter",
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Shaman",
+                "Warlock",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "Darnassus",
+          "class_menu_ids": [
+            2343
+          ],
+          "menus": [
+            {
+              "max_option_id": 6,
+              "menu_id": 2343,
+              "present_classes": [
+                "Druid",
+                "Hunter",
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "Exodar",
+          "class_menu_ids": [
+            7787
+          ],
+          "menus": [
+            {
+              "max_option_id": 6,
+              "menu_id": 7787,
+              "present_classes": [
+                "Druid",
+                "Hunter",
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Shaman",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "Orgrimmar",
+          "class_menu_ids": [
+            1949
+          ],
+          "menus": [
+            {
+              "max_option_id": 7,
+              "menu_id": 1949,
+              "present_classes": [
+                "Hunter",
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Shaman",
+                "Warlock",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "Undercity",
+          "class_menu_ids": [
+            2848,
+            10768
+          ],
+          "menus": [
+            {
+              "max_option_id": 5,
+              "menu_id": 2848,
+              "present_classes": [
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Warlock",
+                "Warrior"
+              ]
+            },
+            {
+              "max_option_id": 5,
+              "menu_id": 10768,
+              "present_classes": [
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Warlock",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "ThunderBluff",
+          "class_menu_ids": [
+            740
+          ],
+          "menus": [
+            {
+              "max_option_id": 5,
+              "menu_id": 740,
+              "present_classes": [
+                "Druid",
+                "Hunter",
+                "Mage",
+                "Priest",
+                "Shaman",
+                "Warrior"
+              ]
+            }
+          ]
+        },
+        {
+          "capital": "Silvermoon",
+          "class_menu_ids": [
+            7649
+          ],
+          "menus": [
+            {
+              "max_option_id": 6,
+              "menu_id": 7649,
+              "present_classes": [
+                "Druid",
+                "Hunter",
+                "Mage",
+                "Paladin",
+                "Priest",
+                "Rogue",
+                "Warlock"
+              ]
+            }
+          ]
+        }
+      ],
+      "capital_trainers": [
+        {
+          "entry": 328,
+          "map": 0,
+          "name": "Zaldimar Wefhellt",
+          "o": 4.62512,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -9471.67,
+          "y": 34.451,
+          "z": 63.9038
+        },
+        {
+          "entry": 376,
+          "map": 0,
+          "name": "High Priestess Laurena",
+          "o": 3.822,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -8512.0,
+          "y": 862.364,
+          "z": 109.927
+        },
+        {
+          "entry": 377,
+          "map": 0,
+          "name": "Priestess Josetta",
+          "o": 4.36332,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -9460.75,
+          "y": 33.1338,
+          "z": 63.9038
+        },
+        {
+          "entry": 461,
+          "map": 0,
+          "name": "Demisette Cloyce",
+          "o": 4.485,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": -8980.0,
+          "y": 1041.09,
+          "z": 101.487
+        },
+        {
+          "entry": 906,
+          "map": 0,
+          "name": "Maximillian Crowe",
+          "o": 5.55015,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": -9472.8,
+          "y": -5.32661,
+          "z": 49.8778
+        },
+        {
+          "entry": 913,
+          "map": 0,
+          "name": "Lyria Du Lac",
+          "o": 2.6529,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -9461.85,
+          "y": 109.353,
+          "z": 57.8784
+        },
+        {
+          "entry": 914,
+          "map": 0,
+          "name": "Ander Germaine",
+          "o": 5.88176,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -8705.41,
+          "y": 329.59,
+          "z": 112.09
+        },
+        {
+          "entry": 917,
+          "map": 0,
+          "name": "Keryn Sylvius",
+          "o": 1.09956,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": -9465.79,
+          "y": 12.6454,
+          "z": 63.9038
+        },
+        {
+          "entry": 918,
+          "map": 0,
+          "name": "Osborne the Night Man",
+          "o": 1.29154,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": -8752.3,
+          "y": 377.572,
+          "z": 101.139
+        },
+        {
+          "entry": 927,
+          "map": 0,
+          "name": "Brother Wilhelm",
+          "o": 1.79769,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": -9468.14,
+          "y": 108.976,
+          "z": 57.6606
+        },
+        {
+          "entry": 928,
+          "map": 0,
+          "name": "Lord Grayson Shadowbreaker",
+          "o": 5.433,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": -8577.0,
+          "y": 881.698,
+          "z": 106.519
+        },
+        {
+          "entry": 1901,
+          "map": 0,
+          "name": "Kelstrum Stonebreaker",
+          "o": 5.46288,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -5044.87,
+          "y": -1243.06,
+          "z": 507.837
+        },
+        {
+          "entry": 3030,
+          "map": 1,
+          "name": "Siln Skychaser",
+          "o": 0.279253,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": -996.925,
+          "y": 278.464,
+          "z": 138.084
+        },
+        {
+          "entry": 3031,
+          "map": 1,
+          "name": "Tigor Skychaser",
+          "o": 2.19912,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": -980.775,
+          "y": 269.899,
+          "z": 138.084
+        },
+        {
+          "entry": 3032,
+          "map": 1,
+          "name": "Beram Skychaser",
+          "o": 4.43314,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": -980.841,
+          "y": 287.174,
+          "z": 138.084
+        },
+        {
+          "entry": 3033,
+          "map": 1,
+          "name": "Turak Runetotem",
+          "o": 3.22886,
+          "spells": 297,
+          "subname": "Druid Trainer",
+          "x": -1039.41,
+          "y": -281.56,
+          "z": 159.114
+        },
+        {
+          "entry": 3034,
+          "map": 1,
+          "name": "Sheal Runetotem",
+          "o": 3.33358,
+          "spells": 297,
+          "subname": "Druid Trainer",
+          "x": -1037.98,
+          "y": -288.508,
+          "z": 159.114
+        },
+        {
+          "entry": 3036,
+          "map": 1,
+          "name": "Kym Wildmane",
+          "o": 0.0,
+          "spells": 297,
+          "subname": "Druid Trainer",
+          "x": -1057.47,
+          "y": -288.536,
+          "z": 159.114
+        },
+        {
+          "entry": 3038,
+          "map": 1,
+          "name": "Kary Thunderhorn",
+          "o": 0.471239,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -1464.61,
+          "y": -93.7802,
+          "z": 159.101
+        },
+        {
+          "entry": 3039,
+          "map": 1,
+          "name": "Holt Thunderhorn",
+          "o": 5.75959,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -1474.76,
+          "y": -81.3723,
+          "z": 161.185
+        },
+        {
+          "entry": 3040,
+          "map": 1,
+          "name": "Urek Thunderhorn",
+          "o": 1.48353,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -1454.48,
+          "y": -100.468,
+          "z": 159.101
+        },
+        {
+          "entry": 3041,
+          "map": 1,
+          "name": "Torm Ragetotem",
+          "o": 4.95674,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -1457.96,
+          "y": -80.8058,
+          "z": 159.101
+        },
+        {
+          "entry": 3042,
+          "map": 1,
+          "name": "Sark Ragetotem",
+          "o": 5.75959,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -1472.87,
+          "y": -78.1839,
+          "z": 161.185
+        },
+        {
+          "entry": 3043,
+          "map": 1,
+          "name": "Ker Ragetotem",
+          "o": 4.10152,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -1444.95,
+          "y": -84.2832,
+          "z": 159.101
+        },
+        {
+          "entry": 3044,
+          "map": 1,
+          "name": "Miles Welsh",
+          "o": 4.2237,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -956.24,
+          "y": 252.418,
+          "z": 97.8755
+        },
+        {
+          "entry": 3045,
+          "map": 1,
+          "name": "Malakai Cross",
+          "o": 5.79449,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -1007.06,
+          "y": 260.339,
+          "z": 112.115
+        },
+        {
+          "entry": 3046,
+          "map": 1,
+          "name": "Father Cobb",
+          "o": 1.27409,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -994.015,
+          "y": 249.055,
+          "z": 102.293
+        },
+        {
+          "entry": 3047,
+          "map": 1,
+          "name": "Archmage Shymm",
+          "o": 3.00197,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -951.105,
+          "y": 279.08,
+          "z": 110.996
+        },
+        {
+          "entry": 3048,
+          "map": 1,
+          "name": "Ursyn Ghull",
+          "o": 3.61283,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -948.744,
+          "y": 248.392,
+          "z": 97.2304
+        },
+        {
+          "entry": 3049,
+          "map": 1,
+          "name": "Thurston Xane",
+          "o": 0.663225,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -995.85,
+          "y": 253.854,
+          "z": 101.834
+        },
+        {
+          "entry": 3324,
+          "map": 1,
+          "name": "Grol'dar",
+          "o": 3.31613,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": 1844.21,
+          "y": -4353.61,
+          "z": -14.555
+        },
+        {
+          "entry": 3325,
+          "map": 1,
+          "name": "Mirket",
+          "o": 2.09439,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": 1834.66,
+          "y": -4362.52,
+          "z": -14.5389
+        },
+        {
+          "entry": 3326,
+          "map": 1,
+          "name": "Zevrost",
+          "o": 0.855211,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": 1848.96,
+          "y": -4360.43,
+          "z": -14.6167
+        },
+        {
+          "entry": 3327,
+          "map": 1,
+          "name": "Gest",
+          "o": 4.74729,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 1792.34,
+          "y": -4279.38,
+          "z": 7.57591
+        },
+        {
+          "entry": 3328,
+          "map": 1,
+          "name": "Ormok",
+          "o": 5.41052,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 1762.88,
+          "y": -4296.38,
+          "z": 7.77422
+        },
+        {
+          "entry": 3344,
+          "map": 1,
+          "name": "Kardris Dreamseeker",
+          "o": 0.05236,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": 1933.69,
+          "y": -4224.86,
+          "z": 42.4218
+        },
+        {
+          "entry": 3352,
+          "map": 1,
+          "name": "Ormak Grimshot",
+          "o": 4.5204,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": 2100.58,
+          "y": -4606.96,
+          "z": 59.0301
+        },
+        {
+          "entry": 3353,
+          "map": 1,
+          "name": "Grezz Ragefist",
+          "o": 1.00836,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": 1980.0,
+          "y": -4799.74,
+          "z": 56.1249
+        },
+        {
+          "entry": 3354,
+          "map": 1,
+          "name": "Sorek",
+          "o": 0.837758,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": 1970.95,
+          "y": -4808.17,
+          "z": 57.0916
+        },
+        {
+          "entry": 3401,
+          "map": 1,
+          "name": "Shenthul",
+          "o": 5.75959,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 1771.21,
+          "y": -4284.42,
+          "z": 8.08015
+        },
+        {
+          "entry": 3403,
+          "map": 1,
+          "name": "Sian'tsu",
+          "o": 6.24828,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": 1932.88,
+          "y": -4211.3,
+          "z": 42.4218
+        },
+        {
+          "entry": 3406,
+          "map": 1,
+          "name": "Xor'juul",
+          "o": 0.15708,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": 2084.96,
+          "y": -4623.77,
+          "z": 58.9202
+        },
+        {
+          "entry": 3407,
+          "map": 1,
+          "name": "Sian'dur",
+          "o": 2.11185,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": 2107.35,
+          "y": -4633.78,
+          "z": 58.981
+        },
+        {
+          "entry": 3408,
+          "map": 1,
+          "name": "Zel'mak",
+          "o": 2.44346,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": 1997.93,
+          "y": -4807.95,
+          "z": 57.0916
+        },
+        {
+          "entry": 4087,
+          "map": 1,
+          "name": "Arias'ta Bladesinger",
+          "o": 2.16421,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": 9992.01,
+          "y": 2316.97,
+          "z": 1330.87
+        },
+        {
+          "entry": 4089,
+          "map": 1,
+          "name": "Sildanair",
+          "o": 4.99164,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": 9940.36,
+          "y": 2284.55,
+          "z": 1341.48
+        },
+        {
+          "entry": 4090,
+          "map": 1,
+          "name": "Astarii Starseeker",
+          "o": 5.79449,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 9667.02,
+          "y": 2532.66,
+          "z": 1360.08
+        },
+        {
+          "entry": 4091,
+          "map": 1,
+          "name": "Jandria",
+          "o": 3.92699,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 9654.43,
+          "y": 2537.32,
+          "z": 1331.6
+        },
+        {
+          "entry": 4092,
+          "map": 1,
+          "name": "Lariia",
+          "o": 0.785398,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 9612.45,
+          "y": 2511.37,
+          "z": 1331.6
+        },
+        {
+          "entry": 4138,
+          "map": 1,
+          "name": "Jeen'ra Nightrunner",
+          "o": 3.21141,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": 10200.3,
+          "y": 2517.94,
+          "z": 1368.91
+        },
+        {
+          "entry": 4146,
+          "map": 1,
+          "name": "Jocaste",
+          "o": 2.42601,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": 10178.0,
+          "y": 2511.01,
+          "z": 1343.24
+        },
+        {
+          "entry": 4163,
+          "map": 1,
+          "name": "Syurna",
+          "o": 1.22173,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 10083.7,
+          "y": 2546.87,
+          "z": 1295.12
+        },
+        {
+          "entry": 4205,
+          "map": 1,
+          "name": "Dorion",
+          "o": 2.42601,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": 10187.0,
+          "y": 2491.67,
+          "z": 1358.62
+        },
+        {
+          "entry": 4214,
+          "map": 1,
+          "name": "Erion Shadewhisper",
+          "o": 5.63741,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 10055.3,
+          "y": 2573.02,
+          "z": 1282.55
+        },
+        {
+          "entry": 4215,
+          "map": 1,
+          "name": "Anishar",
+          "o": 3.26377,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 10090.7,
+          "y": 2536.99,
+          "z": 1285.77
+        },
+        {
+          "entry": 4217,
+          "map": 1,
+          "name": "Mathrengyl Bearwalker",
+          "o": 1.22173,
+          "spells": 297,
+          "subname": "Druid Trainer",
+          "x": 10179.0,
+          "y": 2563.98,
+          "z": 1340.13
+        },
+        {
+          "entry": 4218,
+          "map": 1,
+          "name": "Denatharion",
+          "o": 3.64774,
+          "spells": 297,
+          "subname": "Druid Trainer",
+          "x": 10186.3,
+          "y": 2570.38,
+          "z": 1326.05
+        },
+        {
+          "entry": 4219,
+          "map": 1,
+          "name": "Fylerian Nightwing",
+          "o": 4.36332,
+          "spells": 297,
+          "subname": "Druid Trainer",
+          "x": 10179.4,
+          "y": 2583.69,
+          "z": 1326.05
+        },
+        {
+          "entry": 4563,
+          "map": 0,
+          "name": "Kaal Soulreaper",
+          "o": 0.890118,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": 1775.98,
+          "y": 46.1265,
+          "z": -61.4063
+        },
+        {
+          "entry": 4564,
+          "map": 0,
+          "name": "Luther Pickman",
+          "o": 1.32645,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": 1780.31,
+          "y": 44.0374,
+          "z": -61.4091
+        },
+        {
+          "entry": 4565,
+          "map": 0,
+          "name": "Richard Kerwin",
+          "o": 1.93731,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": 1776.4,
+          "y": 20.2543,
+          "z": -47.305
+        },
+        {
+          "entry": 4566,
+          "map": 0,
+          "name": "Kaelystia Hatebringer",
+          "o": 3.92699,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": 1788.19,
+          "y": 57.5156,
+          "z": -61.4064
+        },
+        {
+          "entry": 4567,
+          "map": 0,
+          "name": "Pierce Shackleton",
+          "o": 2.94961,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": 1791.48,
+          "y": 53.4081,
+          "z": -61.4092
+        },
+        {
+          "entry": 4568,
+          "map": 0,
+          "name": "Anastasia Hartwell",
+          "o": 3.05433,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": 1813.74,
+          "y": 56.4138,
+          "z": -47.3038
+        },
+        {
+          "entry": 4582,
+          "map": 0,
+          "name": "Carolyn Ward",
+          "o": 4.64258,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 1416.64,
+          "y": 68.6927,
+          "z": -62.1954
+        },
+        {
+          "entry": 4583,
+          "map": 0,
+          "name": "Miles Dexter",
+          "o": 2.18166,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 1419.8,
+          "y": 55.7021,
+          "z": -62.1954
+        },
+        {
+          "entry": 4584,
+          "map": 0,
+          "name": "Gregory Charles",
+          "o": 0.453786,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 1407.3,
+          "y": 58.854,
+          "z": -62.1954
+        },
+        {
+          "entry": 4593,
+          "map": 0,
+          "name": "Christoph Walker",
+          "o": 3.94444,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": 1780.46,
+          "y": 422.932,
+          "z": -57.1143
+        },
+        {
+          "entry": 4594,
+          "map": 0,
+          "name": "Angela Curthas",
+          "o": 1.58825,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": 1775.77,
+          "y": 409.607,
+          "z": -57.1143
+        },
+        {
+          "entry": 4595,
+          "map": 0,
+          "name": "Baltus Fowler",
+          "o": 0.122173,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": 1767.26,
+          "y": 418.445,
+          "z": -57.1143
+        },
+        {
+          "entry": 4606,
+          "map": 0,
+          "name": "Aelthalyste",
+          "o": 4.39823,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 1768.37,
+          "y": 400.57,
+          "z": -57.1312
+        },
+        {
+          "entry": 4607,
+          "map": 0,
+          "name": "Father Lankester",
+          "o": 5.41052,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 1784.45,
+          "y": 401.799,
+          "z": -57.1312
+        },
+        {
+          "entry": 4608,
+          "map": 0,
+          "name": "Father Lazarus",
+          "o": 3.40339,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 1756.95,
+          "y": 416.858,
+          "z": -57.1312
+        },
+        {
+          "entry": 5113,
+          "map": 0,
+          "name": "Kelv Sternhammer",
+          "o": 6.24828,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -5047.54,
+          "y": -1269.69,
+          "z": 510.408
+        },
+        {
+          "entry": 5114,
+          "map": 0,
+          "name": "Bilban Tosslespanner",
+          "o": 5.35816,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -5035.67,
+          "y": -1234.64,
+          "z": 507.835
+        },
+        {
+          "entry": 5115,
+          "map": 0,
+          "name": "Daera Brightspear",
+          "o": 1.51844,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -5043.04,
+          "y": -1274.67,
+          "z": 510.408
+        },
+        {
+          "entry": 5116,
+          "map": 0,
+          "name": "Olmin Burningbeard",
+          "o": 2.26893,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -5010.39,
+          "y": -1274.05,
+          "z": 507.835
+        },
+        {
+          "entry": 5117,
+          "map": 0,
+          "name": "Regnus Thundergranite",
+          "o": 3.78736,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -5006.6,
+          "y": -1266.04,
+          "z": 507.837
+        },
+        {
+          "entry": 5141,
+          "map": 0,
+          "name": "Theodrus Frostbeard",
+          "o": 2.21657,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -4613.63,
+          "y": -903.98,
+          "z": 524.778
+        },
+        {
+          "entry": 5142,
+          "map": 0,
+          "name": "Braenna Flintcrag",
+          "o": 4.45059,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -4617.63,
+          "y": -906.666,
+          "z": 501.156
+        },
+        {
+          "entry": 5143,
+          "map": 0,
+          "name": "Toldren Deepiron",
+          "o": 6.17846,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -4625.99,
+          "y": -912.884,
+          "z": 501.152
+        },
+        {
+          "entry": 5144,
+          "map": 0,
+          "name": "Bink",
+          "o": 1.3439,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -4613.03,
+          "y": -929.032,
+          "z": 501.152
+        },
+        {
+          "entry": 5145,
+          "map": 0,
+          "name": "Juli Stormkettle",
+          "o": 3.19395,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -4604.94,
+          "y": -921.489,
+          "z": 501.156
+        },
+        {
+          "entry": 5146,
+          "map": 0,
+          "name": "Nittlebur Sparkfizzle",
+          "o": 5.28835,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -4601.8,
+          "y": -918.586,
+          "z": 524.778
+        },
+        {
+          "entry": 5147,
+          "map": 0,
+          "name": "Valgar Highforge",
+          "o": 0.698132,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": -4596.14,
+          "y": -901.007,
+          "z": 524.778
+        },
+        {
+          "entry": 5148,
+          "map": 0,
+          "name": "Beldruk Doombrow",
+          "o": 3.21141,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": -4592.85,
+          "y": -907.687,
+          "z": 502.85
+        },
+        {
+          "entry": 5149,
+          "map": 0,
+          "name": "Brandur Ironhammer",
+          "o": 4.55531,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": -4601.65,
+          "y": -896.468,
+          "z": 502.85
+        },
+        {
+          "entry": 5165,
+          "map": 0,
+          "name": "Hulfdan Blackbeard",
+          "o": 1.55334,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": -4647.56,
+          "y": -1124.38,
+          "z": 501.967
+        },
+        {
+          "entry": 5166,
+          "map": 0,
+          "name": "Ormyr Flinteye",
+          "o": 0.0,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": -4648.42,
+          "y": -1131.72,
+          "z": 508.634
+        },
+        {
+          "entry": 5167,
+          "map": 0,
+          "name": "Fenthwick",
+          "o": 1.5708,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": -4650.12,
+          "y": -1120.8,
+          "z": 508.634
+        },
+        {
+          "entry": 5171,
+          "map": 0,
+          "name": "Thistleheart",
+          "o": 4.53786,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": -4604.14,
+          "y": -1117.51,
+          "z": 505.022
+        },
+        {
+          "entry": 5172,
+          "map": 0,
+          "name": "Briarthorn",
+          "o": 4.69494,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": -4599.08,
+          "y": -1111.67,
+          "z": 505.022
+        },
+        {
+          "entry": 5173,
+          "map": 0,
+          "name": "Alexander Calder",
+          "o": 1.69297,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": -4608.55,
+          "y": -1109.55,
+          "z": 511.691
+        },
+        {
+          "entry": 5479,
+          "map": 0,
+          "name": "Wu Shen",
+          "o": 1.29154,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -8689.32,
+          "y": 323.237,
+          "z": 109.521
+        },
+        {
+          "entry": 5480,
+          "map": 0,
+          "name": "Ilsa Corbin",
+          "o": 4.43314,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -8688.56,
+          "y": 325.764,
+          "z": 109.521
+        },
+        {
+          "entry": 5484,
+          "map": 0,
+          "name": "Brother Benjamin",
+          "o": 3.85301,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -8547.72,
+          "y": 814.663,
+          "z": 106.53
+        },
+        {
+          "entry": 5489,
+          "map": 0,
+          "name": "Brother Joshua",
+          "o": 5.185,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -8519.0,
+          "y": 863.419,
+          "z": 109.927
+        },
+        {
+          "entry": 5491,
+          "map": 0,
+          "name": "Arthur the Faithful",
+          "o": 0.792,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": -8574.0,
+          "y": 860.909,
+          "z": 106.619
+        },
+        {
+          "entry": 5492,
+          "map": 0,
+          "name": "Katherine the Pure",
+          "o": 3.783,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": -8565.0,
+          "y": 880.211,
+          "z": 106.519
+        },
+        {
+          "entry": 5495,
+          "map": 0,
+          "name": "Ursula Deline",
+          "o": 2.967,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": -8971.0,
+          "y": 1029.9,
+          "z": 101.487
+        },
+        {
+          "entry": 5496,
+          "map": 0,
+          "name": "Sandahl",
+          "o": 6.056,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": -8989.0,
+          "y": 1033.89,
+          "z": 101.487
+        },
+        {
+          "entry": 5497,
+          "map": 0,
+          "name": "Jennea Cannon",
+          "o": 4.858,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -8990.0,
+          "y": 862.929,
+          "z": 29.621
+        },
+        {
+          "entry": 5498,
+          "map": 0,
+          "name": "Elsharin",
+          "o": 3.938,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -9007.0,
+          "y": 885.181,
+          "z": 29.621
+        },
+        {
+          "entry": 5504,
+          "map": 0,
+          "name": "Sheldras Moontree",
+          "o": 4.904,
+          "spells": 297,
+          "subname": "Druid Trainer",
+          "x": -8776.0,
+          "y": 1100.09,
+          "z": 92.626
+        },
+        {
+          "entry": 5505,
+          "map": 0,
+          "name": "Theridran",
+          "o": 5.353,
+          "spells": 297,
+          "subname": "Druid Trainer",
+          "x": -8742.0,
+          "y": 1095.41,
+          "z": 93.812
+        },
+        {
+          "entry": 5506,
+          "map": 0,
+          "name": "Maldryn",
+          "o": 1.536,
+          "spells": 297,
+          "subname": "Druid Trainer",
+          "x": -8751.0,
+          "y": 1124.52,
+          "z": 92.634
+        },
+        {
+          "entry": 5515,
+          "map": 0,
+          "name": "Einris Brightspear",
+          "o": 3.923,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -8415.0,
+          "y": 553.182,
+          "z": 95.703
+        },
+        {
+          "entry": 5516,
+          "map": 0,
+          "name": "Ulfir Ironbeard",
+          "o": 2.954,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -8410.0,
+          "y": 548.566,
+          "z": 95.532
+        },
+        {
+          "entry": 5517,
+          "map": 0,
+          "name": "Thorfin Stoneshield",
+          "o": 0.636,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -8413.0,
+          "y": 541.475,
+          "z": 102.594
+        },
+        {
+          "entry": 5882,
+          "map": 1,
+          "name": "Pephredo",
+          "o": 3.735,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": 1473.55,
+          "y": -4218.57,
+          "z": 43.286
+        },
+        {
+          "entry": 5883,
+          "map": 1,
+          "name": "Enyo",
+          "o": 2.05949,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": 1472.48,
+          "y": -4224.6,
+          "z": 43.286
+        },
+        {
+          "entry": 5885,
+          "map": 1,
+          "name": "Deino",
+          "o": 5.95157,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": 1468.18,
+          "y": -4219.88,
+          "z": 43.286
+        },
+        {
+          "entry": 6014,
+          "map": 1,
+          "name": "X'yera",
+          "o": 1.32645,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 1453.24,
+          "y": -4185.65,
+          "z": 61.6607
+        },
+        {
+          "entry": 6018,
+          "map": 1,
+          "name": "Ur'kyo",
+          "o": 6.05629,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 1452.43,
+          "y": -4179.82,
+          "z": 44.3769
+        },
+        {
+          "entry": 7311,
+          "map": 1,
+          "name": "Uthel'nay",
+          "o": 1.18682,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": 1466.88,
+          "y": -4229.92,
+          "z": 43.286
+        },
+        {
+          "entry": 7312,
+          "map": 0,
+          "name": "Dink",
+          "o": 0.802851,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -4614.48,
+          "y": -928.362,
+          "z": 501.151
+        },
+        {
+          "entry": 7315,
+          "map": 1,
+          "name": "Darnath Bladesinger",
+          "o": 1.8675,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": 9988.85,
+          "y": 2314.61,
+          "z": 1330.87
+        },
+        {
+          "entry": 11397,
+          "map": 0,
+          "name": "Nara Meideros",
+          "o": 3.875,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -8728.0,
+          "y": 1102.96,
+          "z": 92.603
+        },
+        {
+          "entry": 11401,
+          "map": 1,
+          "name": "Priestess Alathea",
+          "o": 0.366519,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 9665.28,
+          "y": 2520.08,
+          "z": 1360.08
+        },
+        {
+          "entry": 11406,
+          "map": 0,
+          "name": "High Priest Rohan",
+          "o": 4.32842,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -4612.27,
+          "y": -909.098,
+          "z": 501.146
+        },
+        {
+          "entry": 13283,
+          "map": 0,
+          "name": "Lord Tony Romano",
+          "o": 3.01942,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": -8790.2,
+          "y": 328.033,
+          "z": 103.17
+        },
+        {
+          "entry": 13417,
+          "map": 1,
+          "name": "Sagorne Creststrider",
+          "o": 3.78736,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": 1937.84,
+          "y": -4222.84,
+          "z": 42.4217
+        },
+        {
+          "entry": 16266,
+          "map": 530,
+          "name": "Celoenus",
+          "o": 5.23599,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": 9467.63,
+          "y": -6862.82,
+          "z": 28.4144
+        },
+        {
+          "entry": 16269,
+          "map": 530,
+          "name": "Garridel",
+          "o": 6.23082,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": 9462.24,
+          "y": -6853.45,
+          "z": 28.4612
+        },
+        {
+          "entry": 16270,
+          "map": 530,
+          "name": "Hannovia",
+          "o": 3.85718,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": 9529.21,
+          "y": -6864.58,
+          "z": 18.8327
+        },
+        {
+          "entry": 16275,
+          "map": 530,
+          "name": "Noellene",
+          "o": 6.14356,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": 9516.05,
+          "y": -6870.96,
+          "z": 18.8333
+        },
+        {
+          "entry": 16276,
+          "map": 530,
+          "name": "Ponaris",
+          "o": 4.64258,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 9466.62,
+          "y": -6844.23,
+          "z": 28.4612
+        },
+        {
+          "entry": 16279,
+          "map": 530,
+          "name": "Tannaria",
+          "o": 3.82227,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 9534.15,
+          "y": -6876.0,
+          "z": 26.2321
+        },
+        {
+          "entry": 16646,
+          "map": 530,
+          "name": "Alamma",
+          "o": 5.42797,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": 9775.05,
+          "y": -7286.25,
+          "z": 14.752
+        },
+        {
+          "entry": 16647,
+          "map": 530,
+          "name": "Talionia",
+          "o": 0.820305,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": 9773.28,
+          "y": -7301.98,
+          "z": 14.7505
+        },
+        {
+          "entry": 16648,
+          "map": 530,
+          "name": "Zanien",
+          "o": 4.17134,
+          "spells": 235,
+          "subname": "Warlock Trainer",
+          "x": 9788.51,
+          "y": -7285.7,
+          "z": 14.7506
+        },
+        {
+          "entry": 16653,
+          "map": 530,
+          "name": "Inethven",
+          "o": 1.25664,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": 9994.69,
+          "y": -7117.56,
+          "z": 47.7883
+        },
+        {
+          "entry": 16655,
+          "map": 530,
+          "name": "Harene Plainwalker",
+          "o": 0.595148,
+          "spells": 297,
+          "subname": "Druid Trainer",
+          "x": 9706.56,
+          "y": -7261.66,
+          "z": 16.6175
+        },
+        {
+          "entry": 16658,
+          "map": 530,
+          "name": "Aldrae",
+          "o": 1.76278,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 9938.6,
+          "y": -7043.93,
+          "z": 47.7986
+        },
+        {
+          "entry": 16659,
+          "map": 530,
+          "name": "Lotheolan",
+          "o": 1.48353,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 9937.81,
+          "y": -7071.59,
+          "z": 47.7986
+        },
+        {
+          "entry": 16660,
+          "map": 530,
+          "name": "Belestra",
+          "o": 6.00393,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": 9924.93,
+          "y": -7054.94,
+          "z": 47.7986
+        },
+        {
+          "entry": 16672,
+          "map": 530,
+          "name": "Tana",
+          "o": 3.75246,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": 9943.68,
+          "y": -7398.71,
+          "z": 12.4643
+        },
+        {
+          "entry": 16673,
+          "map": 530,
+          "name": "Oninath",
+          "o": 2.87979,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": 9943.71,
+          "y": -7423.08,
+          "z": 12.4643
+        },
+        {
+          "entry": 16674,
+          "map": 530,
+          "name": "Zandine",
+          "o": 0.750492,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": 9927.69,
+          "y": -7425.2,
+          "z": 13.5463
+        },
+        {
+          "entry": 16679,
+          "map": 530,
+          "name": "Osselan",
+          "o": 4.97419,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": 9846.36,
+          "y": -7504.87,
+          "z": 19.7368
+        },
+        {
+          "entry": 16680,
+          "map": 530,
+          "name": "Ithelis",
+          "o": 4.60767,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": 9855.74,
+          "y": -7505.35,
+          "z": 19.7501
+        },
+        {
+          "entry": 16681,
+          "map": 530,
+          "name": "Champion Bachi",
+          "o": 1.5708,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": 9850.97,
+          "y": -7517.68,
+          "z": 19.8144
+        },
+        {
+          "entry": 16684,
+          "map": 530,
+          "name": "Zelanis",
+          "o": 1.58825,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 9732.89,
+          "y": -7366.4,
+          "z": 24.4147
+        },
+        {
+          "entry": 16685,
+          "map": 530,
+          "name": "Elara",
+          "o": 0.977384,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 9754.17,
+          "y": -7371.31,
+          "z": 24.4369
+        },
+        {
+          "entry": 16686,
+          "map": 530,
+          "name": "Nerisen",
+          "o": 1.55334,
+          "spells": 122,
+          "subname": "Rogue Trainer",
+          "x": 9745.94,
+          "y": -7363.87,
+          "z": 24.4207
+        },
+        {
+          "entry": 16721,
+          "map": 530,
+          "name": "Shalannius",
+          "o": 0.017453,
+          "spells": 297,
+          "subname": "Druid Trainer",
+          "x": -4274.81,
+          "y": -11495.3,
+          "z": 9.4874
+        },
+        {
+          "entry": 16738,
+          "map": 530,
+          "name": "Deremiis",
+          "o": 3.05433,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -4222.3,
+          "y": -11563.9,
+          "z": -125.935
+        },
+        {
+          "entry": 16749,
+          "map": 530,
+          "name": "Edirah",
+          "o": 0.401426,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -4048.73,
+          "y": -11565.5,
+          "z": -138.407
+        },
+        {
+          "entry": 16756,
+          "map": 530,
+          "name": "Caedmos",
+          "o": 4.10152,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -3968.08,
+          "y": -11473.0,
+          "z": -135.113
+        },
+        {
+          "entry": 16761,
+          "map": 530,
+          "name": "Baatun",
+          "o": 0.087266,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": -4207.31,
+          "y": -11477.9,
+          "z": -131.556
+        },
+        {
+          "entry": 16771,
+          "map": 530,
+          "name": "Ahonan",
+          "o": 5.81195,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -4198.85,
+          "y": -11648.6,
+          "z": -99.673
+        },
+        {
+          "entry": 17105,
+          "map": 1,
+          "name": "Emissary Valustraa",
+          "o": 5.65487,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": 9664.36,
+          "y": 2528.67,
+          "z": 1360.08
+        },
+        {
+          "entry": 17120,
+          "map": 530,
+          "name": "Behomat",
+          "o": 2.67035,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -4189.44,
+          "y": -11653.8,
+          "z": -99.5823
+        },
+        {
+          "entry": 17121,
+          "map": 530,
+          "name": "Kavaan",
+          "o": 1.64061,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": -4188.12,
+          "y": -11484.9,
+          "z": -130.79
+        },
+        {
+          "entry": 17122,
+          "map": 530,
+          "name": "Vord",
+          "o": 0.872665,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -4232.28,
+          "y": -11569.3,
+          "z": -126.073
+        },
+        {
+          "entry": 17204,
+          "map": 530,
+          "name": "Farseer Nobundo",
+          "o": 6.011,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": -3804.5,
+          "y": -11396.9,
+          "z": -104.253
+        },
+        {
+          "entry": 17219,
+          "map": 530,
+          "name": "Sulaa",
+          "o": 1.06381,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": -3777.9,
+          "y": -11407.2,
+          "z": -137.934
+        },
+        {
+          "entry": 17504,
+          "map": 530,
+          "name": "Kazi",
+          "o": 1.15192,
+          "spells": 133,
+          "subname": "Warrior Trainer",
+          "x": -4203.95,
+          "y": -11668.4,
+          "z": -98.8416
+        },
+        {
+          "entry": 17505,
+          "map": 530,
+          "name": "Killac",
+          "o": 4.32842,
+          "spells": 172,
+          "subname": "Hunter Trainer",
+          "x": -4233.06,
+          "y": -11556.1,
+          "z": -126.032
+        },
+        {
+          "entry": 17509,
+          "map": 530,
+          "name": "Jol",
+          "o": 4.64258,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": -4191.51,
+          "y": -11471.8,
+          "z": -130.79
+        },
+        {
+          "entry": 17510,
+          "map": 530,
+          "name": "Izmir",
+          "o": 2.53073,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -3969.38,
+          "y": -11483.2,
+          "z": -135.165
+        },
+        {
+          "entry": 17511,
+          "map": 530,
+          "name": "Fallat",
+          "o": 5.48033,
+          "spells": 240,
+          "subname": "Priest Trainer",
+          "x": -3971.81,
+          "y": -11479.0,
+          "z": -135.178
+        },
+        {
+          "entry": 17513,
+          "map": 530,
+          "name": "Harnan",
+          "o": 1.5577,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -4053.89,
+          "y": -11560.6,
+          "z": -138.531
+        },
+        {
+          "entry": 17514,
+          "map": 530,
+          "name": "Bati",
+          "o": 0.261799,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": -4057.0,
+          "y": -11556.2,
+          "z": -138.468
+        },
+        {
+          "entry": 17519,
+          "map": 530,
+          "name": "Hobahken",
+          "o": 3.1648,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": -3665.56,
+          "y": -11436.8,
+          "z": -118.054
+        },
+        {
+          "entry": 17520,
+          "map": 530,
+          "name": "Gurrag",
+          "o": 1.86775,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": -3889.27,
+          "y": -11323.0,
+          "z": -126.291
+        },
+        {
+          "entry": 20406,
+          "map": 0,
+          "name": "Champion Cyssa Dawnrose",
+          "o": 6.0912,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": 1298.99,
+          "y": 316.802,
+          "z": -58.4492
+        },
+        {
+          "entry": 20407,
+          "map": 0,
+          "name": "Farseer Umbrua",
+          "o": 5.18363,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": -9031.63,
+          "y": 549.8,
+          "z": 73.4711
+        },
+        {
+          "entry": 23103,
+          "map": 0,
+          "name": "Derek the Undying",
+          "o": 1.50098,
+          "spells": 256,
+          "subname": "Mage Trainer",
+          "x": 1773.32,
+          "y": 333.295,
+          "z": -62.2049
+        },
+        {
+          "entry": 23127,
+          "map": 0,
+          "name": "Farseer Javad",
+          "o": 3.75844,
+          "spells": 276,
+          "subname": "Shaman Trainer",
+          "x": -4720.26,
+          "y": -1150.07,
+          "z": 502.448
+        },
+        {
+          "entry": 23128,
+          "map": 1,
+          "name": "Master Pyreanor",
+          "o": 4.17134,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": 1939.69,
+          "y": -4133.33,
+          "z": 41.2444
+        },
+        {
+          "entry": 35281,
+          "map": 1,
+          "name": "Rukua",
+          "o": 5.70723,
+          "spells": 177,
+          "subname": "Paladin Trainer",
+          "x": 9664.62,
+          "y": 2529.99,
+          "z": 1360.08
+        }
+      ],
       "creature_default_trainer": {
         "15279": 17,
         "15280": 6,
@@ -3087,6 +5143,763 @@
       ],
       "table": "creature_queststarter"
     },
+    "gossip_menu": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "MenuID",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "TextID",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "int unsigned"
+        }
+      ],
+      "table": "gossip_menu"
+    },
+    "gossip_menu_option": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "MenuID",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "OptionID",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "OptionIcon",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "name": "OptionText",
+          "nullable": true,
+          "ordinal": 5,
+          "type": "text"
+        },
+        {
+          "default": "0",
+          "name": "OptionBroadcastTextID",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "OptionType",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "OptionNpcFlag",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "ActionMenuID",
+          "nullable": false,
+          "ordinal": 9,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "ActionPoiID",
+          "nullable": false,
+          "ordinal": 10,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "BoxCoded",
+          "nullable": false,
+          "ordinal": 11,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "BoxMoney",
+          "nullable": false,
+          "ordinal": 12,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "name": "BoxText",
+          "nullable": true,
+          "ordinal": 13,
+          "type": "text"
+        },
+        {
+          "default": "0",
+          "name": "BoxBroadcastTextID",
+          "nullable": false,
+          "ordinal": 14,
+          "type": "int"
+        },
+        {
+          "default": null,
+          "name": "VerifiedBuild",
+          "nullable": true,
+          "ordinal": 15,
+          "type": "int"
+        }
+      ],
+      "table": "gossip_menu_option"
+    },
+    "npc_text": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "ID",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "name": "text0_0",
+          "nullable": true,
+          "ordinal": 3,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text0_1",
+          "nullable": true,
+          "ordinal": 4,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID0",
+          "nullable": false,
+          "ordinal": 5,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang0",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability0",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em0_0",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em0_1",
+          "nullable": false,
+          "ordinal": 9,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em0_2",
+          "nullable": false,
+          "ordinal": 10,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em0_3",
+          "nullable": false,
+          "ordinal": 11,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em0_4",
+          "nullable": false,
+          "ordinal": 12,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em0_5",
+          "nullable": false,
+          "ordinal": 13,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text1_0",
+          "nullable": true,
+          "ordinal": 14,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text1_1",
+          "nullable": true,
+          "ordinal": 15,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID1",
+          "nullable": false,
+          "ordinal": 16,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang1",
+          "nullable": false,
+          "ordinal": 17,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability1",
+          "nullable": false,
+          "ordinal": 18,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em1_0",
+          "nullable": false,
+          "ordinal": 19,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em1_1",
+          "nullable": false,
+          "ordinal": 20,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em1_2",
+          "nullable": false,
+          "ordinal": 21,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em1_3",
+          "nullable": false,
+          "ordinal": 22,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em1_4",
+          "nullable": false,
+          "ordinal": 23,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em1_5",
+          "nullable": false,
+          "ordinal": 24,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text2_0",
+          "nullable": true,
+          "ordinal": 25,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text2_1",
+          "nullable": true,
+          "ordinal": 26,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID2",
+          "nullable": false,
+          "ordinal": 27,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang2",
+          "nullable": false,
+          "ordinal": 28,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability2",
+          "nullable": false,
+          "ordinal": 29,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em2_0",
+          "nullable": false,
+          "ordinal": 30,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em2_1",
+          "nullable": false,
+          "ordinal": 31,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em2_2",
+          "nullable": false,
+          "ordinal": 32,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em2_3",
+          "nullable": false,
+          "ordinal": 33,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em2_4",
+          "nullable": false,
+          "ordinal": 34,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em2_5",
+          "nullable": false,
+          "ordinal": 35,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text3_0",
+          "nullable": true,
+          "ordinal": 36,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text3_1",
+          "nullable": true,
+          "ordinal": 37,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID3",
+          "nullable": false,
+          "ordinal": 38,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang3",
+          "nullable": false,
+          "ordinal": 39,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability3",
+          "nullable": false,
+          "ordinal": 40,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em3_0",
+          "nullable": false,
+          "ordinal": 41,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em3_1",
+          "nullable": false,
+          "ordinal": 42,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em3_2",
+          "nullable": false,
+          "ordinal": 43,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em3_3",
+          "nullable": false,
+          "ordinal": 44,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em3_4",
+          "nullable": false,
+          "ordinal": 45,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em3_5",
+          "nullable": false,
+          "ordinal": 46,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text4_0",
+          "nullable": true,
+          "ordinal": 47,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text4_1",
+          "nullable": true,
+          "ordinal": 48,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID4",
+          "nullable": false,
+          "ordinal": 49,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang4",
+          "nullable": false,
+          "ordinal": 50,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability4",
+          "nullable": false,
+          "ordinal": 51,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em4_0",
+          "nullable": false,
+          "ordinal": 52,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em4_1",
+          "nullable": false,
+          "ordinal": 53,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em4_2",
+          "nullable": false,
+          "ordinal": 54,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em4_3",
+          "nullable": false,
+          "ordinal": 55,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em4_4",
+          "nullable": false,
+          "ordinal": 56,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em4_5",
+          "nullable": false,
+          "ordinal": 57,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text5_0",
+          "nullable": true,
+          "ordinal": 58,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text5_1",
+          "nullable": true,
+          "ordinal": 59,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID5",
+          "nullable": false,
+          "ordinal": 60,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang5",
+          "nullable": false,
+          "ordinal": 61,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability5",
+          "nullable": false,
+          "ordinal": 62,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em5_0",
+          "nullable": false,
+          "ordinal": 63,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em5_1",
+          "nullable": false,
+          "ordinal": 64,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em5_2",
+          "nullable": false,
+          "ordinal": 65,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em5_3",
+          "nullable": false,
+          "ordinal": 66,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em5_4",
+          "nullable": false,
+          "ordinal": 67,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em5_5",
+          "nullable": false,
+          "ordinal": 68,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text6_0",
+          "nullable": true,
+          "ordinal": 69,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text6_1",
+          "nullable": true,
+          "ordinal": 70,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID6",
+          "nullable": false,
+          "ordinal": 71,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang6",
+          "nullable": false,
+          "ordinal": 72,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability6",
+          "nullable": false,
+          "ordinal": 73,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em6_0",
+          "nullable": false,
+          "ordinal": 74,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em6_1",
+          "nullable": false,
+          "ordinal": 75,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em6_2",
+          "nullable": false,
+          "ordinal": 76,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em6_3",
+          "nullable": false,
+          "ordinal": 77,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em6_4",
+          "nullable": false,
+          "ordinal": 78,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em6_5",
+          "nullable": false,
+          "ordinal": 79,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "text7_0",
+          "nullable": true,
+          "ordinal": 80,
+          "type": "longtext"
+        },
+        {
+          "default": null,
+          "name": "text7_1",
+          "nullable": true,
+          "ordinal": 81,
+          "type": "longtext"
+        },
+        {
+          "default": "0",
+          "name": "BroadcastTextID7",
+          "nullable": false,
+          "ordinal": 82,
+          "type": "int"
+        },
+        {
+          "default": "0",
+          "name": "lang7",
+          "nullable": false,
+          "ordinal": 83,
+          "type": "tinyint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Probability7",
+          "nullable": false,
+          "ordinal": 84,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "em7_0",
+          "nullable": false,
+          "ordinal": 85,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em7_1",
+          "nullable": false,
+          "ordinal": 86,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em7_2",
+          "nullable": false,
+          "ordinal": 87,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em7_3",
+          "nullable": false,
+          "ordinal": 88,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em7_4",
+          "nullable": false,
+          "ordinal": 89,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": "0",
+          "name": "em7_5",
+          "nullable": false,
+          "ordinal": 90,
+          "type": "smallint unsigned"
+        },
+        {
+          "default": null,
+          "name": "VerifiedBuild",
+          "nullable": true,
+          "ordinal": 91,
+          "type": "int"
+        }
+      ],
+      "table": "npc_text"
+    },
     "player_totem_model": {
       "columns": [
         {
@@ -3286,6 +6099,60 @@
         }
       ],
       "table": "playercreateinfo_spell_custom"
+    },
+    "points_of_interest": {
+      "columns": [
+        {
+          "default": "0",
+          "name": "ID",
+          "nullable": false,
+          "ordinal": 2,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "PositionX",
+          "nullable": false,
+          "ordinal": 3,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "PositionY",
+          "nullable": false,
+          "ordinal": 4,
+          "type": "float"
+        },
+        {
+          "default": "0",
+          "name": "Icon",
+          "nullable": false,
+          "ordinal": 5,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Flags",
+          "nullable": false,
+          "ordinal": 6,
+          "type": "int unsigned"
+        },
+        {
+          "default": "0",
+          "name": "Importance",
+          "nullable": false,
+          "ordinal": 7,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "name": "Name",
+          "nullable": false,
+          "ordinal": 8,
+          "type": "text"
+        }
+      ],
+      "table": "points_of_interest"
     },
     "quest_offer_reward": {
       "columns": [

@@ -8,10 +8,18 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from aracgen.capital_trainer_catalog import CAPITAL_ZONES, classify_capital
 from aracgen.matrix import ComboMatrix
 from aracgen.schema_emit import format_sql_literal, prepare_row
 from aracgen.snapshot import load_snapshot
-from aracgen.snapshot_model import MOD_UAC_CREATURE_GUID_MAX, Snapshot
+from aracgen.snapshot_model import (
+    MOD_UAC_CAPITAL_GUID_MAX,
+    MOD_UAC_CAPITAL_GUID_MIN,
+    MOD_UAC_CREATURE_GUID_MAX,
+    MOD_UAC_CREATURE_GUID_MIN,
+    MOD_UAC_STARTER_GUID_MAX,
+    Snapshot,
+)
 from aracgen.snapshot_zones import (
     STARTER_SPAWN_BOX_RADIUS,
     StarterZoneBox,
@@ -77,6 +85,7 @@ class TrainerRow:
     curmana: int
     npcflag: int
     computed: TrainerPlacement | None = None
+    is_capital: bool = False
 
     @property
     def comment(self) -> str:
@@ -92,6 +101,9 @@ class TrainerEmitResult:
     rows: tuple[TrainerRow, ...]
     guid_base: int
     guid_max: int
+    # DELETE range for this file's install/uninstall, and which pass produced it.
+    band: tuple[int, int] = (MOD_UAC_CREATURE_GUID_MIN, MOD_UAC_CREATURE_GUID_MAX)
+    kind: str = "starter"  # "starter" | "capital"
 
 
 def _trainer_data(snapshot: Snapshot) -> dict[str, Any]:
@@ -429,6 +441,151 @@ def _lookup_catalog_entry(
         raise ValueError(msg) from exc
 
 
+def _index_capital_trainers(
+    captured: Sequence[Mapping[str, Any]],
+) -> tuple[dict[str, list[NativeTrainer]], dict[tuple[str, str], tuple[int, str]]]:
+    """From captured capital trainers, build per-capital anchors + faction fullest entry.
+
+    Returns (natives_by_capital, faction_full) where faction_full[(faction, class)]
+    is the (entry, name) of the fullest captured trainer of that class in the faction.
+    """
+    natives_by_capital: dict[str, list[NativeTrainer]] = {}
+    faction_full: dict[tuple[str, str], tuple[int, str]] = {}
+    best_spells: dict[tuple[str, str], int] = {}
+    for row in captured:
+        class_name = trainer_class_name(str(row["name"]), str(row["subname"]))
+        if class_name is None:
+            continue
+        zone = classify_capital(int(row["map"]), float(row["x"]), float(row["y"]))
+        if zone is None:
+            continue
+        natives_by_capital.setdefault(zone.label, []).append(
+            NativeTrainer(
+                class_name=class_name,
+                entry=int(row["entry"]),
+                name=str(row["name"]),
+                x=float(row["x"]),
+                y=float(row["y"]),
+                z=float(row["z"]),
+                o=float(row["o"]),
+            )
+        )
+        key = (zone.faction, class_name)
+        spells = int(row["spells"])
+        entry = int(row["entry"])
+        current = best_spells.get(key)
+        # Prefer the fullest trainer; tie-break on lowest entry for determinism.
+        better = current is None or spells > current
+        tie = current is not None and spells == current and entry < faction_full[key][0]
+        if better or tie:
+            best_spells[key] = spells
+            faction_full[key] = (entry, str(row["name"]))
+    return natives_by_capital, faction_full
+
+
+def capital_trainer_rows(
+    snapshot: Snapshot,
+    matrix: ComboMatrix,
+    start_guid: int,
+    *,
+    overrides: Sequence[TrainerOverride] = (),
+) -> list[TrainerRow]:
+    """Full class trainers for home capitals that lack them (Phase 2c, snapshot-driven).
+
+    Coverage, the reused full-trainer entry, and anchor positions all come from the
+    captured ``capital_trainers`` data (mod-uac's own spawns already excluded at
+    capture); only capital geography (CAPITAL_ZONES) is curated. Spawns inherit
+    npcflag/equipment/health from the template via 0 columns. Overrides match on
+    (capital, class).
+    """
+    captured = snapshot.data.get("trainers", {}).get("capital_trainers", [])
+    natives_by_capital, faction_full = _index_capital_trainers(captured)
+
+    rows: list[TrainerRow] = []
+    guid = start_guid
+    for zone in CAPITAL_ZONES:
+        natives = tuple(natives_by_capital.get(zone.label, ()))
+        present = {trainer.class_name for trainer in natives}
+        needed = {
+            ID_TO_CLASS_NAME[class_id]
+            for race_id, class_id in matrix.new_combos
+            if race_id in zone.home_races and class_id in ID_TO_CLASS_NAME
+        }
+        gaps = tuple(name for name in CLASS_ORDER if name in (needed - present))
+        if not gaps:
+            continue
+        if not natives:
+            msg = f"No captured trainers in capital {zone.label!r} to anchor against"
+            raise ValueError(msg)
+
+        gap_set = frozenset(gaps)
+        side_slots: dict[tuple[int, str], int] = {}
+        for class_name in gaps:
+            full = faction_full.get((zone.faction, class_name))
+            if full is None:
+                msg = (
+                    f"No full {class_name} trainer captured for faction {zone.faction!r} "
+                    f"(capital {zone.label}); cannot source a capital trainer entry"
+                )
+                raise ValueError(msg)
+            entry, entry_name = full
+
+            override = _override_for(overrides, zone_name=zone.label, class_name=class_name)
+            if override and override.anchor:
+                anchor = _resolve_override_anchor(natives, override.anchor, zone_name=zone.label)
+            else:
+                anchor = select_anchor(
+                    class_name,
+                    natives,
+                    gap_classes=gap_set,
+                    fallback_x=zone.cx,
+                    fallback_y=zone.cy,
+                )
+            x, y, z, o, _side = plan_anchor_placement(anchor, natives, side_slots)
+
+            computed: TrainerPlacement | None = None
+            if override and override.entry is not None:
+                entry = override.entry
+            if override and any(
+                value is not None for value in (override.x, override.y, override.z, override.o)
+            ):
+                computed = TrainerPlacement(x=x, y=y, z=z, o=o)
+                if override.x is not None:
+                    x = override.x
+                if override.y is not None:
+                    y = override.y
+                if override.z is not None:
+                    z = override.z
+                if override.o is not None:
+                    o = override.o
+
+            rows.append(
+                TrainerRow(
+                    guid=guid,
+                    zone_label=zone.label,
+                    map_id=zone.map_id,
+                    zone_id=0,
+                    class_name=class_name,
+                    entry=entry,
+                    entry_name=entry_name,
+                    anchor_class=anchor.class_name,
+                    anchor_name=anchor.name,
+                    x=x,
+                    y=y,
+                    z=z,
+                    o=o,
+                    equipment_id=0,
+                    curhealth=0,
+                    curmana=0,
+                    npcflag=0,
+                    computed=computed,
+                    is_capital=True,
+                )
+            )
+            guid += 1
+    return rows
+
+
 def compute_trainer_rows(
     snapshot: Snapshot,
     matrix: ComboMatrix | None = None,
@@ -565,9 +722,31 @@ def compute_trainer_rows(
             )
             next_guid += 1
 
+    band = (guid_base, MOD_UAC_STARTER_GUID_MAX)
     if not rows:
-        return TrainerEmitResult(rows=(), guid_base=guid_base, guid_max=guid_base - 1)
-    return TrainerEmitResult(rows=tuple(rows), guid_base=guid_base, guid_max=next_guid - 1)
+        return TrainerEmitResult(
+            rows=(), guid_base=guid_base, guid_max=guid_base - 1, band=band, kind="starter"
+        )
+    return TrainerEmitResult(
+        rows=tuple(rows), guid_base=guid_base, guid_max=next_guid - 1, band=band, kind="starter"
+    )
+
+
+def compute_capital_trainer_result(
+    snapshot: Snapshot,
+    matrix: ComboMatrix | None = None,
+    *,
+    guid_base: int = MOD_UAC_CAPITAL_GUID_MIN,
+    overrides: Sequence[TrainerOverride] = (),
+) -> TrainerEmitResult:
+    """Capital-city class trainers (Phase 2c), in their own reserved GUID sub-band."""
+    matrix = matrix or ComboMatrix.stock()
+    rows = capital_trainer_rows(snapshot, matrix, guid_base, overrides=overrides)
+    band = (guid_base, MOD_UAC_CAPITAL_GUID_MAX)
+    guid_max = guid_base + len(rows) - 1 if rows else guid_base - 1
+    return TrainerEmitResult(
+        rows=tuple(rows), guid_base=guid_base, guid_max=guid_max, band=band, kind="capital"
+    )
 
 
 def _creature_logical_values(row: TrainerRow) -> dict[str, Any]:
@@ -600,13 +779,22 @@ def _creature_logical_values(row: TrainerRow) -> dict[str, Any]:
     }
 
 
-def _reserved_guid_delete_range() -> tuple[int, int]:
-    """Full mod-uac trainer band so reinstall clears stale guids."""
-    return TRAINER_GUID_BASE, MOD_UAC_CREATURE_GUID_MAX
+_INSTALL_HEADERS: dict[str, tuple[str, str]] = {
+    "starter": (
+        "-- mod-uac: curated starter-list class trainers for new race/class combos.",
+        "-- One faction-matched starter trainer per uncovered class per starter zone.",
+    ),
+    "capital": (
+        "-- mod-uac: capital-city class trainers for new combos whose home capital lacks them.",
+        "-- Snapshot-driven: a full class trainer beside each capital's existing trainer cluster.",
+    ),
+}
 
 
-def _render_guid_band_delete(comment: str, *, row_count: int | None = None) -> str:
-    delete_min, delete_max = _reserved_guid_delete_range()
+def _render_guid_band_delete(
+    comment: str, band: tuple[int, int], *, row_count: int | None = None
+) -> str:
+    delete_min, delete_max = band
     lines = [comment, ""]
     if row_count is not None:
         lines[0] = f"{comment} ({row_count} rows in current emission)"
@@ -625,17 +813,19 @@ def render_install_sql(
     *,
     snapshot: Snapshot | None = None,
 ) -> str:
+    noun = "capital" if result.kind == "capital" else "starter"
     if not result.rows:
         return _render_guid_band_delete(
-            "-- mod-uac: no starter trainer spawns required for this baseline.",
+            f"-- mod-uac: no {noun} trainer spawns required for this baseline.",
+            result.band,
         )
 
     snap = snapshot or load_snapshot()
     schema = snap.schema(CREATURE_TABLE)
-    delete_min, delete_max = _reserved_guid_delete_range()
+    delete_min, delete_max = result.band
+    header = _INSTALL_HEADERS.get(result.kind, _INSTALL_HEADERS["starter"])
     lines = [
-        "-- mod-uac: curated starter-list class trainers for new race/class combos.",
-        "-- One faction-matched starter trainer per uncovered class per starter zone.",
+        *header,
         f"DELETE FROM `{CREATURE_TABLE}` WHERE `guid` BETWEEN "
         f"{delete_min} AND {delete_max};",
         "",
@@ -653,12 +843,15 @@ def render_install_sql(
 
 
 def render_uninstall_sql(result: TrainerEmitResult) -> str:
+    noun = "capital" if result.kind == "capital" else "starter"
     if not result.rows:
         return _render_guid_band_delete(
-            "-- mod-uac: revert starter trainer spawns (no rows in current emission)",
+            f"-- mod-uac: revert {noun} trainer spawns (no rows in current emission)",
+            result.band,
         )
     return _render_guid_band_delete(
-        "-- mod-uac: revert starter trainer spawns",
+        f"-- mod-uac: revert {noun} trainer spawns",
+        result.band,
         row_count=len(result.rows),
     )
 
@@ -668,8 +861,9 @@ def _format_placement(placement: TrainerPlacement) -> str:
 
 
 def render_worksheet(result: TrainerEmitResult) -> str:
+    noun = "capital" if result.kind == "capital" else "starter"
     lines = [
-        "# mod-uac starter trainers — worksheet",
+        f"# mod-uac {noun} trainers — worksheet",
         "",
         "Emitted coordinates match shipped SQL. Rows with a YAML position override also",
         "show the computed placement before override.",
@@ -780,6 +974,14 @@ class TrainerEmitter:
             snapshot,
             self.matrix,
             guid_base=self.guid_base,
+            overrides=self.overrides,
+        )
+
+    def compute_capital(self) -> TrainerEmitResult:
+        snapshot = self.snapshot or load_snapshot()
+        return compute_capital_trainer_result(
+            snapshot,
+            self.matrix,
             overrides=self.overrides,
         )
 

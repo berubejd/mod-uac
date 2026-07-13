@@ -13,6 +13,7 @@ from aracgen.emit_client import (
     ClientPatchEmitter,
     ClientPatchVariant,
 )
+from aracgen.emit_guard_directions import GuardDirectionsEmitter
 from aracgen.emit_hunter_pet import HunterPetEmitter
 from aracgen.emit_player import PlayerCreateEmitter, build_resolver
 from aracgen.emit_racials import RacialAbilityEmitter
@@ -33,7 +34,7 @@ from aracgen.snapshot import (
     write_snapshot,
 )
 from aracgen.snapshot_dsn import resolve_world_database_info
-from aracgen.snapshot_model import MOD_UAC_CREATURE_GUID_MAX, Snapshot
+from aracgen.snapshot_model import MOD_UAC_STARTER_GUID_MAX, Snapshot
 from aracgen.sources import DbcSource
 from aracgen.stock_loader import StockKitStore
 from aracgen.trainer_catalog import TRAINER_GUID_BASE
@@ -137,10 +138,12 @@ def resolve_generation_snapshot(
 
 
 def validate_trainer_guid_base(guid_base: int) -> None:
-    if not (TRAINER_GUID_BASE <= guid_base <= MOD_UAC_CREATURE_GUID_MAX):
+    # Starter trainers live in the starter sub-band only; the capital sub-band
+    # (>= MOD_UAC_CAPITAL_GUID_MIN) is reserved for the capital pass.
+    if not (TRAINER_GUID_BASE <= guid_base <= MOD_UAC_STARTER_GUID_MAX):
         msg = (
-            f"--trainer-guid-base must be within the mod-uac reserved creature band "
-            f"({TRAINER_GUID_BASE}-{MOD_UAC_CREATURE_GUID_MAX}), got {guid_base}"
+            f"--trainer-guid-base must be within the mod-uac starter GUID sub-band "
+            f"({TRAINER_GUID_BASE}-{MOD_UAC_STARTER_GUID_MAX}), got {guid_base}"
         )
         raise ValueError(msg)
 
@@ -162,11 +165,36 @@ def write_trainer_sql(
         overrides=overrides,
     )
     result = emitter.compute()
-    if result.guid_max > MOD_UAC_CREATURE_GUID_MAX:
+    _write_trainer_result(result, install_path, uninstall_path, worksheet_path, emitter=emitter)
+
+
+def write_capital_trainer_sql(
+    install_path: Path,
+    uninstall_path: Path,
+    worksheet_path: Path,
+    *,
+    snapshot: Snapshot,
+    overrides_path: Path | None = None,
+) -> None:
+    overrides = load_trainer_overrides(overrides_path)
+    emitter = TrainerEmitter(snapshot=snapshot, overrides=overrides)
+    result = emitter.compute_capital()
+    _write_trainer_result(result, install_path, uninstall_path, worksheet_path, emitter=emitter)
+
+
+def _write_trainer_result(
+    result,
+    install_path: Path,
+    uninstall_path: Path,
+    worksheet_path: Path,
+    *,
+    emitter: TrainerEmitter,
+) -> None:
+    band_min, band_max = result.band
+    if result.rows and result.guid_max > band_max:
         msg = (
-            f"Trainer emission exceeds reserved GUID band "
-            f"({TRAINER_GUID_BASE}-{MOD_UAC_CREATURE_GUID_MAX}): "
-            f"last guid {result.guid_max}"
+            f"{result.kind} trainer emission exceeds its reserved GUID sub-band "
+            f"({band_min}-{band_max}): last guid {result.guid_max}"
         )
         raise ValueError(msg)
 
@@ -178,7 +206,7 @@ def write_trainer_sql(
     worksheet_path.write_text(emitter.render_worksheet(result), encoding="utf-8")
 
     print(
-        f"Wrote {install_path} ({len(result.rows)} trainers, "
+        f"Wrote {install_path} ({len(result.rows)} {result.kind} trainers, "
         f"guids {result.guid_base}-{result.guid_max})"
     )
     print(f"Wrote {uninstall_path}")
@@ -286,6 +314,29 @@ def write_totem_sql(
 
     race_ids = sorted({row.race_id for row in result.rows})
     print(f"Wrote {install_path} ({len(result.rows)} totem rows, races {race_ids})")
+    print(f"Wrote {uninstall_path}")
+
+
+def write_capital_guard_sql(
+    install_path: Path,
+    uninstall_path: Path,
+    *,
+    snapshot: Snapshot,
+    overrides_path: Path | None = None,
+) -> None:
+    overrides = load_trainer_overrides(overrides_path)
+    emitter = GuardDirectionsEmitter(snapshot=snapshot, overrides=overrides)
+    result = emitter.compute()
+
+    install_path.parent.mkdir(parents=True, exist_ok=True)
+    uninstall_path.parent.mkdir(parents=True, exist_ok=True)
+    install_path.write_text(emitter.render_install(result), encoding="utf-8")
+    uninstall_path.write_text(emitter.render_uninstall(result), encoding="utf-8")
+
+    print(
+        f"Wrote {install_path} ({len(result.artifacts)} POI(s), "
+        f"{len(result.options)} guard option(s))"
+    )
     print(f"Wrote {uninstall_path}")
 
 

@@ -8,6 +8,7 @@ from aracgen.emit_trainers import (
     NativeTrainer,
     TrainerEmitResult,
     TrainerEmitter,
+    compute_capital_trainer_result,
     compute_trainer_rows,
     compute_zone_gaps,
     load_trainer_overrides,
@@ -22,7 +23,13 @@ from aracgen.emit_trainers import (
 )
 from aracgen.matrix import ComboMatrix
 from aracgen.snapshot import load_snapshot
-from aracgen.snapshot_model import MOD_UAC_CREATURE_GUID_MAX, Snapshot
+from aracgen.snapshot_model import (
+    MOD_UAC_CAPITAL_GUID_MAX,
+    MOD_UAC_CAPITAL_GUID_MIN,
+    MOD_UAC_CREATURE_GUID_MAX,
+    MOD_UAC_STARTER_GUID_MAX,
+    Snapshot,
+)
 from aracgen.snapshot_zones import build_starter_zone_boxes
 from aracgen.trainer_catalog import PLACEMENT_GAP, TRAINER_GUID_BASE, TrainerOverride
 
@@ -31,6 +38,12 @@ MINIMAL_FIXTURE = ROOT / "tools" / "tests" / "fixtures" / "world_snapshot_minima
 CHECKED_IN_INSTALL = ROOT / "data" / "sql" / "db-world" / "mod_uac_starter_trainers.sql"
 CHECKED_IN_UNINSTALL = (
     ROOT / "data" / "sql" / "db-uninstall" / "mod_uac_starter_trainers_uninstall.sql"
+)
+CHECKED_IN_CAPITAL_INSTALL = (
+    ROOT / "data" / "sql" / "db-world" / "mod_uac_capital_trainers.sql"
+)
+CHECKED_IN_CAPITAL_UNINSTALL = (
+    ROOT / "data" / "sql" / "db-uninstall" / "mod_uac_capital_trainers_uninstall.sql"
 )
 OVERRIDES_PATH = ROOT / "data" / "trainer_overrides.yaml"
 
@@ -114,16 +127,32 @@ def trainer_result(baked_snapshot: Snapshot, stock_matrix: ComboMatrix):
     return compute_trainer_rows(baked_snapshot, stock_matrix, overrides=overrides)
 
 
-def test_emits_26_trainers(trainer_result) -> None:
+@pytest.fixture(scope="session")
+def capital_result(baked_snapshot: Snapshot, stock_matrix: ComboMatrix):
+    overrides = load_trainer_overrides(OVERRIDES_PATH)
+    return compute_capital_trainer_result(baked_snapshot, stock_matrix, overrides=overrides)
+
+
+def test_starter_result_is_starter_only(trainer_result) -> None:
     assert len(trainer_result.rows) == 26
+    assert all(not row.is_capital for row in trainer_result.rows)
     assert trainer_result.guid_base == TRAINER_GUID_BASE
     assert trainer_result.guid_max == TRAINER_GUID_BASE + 25
+    assert trainer_result.band == (TRAINER_GUID_BASE, MOD_UAC_STARTER_GUID_MAX)
+    assert trainer_result.kind == "starter"
+
+
+def test_capital_result_is_capital_only(capital_result) -> None:
+    assert len(capital_result.rows) == 14
+    assert all(row.is_capital for row in capital_result.rows)
+    assert capital_result.guid_base == MOD_UAC_CAPITAL_GUID_MIN
+    assert capital_result.guid_max == MOD_UAC_CAPITAL_GUID_MIN + 13
+    assert capital_result.band == (MOD_UAC_CAPITAL_GUID_MIN, MOD_UAC_CAPITAL_GUID_MAX)
+    assert capital_result.kind == "capital"
 
 
 def test_golden_entry_matrix(trainer_result) -> None:
-    observed = {
-        (row.zone_label, row.class_name): row.entry for row in trainer_result.rows
-    }
+    observed = {(row.zone_label, row.class_name): row.entry for row in trainer_result.rows}
     assert observed == GOLDEN_ENTRIES
 
 
@@ -132,6 +161,32 @@ def test_golden_anchor_matrix(trainer_result) -> None:
         (row.zone_label, row.class_name): row.anchor_class for row in trainer_result.rows
     }
     assert observed == GOLDEN_ANCHORS
+
+
+CAPITAL_GAP_KEYS = {
+    ("Darnassus", "Shaman"), ("Darnassus", "Warlock"),
+    ("Ironforge", "Druid"), ("Exodar", "Rogue"), ("Exodar", "Warlock"),
+    ("Undercity", "Shaman"), ("Undercity", "Hunter"), ("Undercity", "Druid"),
+    ("Orgrimmar", "Druid"), ("ThunderBluff", "Paladin"), ("ThunderBluff", "Rogue"),
+    ("ThunderBluff", "Warlock"), ("Silvermoon", "Shaman"), ("Silvermoon", "Warrior"),
+}
+
+
+def test_capital_trainers_cover_audited_gaps(capital_result) -> None:
+    capital = capital_result.rows
+    by_key = {(row.zone_label, row.class_name): row for row in capital}
+    assert set(by_key) == CAPITAL_GAP_KEYS
+    # Capital GUIDs live in the dedicated capital sub-band.
+    assert min(r.guid for r in capital) == MOD_UAC_CAPITAL_GUID_MIN
+    assert capital_result.guid_max <= MOD_UAC_CAPITAL_GUID_MAX
+    # Reuses a full class-trainer entry (e.g. Farseer Nobundo), and inherits
+    # npcflag/equipment/health from the template via 0 columns.
+    assert by_key[("Darnassus", "Shaman")].entry == 17204
+    for row in capital:
+        assert row.is_capital
+        assert row.npcflag == 0
+        assert row.equipment_id == 0
+        assert row.curhealth == 0
 
 
 def test_northshire_priest_anchored_trainers_are_one_step_from_anchor(
@@ -280,7 +335,7 @@ def test_select_anchor_skips_gap_kin() -> None:
 
 def test_load_trainer_overrides_from_checked_in_file() -> None:
     overrides = load_trainer_overrides(OVERRIDES_PATH)
-    assert len(overrides) == 3
+    assert len(overrides) == 6
     by_key = {(item.zone, item.class_name): item for item in overrides}
     warlock = by_key[("CampNarache", "Warlock")]
     assert warlock.x == pytest.approx(-2950.7625)
@@ -323,12 +378,18 @@ def test_camp_narache_warlock_uses_override_position(
 
 
 def test_empty_emit_still_deletes_guid_band() -> None:
-    empty = TrainerEmitResult(rows=(), guid_base=TRAINER_GUID_BASE, guid_max=TRAINER_GUID_BASE - 1)
+    empty = TrainerEmitResult(
+        rows=(),
+        guid_base=TRAINER_GUID_BASE,
+        guid_max=TRAINER_GUID_BASE - 1,
+        band=(TRAINER_GUID_BASE, MOD_UAC_STARTER_GUID_MAX),
+        kind="starter",
+    )
     install = render_install_sql(empty)
     uninstall = render_uninstall_sql(empty)
     delete_clause = (
         f"DELETE FROM `creature` WHERE `guid` BETWEEN "
-        f"{TRAINER_GUID_BASE} AND {MOD_UAC_CREATURE_GUID_MAX};"
+        f"{TRAINER_GUID_BASE} AND {MOD_UAC_STARTER_GUID_MAX};"
     )
     assert delete_clause in install
     assert delete_clause in uninstall
@@ -341,13 +402,35 @@ def test_override_missing_class_raises(tmp_path: Path) -> None:
         load_trainer_overrides(bad_yaml)
 
 
-def test_install_sql_deletes_full_reserved_guid_band(trainer_result) -> None:
-    sql = render_install_sql(trainer_result)
-    expected = (
+def test_starter_and_capital_deletes_are_disjoint_subbands(trainer_result, capital_result) -> None:
+    starter_sql = render_install_sql(trainer_result)
+    capital_sql = render_install_sql(capital_result)
+    assert (
         f"DELETE FROM `creature` WHERE `guid` BETWEEN "
-        f"{TRAINER_GUID_BASE} AND {MOD_UAC_CREATURE_GUID_MAX};"
-    )
-    assert expected in sql
+        f"{TRAINER_GUID_BASE} AND {MOD_UAC_STARTER_GUID_MAX};"
+    ) in starter_sql
+    assert (
+        f"DELETE FROM `creature` WHERE `guid` BETWEEN "
+        f"{MOD_UAC_CAPITAL_GUID_MIN} AND {MOD_UAC_CAPITAL_GUID_MAX};"
+    ) in capital_sql
+    # The starter DELETE must not reach into the capital sub-band (no clobber on re-apply).
+    assert f"AND {MOD_UAC_CREATURE_GUID_MAX};" not in starter_sql
+
+
+def test_capital_install_sql_matches_checked_in_artifact(
+    baked_snapshot: Snapshot, capital_result
+) -> None:
+    if not CHECKED_IN_CAPITAL_INSTALL.is_file():
+        pytest.skip(f"Checked-in SQL not found: {CHECKED_IN_CAPITAL_INSTALL}")
+    generated = render_install_sql(capital_result, snapshot=baked_snapshot)
+    assert generated == CHECKED_IN_CAPITAL_INSTALL.read_text(encoding="utf-8")
+
+
+def test_capital_uninstall_sql_matches_checked_in_artifact(capital_result) -> None:
+    if not CHECKED_IN_CAPITAL_UNINSTALL.is_file():
+        pytest.skip(f"Checked-in SQL not found: {CHECKED_IN_CAPITAL_UNINSTALL}")
+    generated = render_uninstall_sql(capital_result)
+    assert generated == CHECKED_IN_CAPITAL_UNINSTALL.read_text(encoding="utf-8")
 
 
 def test_invalid_override_anchor_raises(minimal_snapshot: Snapshot) -> None:
@@ -372,9 +455,12 @@ def test_emitter_end_to_end(baked_snapshot: Snapshot, stock_matrix: ComboMatrix)
         overrides=overrides,
     )
     result = emitter.compute()
+    capital = emitter.compute_capital()
     assert len(result.rows) == 26
+    assert len(capital.rows) == 14
     assert "DELETE FROM `creature`" in emitter.render_install(result)
     assert "DELETE FROM `creature`" in emitter.render_uninstall(result)
+    assert "DELETE FROM `creature`" in emitter.render_install(capital)
 
 
 def test_minimal_snapshot_gap_for_shaman(minimal_snapshot: Snapshot) -> None:

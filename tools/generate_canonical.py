@@ -10,6 +10,8 @@ from aracgen.cli import (
     add_snapshot_cli_args,
     add_trainer_cli_args,
     resolve_generation_snapshot,
+    write_capital_guard_sql,
+    write_capital_trainer_sql,
     write_class_quest_sql,
     write_client_patches,
     write_hunter_pet_sql,
@@ -145,6 +147,19 @@ def main() -> None:
         snapshot=snapshot,
         overrides_path=args.trainer_overrides,
         guid_base=args.trainer_guid_base,
+    )
+    write_capital_trainer_sql(
+        INSTALL_DIR / "mod_uac_capital_trainers.sql",
+        UNINSTALL_DIR / "mod_uac_capital_trainers_uninstall.sql",
+        REPO_ROOT / "docs" / "capital_trainer_worksheet.md",
+        snapshot=snapshot,
+        overrides_path=args.trainer_overrides,
+    )
+    write_capital_guard_sql(
+        INSTALL_DIR / "mod_uac_capital_guard_poi.sql",
+        UNINSTALL_DIR / "mod_uac_capital_guard_poi_uninstall.sql",
+        snapshot=snapshot,
+        overrides_path=args.trainer_overrides,
     )
 
 
