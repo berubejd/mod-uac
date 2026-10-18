@@ -480,6 +480,7 @@ def capture_trainer_data(connection, creature_schema: TableSchema) -> dict[str, 
         }
 
         capital_trainers = _capture_capital_trainers(cursor, entry_col)
+        capital_class_menus = _capture_capital_class_menus(cursor)
 
     return {
         "playercreateinfo": playercreateinfo,
@@ -498,7 +499,7 @@ def capture_trainer_data(connection, creature_schema: TableSchema) -> dict[str, 
             str(entry): meta for entry, meta in creature_template.items()
         },
         "capital_trainers": capital_trainers,
-        "capital_class_menus": _capture_capital_class_menus(cursor),
+        "capital_class_menus": capital_class_menus,
     }
 
 
@@ -510,13 +511,13 @@ CLASS_TRAINER_SUBNAME_REGEXP = (
 def _classify_poi_capital(x: float, y: float) -> str | None:
     from aracgen.capital_trainer_catalog import CAPITAL_ZONES, classify_capital
 
-    matches = [
-        zone.label
-        for zone in CAPITAL_ZONES
-        if classify_capital(zone.map_id, x, y) is not None
-    ]
+    matches = {
+        match.label
+        for map_id in {zone.map_id for zone in CAPITAL_ZONES}
+        if (match := classify_capital(map_id, x, y)) is not None
+    }
     if len(matches) == 1:
-        return matches[0]
+        return next(iter(matches))
     return None
 
 

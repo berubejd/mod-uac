@@ -152,6 +152,75 @@ Spells: Tame Beast (1515), Call Pet (883), Dismiss Pet (2641), Feed Pet (6991), 
 Requires `PlayerStart.CustomSpells = 1`. The spell grant alone is insufficient — the
 `spell_dbc` overlays set `BaseLevel`/`SpellLevel` to 1.
 
+## Class quests for newly supported races
+
+`zz_mod_uac_class_quest_races.sql` opens remaining class-quest race gates within
+their original factions. This matters when the optional level-one hunter pet
+feature is disabled: for example, a human hunter must be able to complete all
+four dwarf pet-training quests (6064, 6084, 6085, 6086) at level 10.
+
+The additional SQL changes **only `quest_template.AllowableRaces`**, not class,
+level, prerequisite, skill, reputation, progression, objectives or rewards.
+Narrow Alliance masks expand to Alliance; narrow Horde masks expand to Horde.
+Chains already shared between factions retain both factions. Priest class quests
+are included, so their original within-faction racial restrictions are relaxed
+as well. Three racial starter prerequisites are widened instead of removing
+their dependency from class introductions.
+
+Intentional exceptions remain:
+
+- Native and synthetic Call of Earth quests keep their existing race partition
+  to prevent overlapping Earth Totem paths.
+- Death Knight racial story variants stay unchanged: all ten races already
+  support that class.
+- Racial story/reward splits such as Quel'Delar are not class quests merely
+  because one variant singles out a class.
+- Ordinary racial quests, mounts, riding restrictions and expansion gates are
+  outside this change.
+
+This does not relocate questgivers or create new class questlines. Players still
+travel to the original trainer and zone; a progression module can independently
+restrict access to those zones. In particular, opening a race mask does not
+make Azuremyst or Eversong available in a Vanilla-only progression setup.
+
+### Audit another world baseline
+
+Use the normal tooling requirements, including PyMySQL. Connection information
+is read from the config and is not written into the capture:
+
+```sh
+python tools/capture_quest_race_audit.py --config /path/to/worldserver.conf --output /safe/quest-audit.json
+python tools/generate_quest_race_fixes.py --audit /safe/quest-audit.json --output /safe/quest-fixes
+```
+
+The first command is a read-only capture; the second generates a report and
+paired install/uninstall SQL without modifying the database. Inspect the report
+before installing it. The generator refuses to emit SQL when it finds additional
+race restrictions in candidate quests' availability conditions (including
+condition references), related items or spell areas; those require review rather
+than blanket deletion. Race-gated gossip and scripts still need separate review.
+
+Keep the capture and generated uninstall file. Guarded updates modify a row only
+if its prior mask matches the capture, protecting later operator changes and
+making repeated application harmless. Do not regenerate a replacement rollback
+from an already-patched database: that loses the original masks. The checked-in
+patch contains 160 updates generated from an AzerothCore Playerbot world with
+Individual Progression and the existing mod-uac patches applied; custom quest
+IDs absent from another world are harmless no-ops. Baselines with different
+masks should be recaptured and reviewed.
+
+The `zz_` filename ensures the broad audit fixes follow the module's narrower
+reference-chain SQL. Preserve the additional files when rerunning the original
+generators, which do not regenerate this separate audit pass. To revert only
+these changes, use
+`data/sql/db-uninstall/zz_mod_uac_class_quest_races_uninstall.sql`. When removing
+the entire module, revert this additional layer **before** the earlier class
+quest SQL so overlapping masks return through the correct intermediate state.
+
+Restart worldserver to load the data. With Playerbots, do not hot-reload quest
+templates: the core recreates quest objects while travel/RPG destinations may
+retain pointers to the previous objects.
+
 ## Custom DBC baselines
 
 Operators with a custom DBC baseline (or existing `*_dbc` overlay rows with conflicting IDs)
@@ -170,8 +239,9 @@ design: [mod-uac-trainer-emitter-spec.md](mod-uac-trainer-emitter-spec.md).
 ## Uninstall details
 
 AzerothCore has no down-migrations. Revert manually by running the paired files in
-`data/sql/db-uninstall/` against the **world** database (same order as install, or any order —
-the files are independent).
+`data/sql/db-uninstall/` against the **world** database. Revert the additional
+`zz_mod_uac_class_quest_races_uninstall.sql` layer first, before the earlier class
+quest changes. The other original uninstall files are independent.
 
 To revert **only** level-1 hunter pets while keeping other mod-uac data, run the two
 `mod_uac_hunter_pet_*_uninstall.sql` files.
